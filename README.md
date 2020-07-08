@@ -2,6 +2,7 @@
 
 [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://docs.hypertrace.org/docs/)
 
+<img src="https://hypertrace-docs.s3.amazonaws.com/ht-logo-horizontal.png" width="200">
 
 ---
 
