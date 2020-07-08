@@ -41,13 +41,13 @@ Follow these steps to get started with hypertrace:
 - [Instrumentation](https://docs.hypertrace.org/docs/getting-started/Instrumentation/)
 - [Quick start with sample app](https://docs.hypertrace.org/docs/getting-started/quick-start/)
 
-## To start developing Kubernetes
+## To start tracing with Hypertrace
 
 The [community repository] hosts all information about building Hypertrace from source, how to contribute code and documentation, who to contact about what, etc.
 
-If you want to deploy hypertrace right away on docker desktop or any cloud platform you can refer to our [deployment docs] or here are steps to quick start with docker desktop. 
+If you want to deploy hypertrace right away on docker desktop or any cloud platform you can refer to our [deployment docs]() or here are steps to quick start with docker desktop. 
 
-### You have a working [Docker environment] with [Kubernetes] enabled.
+### You have a working [Docker environment]() with [Kubernetes]() enabled.
 
 ```
 git clone https://github.com/hypertrace/hypertrace-helm
