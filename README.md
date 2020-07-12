@@ -1,6 +1,6 @@
 # Hypertrace
 
-[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://docs.hypertrace.org/docs/)
+[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://docs.hypertrace.org/)
 
 <img src="https://hypertrace-docs.s3.amazonaws.com/ht-logo-horizontal.png" width="200">
 
@@ -30,16 +30,16 @@ It's designed to ingest and analyze large volumes of production trace data. Vari
 
 ## To start using Hypertrace
 
-See our documentation on [docs.hypertrace.org](https://docs.hypertrace.org/docs/).
+See our documentation on [docs.hypertrace.org](https://docs.hypertrace.org/).
 
 | ![space-1.jpg](https://s3.amazonaws.com/fininity.tech/DT/getting-started.png) | 
 |:--:| 
 | *Getting started with Hypertrace* |
 
 Follow these steps to get started with hypertrace:
-- [Installation](https://docs.hypertrace.org/docs/getting-started/installation/)
-- [Instrumentation](https://docs.hypertrace.org/docs/getting-started/Instrumentation/)
-- [Quick start with sample app](https://docs.hypertrace.org/docs/getting-started/quick-start/)
+- [Installation](https://docs.hypertrace.org/getting-started/installation/)
+- [Instrumentation](https://docs.hypertrace.org/getting-started/Instrumentation/)
+- [Quick start with sample app](https://docs.hypertrace.org/getting-started/quick-start/)
 
 ## To start tracing with Hypertrace
 
