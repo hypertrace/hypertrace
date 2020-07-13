@@ -55,11 +55,6 @@ and patterns of metrics for different components like Services,Backends and Endp
 enabling different personal like Devs, DevOps and Deployment specialists to get to
 the problems they are debugging very quickly.
 
-### One-click Deployment
-Hypertrace is completely built in a cloud-native fashion and can be deployed easily
-with one command in any of the Kubernetes clusters by using the Helm charts
-that are built for it.
-
 ## Architecture
 
 | ![space-1.jpg](https://s3.amazonaws.com/fininity.tech/DT/architecture.png) |
@@ -98,9 +93,6 @@ For the full story, head over to the [developer's documentation].
 ## Related Repositories
 ### Documentation
 * [Docs website] (https://github.com/hypertrace/hypertrace-docs-website)
-
-### Data Model
-* [Data Model] (https://github.com/hypertrace/data-model)
 
 ### Data Ingestion Pipeline
 * https://github.com/hypertrace/span-normalizer
