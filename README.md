@@ -63,24 +63,19 @@ the problems they are debugging very quickly.
 
 ### To start using Hypertrace
 
-See our documentation on [docs.hypertrace.org](https://docs.hypertrace.org/docs/).
-
-| ![space-1.jpg](https://s3.amazonaws.com/fininity.tech/DT/getting-started.png) |
-|:--:|
-| *Getting started with Hypertrace* |
+Visit Hypertrace documentation at [docs.hypertrace.org](https://docs.hypertrace.org/).
 
 Follow these steps to get started with hypertrace:
-- [Installation](https://docs.hypertrace.org/docs/getting-started/installation/)
-- [Instrumentation](https://docs.hypertrace.org/docs/getting-started/Instrumentation/)
-- [Quick start with sample app](https://docs.hypertrace.org/docs/getting-started/quick-start/)
+- [Installation](https://docs.hypertrace.org/docs/getting-started/)
+- [Quick start with sample app](https://docs.hypertrace.org/docs/sample-app/)
 
 ### To start tracing with Hypertrace
 
-The [community repository] hosts all information about building Hypertrace from source, how to contribute code and documentation, who to contact about what, etc.
+The [community repository]() hosts all information about building Hypertrace from source, how to contribute code and documentation, who to contact about what, etc.
 
-If you want to deploy hypertrace right away on docker desktop or any cloud platform you can refer to our [deployment docs]() or here are steps to quick start with docker desktop.
+If you want to deploy hypertrace right away on docker desktop or any cloud platform you can refer to our [deployment docs](https://docs.hypertrace.org/deployments/) or here are steps to quick start with docker desktop.
 
-### You have a working [Docker environment]() with [Kubernetes]() enabled.
+### You have a working [Docker environment](https://www.docker.com/) with [Kubernetes](https://kubernetes.io/) enabled.
 
 ```
 git clone https://github.com/hypertrace/hypertrace-helm
