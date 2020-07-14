@@ -66,8 +66,8 @@ the problems they are debugging very quickly.
 Visit Hypertrace documentation at [docs.hypertrace.org](https://docs.hypertrace.org/).
 
 Follow these steps to get started with hypertrace:
-- [Installation](https://docs.hypertrace.org/docs/getting-started/)
-- [Quick start with sample app](https://docs.hypertrace.org/docs/sample-app/)
+- [Installation](https://docs.hypertrace.org/getting-started/)
+- [Quick start with sample app](https://docs.hypertrace.org/sample-app/)
 
 ### To start tracing with Hypertrace
 
