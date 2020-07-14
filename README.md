@@ -13,8 +13,7 @@ project for the software development community to use in their applications.
 
 ### To start using Hypertrace
 - [Join the Hypertrace Workspace](https://www.hypertrace.org/get-started) on Slack to chat with other Hypertrace users.
-- You will be invited to a private channel where you can download and unzip or unpack the installer file.
-- Run `./hypertrace.sh install`
+- You will be invited to a private channel where you can get the installer zip file along with instructions to install!
 
 ## Related Repositories
 ### Documentation
