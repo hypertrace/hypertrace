@@ -12,21 +12,10 @@ project for the software development community to use in their applications.
 
 
 ### To start using Hypertrace
-
-Visit Hypertrace documentation at [docs.hypertrace.org](https://docs.hypertrace.org/).
-
-Follow these steps to get started with hypertrace:
-- [Installation](https://docs.hypertrace.org/getting-started/)
-- [Quick start with sample app](https://docs.hypertrace.org/sample-app/)
-
-### To start tracing with Hypertrace
-
-The [community repository]() hosts all information about building Hypertrace from source, how to contribute code and documentation, who to contact about what, etc.
-
-If you want to deploy hypertrace right away on docker desktop or any cloud platform you can refer to our [deployment docs](https://docs.hypertrace.org/deployments/) or here are steps to quick start with docker desktop.
-
-
-For the full story, head over to the [developer's documentation](https://docs.hypertrace.org/).
+- [Join the Hypertrace Workspace](https://www.hypertrace.org/get-started) on Slack to chat with other Hypertrace users.
+- You will be invited to a private channel where you can download and unzip or unpack the installer file.
+- Update the config properties under `./config/hypertrace.properties` as needed. The default config will work for a `dev` deployment on Docker for Desktop.
+- Run `./hypertrace.sh install`
 
 ## Related Repositories
 ### Documentation
