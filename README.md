@@ -16,8 +16,6 @@ project for the software development community to use in their applications.
 - You will be invited to a private channel where you can get the installer zip file along with instructions to install!
 
 ## Related Repositories
-### Documentation
-* [Docs website](https://github.com/hypertrace/hypertrace-docs-website)
 
 ### Data Ingestion Pipeline
 * [Span Normalizer](https://github.com/hypertrace/span-normalizer)
