@@ -14,7 +14,6 @@ project for the software development community to use in their applications.
 ### To start using Hypertrace
 - [Join the Hypertrace Workspace](https://www.hypertrace.org/get-started) on Slack to chat with other Hypertrace users.
 - You will be invited to a private channel where you can download and unzip or unpack the installer file.
-- Update the config properties under `./config/hypertrace.properties` as needed. The default config will work for a `dev` deployment on Docker for Desktop.
 - Run `./hypertrace.sh install`
 
 ## Related Repositories
