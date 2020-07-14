@@ -83,7 +83,7 @@ cd hypertrace-helm
 ./hypertrace.sh install
 ```
 
-For the full story, head over to the [developer's documentation].
+For the full story, head over to the [developer's documentation](https://docs.hypertrace.org/).
 
 ## Related Repositories
 ### Documentation
