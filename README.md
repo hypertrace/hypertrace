@@ -14,15 +14,17 @@ If you want to see Hypertrace in action, you can quickly start Hypertrace via Do
 
 ```
 git clone https://github.com/hypertrace/hypertrace.git
-cd hypertrace
-docker-compose -f docker/docker-compose.yml up
+cd hypertrace/docker
+docker-compose -f docker-compose.yml up
 ```
 This will start all services required for Hypertrace. Once you see the service `Hypertrace-UI` start, you can visit Hypertrace UI at http://localhost:2020 . 
 
-If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace. Even if not you can run sample application using `docker-compose -f docker/docker-compose-zipkin-example.yml` or you can try Hypertrace with sample application by running
+If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace. 
+
+Even if not you can try Hypertrace with sample application by running
 
 ```
-docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up
+docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up
 ```
 Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
 
