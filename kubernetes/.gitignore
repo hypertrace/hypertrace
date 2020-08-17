@@ -1,0 +1,27 @@
+.gradle
+/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+## Helm
+data-services/charts
+data-services/Chart.lock
+
+platform-services/charts
+platform-services/Chart.lock
+
+#mac OS
+.DS_Store
+
+#intellij
+.idea

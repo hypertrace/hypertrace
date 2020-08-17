@@ -1,0 +1,414 @@
+zookeeper:
+  replicaCount: 1
+  javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.1"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "256Mi"
+  volume:
+    storageClassName: "hypertrace"
+    storage: "1Gi"
+  livenessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 8
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 8
+
+kafka:
+  replicaCount: 1
+  javaOpts: "-Xms128M -Xmx384M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: "512Mi"
+    limits:
+      cpu: "0.5"
+      memory: "512Mi"
+  volume:
+    storageClassName: "hypertrace"
+    storage: "4Gi"
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 10
+  config:
+    defaultReplicationFactor: 1
+    minInsyncReplicas: 1
+    offsetsTopicReplicationFactor: 1
+    transactionStateLogReplicationFactor: 1
+
+schema-registry:
+  replicaCount: 1
+  heapOptions: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.1"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "256Mi"
+  livenessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 9
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 9
+
+pinot:
+  controller:
+    replicaCount: 1
+    jvmOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "0.1"
+        memory: "256Mi"
+    persistence:
+      size: "4Gi"
+      storageClass: "hypertrace"
+    livenessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 8
+    readinessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 8
+
+  broker:
+    replicaCount: 1
+    jvmOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "0.1"
+        memory: "256Mi"
+    livenessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 8
+    readinessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 8
+
+  server:
+    replicaCount: 1
+    jvmOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "0.2"
+        memory: "256Mi"
+    persistence:
+      size: "4Gi"
+      storageClass: "hypertrace"
+    livenessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 8
+    readinessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 8
+
+  servicemanager:
+    enabled: false
+
+mongodb:
+  replicaSet:
+    enabled: false
+  persistence:
+    storageClassName: "hypertrace"
+    size: "2Gi"
+
+hypertrace-oc-collector:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: "0.05"
+      memory: "128Mi"
+    limits:
+      cpu: "0.5"
+      memory: "128Mi"
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  kafka-topic-creator:
+    enabled: false
+
+span-normalizer:
+  javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.05"
+      memory: "320Mi"
+    limits:
+      cpu: "0.5"
+      memory: "320Mi"
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  kafka-topic-creator:
+    enabled: false
+
+raw-spans-grouper:
+  javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.05"
+      memory: "320Mi"
+    limits:
+      cpu: "0.5"
+      memory: "320Mi"
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  rawSpansGrouperConfig:
+    span:
+      groupby:
+        internal: 10
+  kafka-topic-creator:
+    enabled: false
+
+hypertrace-trace-enricher:
+  javaOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: "384Mi"
+    limits:
+      cpu: "0.5"
+      memory: "384Mi"
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  kafka-topic-creator:
+    enabled: false
+
+hypertrace-view-generator:
+  mergeAllViews: true
+  allViews:
+    creator:
+      jobName: views-creation-job
+      resources:
+        requests:
+          cpu: "0.1"
+          memory: "320Mi"
+        limits:
+          cpu: "1.0"
+          memory: "320Mi"
+    generator:
+      deploymentName: views-generator
+      javaOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
+      resources:
+        requests:
+          cpu: "0.2"
+          memory: "384Mi"
+        limits:
+          cpu: "1.0"
+          memory: "384Mi"
+      livenessProbe:
+        initialDelaySeconds: 10
+        periodSeconds: 5
+      readinessProbe:
+        initialDelaySeconds: 10
+        periodSeconds: 5
+  kafka-topic-creator:
+    enabled: true
+    kafka:
+      topics:
+        - name: backend-entity-view-events
+          replicationFactor: 1
+          partitions: 2
+          configs:
+            - retention.bytes=1073741824
+            - retention.ms=10800000
+        - name: raw-trace-view-events
+          replicationFactor: 1
+          partitions: 2
+          configs:
+            - retention.bytes=1073741824
+            - retention.ms=10800000
+        - name: raw-service-view-events
+          replicationFactor: 1
+          partitions: 2
+          configs:
+            - retention.bytes=1073741824
+            - retention.ms=10800000
+        - name: service-call-view-events
+          replicationFactor: 1
+          partitions: 2
+          configs:
+            - retention.bytes=1073741824
+            - retention.ms=10800000
+        - name: span-event-view
+          replicationFactor: 1
+          partitions: 2
+          configs:
+            - retention.bytes=1073741824
+            - retention.ms=10800000
+
+hypertrace-federated-service:
+  enabled: true
+  javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "256Mi"
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+
+gateway-service:
+  replicaCount: 0
+  containerPortName: grpc-port
+  serviceSelectorLabels:
+    app: hypertrace-federated-service
+  configMap:
+    name: gateway-service-config
+    data:
+      application.conf: |-
+        entity.service.config = {
+          host = localhost
+          port = 9001
+        }
+        query.service.config = {
+          host = localhost
+          port = 9001
+        }
+        attributes.service.config = {
+          host = localhost
+          port = 9001
+        }
+
+entity-service:
+  replicaCount: 0
+  serviceSelectorLabels:
+    app: hypertrace-federated-service
+  config-bootstrapper:
+    javaOpts: "-Xms128M -Xmx128M"
+    resources:
+      requests:
+        cpu: "0.1"
+        memory: "256Mi"
+      limits:
+        cpu: "0.2"
+        memory: "256Mi"
+
+attribute-service:
+  replicaCount: 0
+  serviceSelectorLabels:
+    app: hypertrace-federated-service
+  config-bootstrapper:
+    javaOpts: "-Xms128M -Xmx128M"
+    resources:
+      requests:
+        cpu: "0.1"
+        memory: "256Mi"
+      limits:
+        cpu: "0.2"
+        memory: "256Mi"
+
+query-service:
+  replicaCount: 0
+  serviceSelectorLabels:
+    app: hypertrace-federated-service
+
+hypertrace-graphql-service:
+  javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "256Mi"
+
+hypertrace-ui:
+  service:
+    port: 2020
+  resources:
+    requests:
+      cpu: "0.05"
+      memory: "64Mi"
+    limits:
+      cpu: "0.2"
+      memory: "64Mi"
+
+kafka-topic-creator:
+  enabled: true
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "256Mi"
+  env:
+    - name: KAFKA_HEAP_OPTS
+      value: "-Xms128M -Xmx128M"
+  jobName: hypertrace-kafka-topics-creator
+  helmHook: pre-install,pre-upgrade
+  zookeeper:
+    address: zookeeper:2181
+  kafka:
+    topics:
+      - name: jaeger-spans
+        replicationFactor: 1
+        partitions: 2
+        configs:
+          - retention.bytes=1073741824
+          - retention.ms=10800000
+      - name: raw-spans-from-jaeger-spans
+        replicationFactor: 1
+        partitions: 2
+        configs:
+          - retention.bytes=1073741824
+          - retention.ms=10800000
+      - name: structured-traces-from-raw-spans
+        replicationFactor: 1
+        partitions: 2
+        configs:
+          - retention.bytes=1073741824
+          - retention.ms=10800000
+      - name: enriched-structured-traces
+        replicationFactor: 1
+        partitions: 2
+        configs:
+          - retention.bytes=1073741824
+          - retention.ms=10800000
