@@ -1,0 +1,27 @@
+{{- if or (eq .Values.htEnv "gcp") (eq .Values.htEnv "aws") (eq .Values.htEnv "minikube") (eq .Values.htEnv "docker-desktop") (eq .Values.htEnv "microk8s")}}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: hypertrace
+{{- if eq .Values.htEnv "gcp" }}
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+{{- end }}
+{{- if eq .Values.htEnv "aws" }}
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+{{- end }}
+{{- if eq .Values.htEnv "minikube" }}
+provisioner: k8s.io/minikube-hostpath
+{{- end }}
+{{- if eq .Values.htEnv "docker-desktop" }}
+provisioner: docker.io/hostpath
+{{- end }}
+{{- if eq .Values.htEnv "microk8s" }}
+provisioner: microk8s.io/hostpath
+{{- end }}
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+{{- end }}

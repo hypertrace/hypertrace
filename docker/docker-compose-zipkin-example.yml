@@ -1,0 +1,20 @@
+version: '2.4'
+services:
+  # Generate traffic by hitting http://localhost:8081
+  frontend:
+    container_name: frontend
+    image: openzipkin/example-sleuth-webmvc
+    command: Frontend
+    environment: 
+        - SPRING_SLEUTH_SUPPORTS-JOIN=false
+    ports:
+      - 8081:8081
+    depends_on:
+      backend:
+        condition: service_started
+  backend:
+    container_name: backend
+    image: openzipkin/example-sleuth-webmvc
+    command: Backend
+    environment: 
+        - SPRING_SLEUTH_SUPPORTS-JOIN=false
