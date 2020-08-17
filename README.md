@@ -24,7 +24,7 @@ If you have application instrumented to send traces to Zipkin or Jaeger, you are
 Even if not you can try Hypertrace with sample application by running
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up
+docker-compose -f docker-compose-zipkin-example.yml up
 ```
 Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
 
