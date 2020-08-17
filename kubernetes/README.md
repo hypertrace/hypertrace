@@ -28,6 +28,7 @@ In case of any port collisions, users can modify the following properties in hel
 
 ### Install
 - `git clone https://github.com/hypertrace/hypertrace.git`
+- `cd hypertrace/kubernetes`
 - Update the config properties under `./config/hypertrace.properties` as needed. The default config will work for a `dev` deployment on Docker for Desktop.
 - Run `./hypertrace.sh install`
 
