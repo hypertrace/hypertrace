@@ -17,17 +17,17 @@ git clone https://github.com/hypertrace/hypertrace.git
 cd hypertrace
 docker-compose -f docker/docker-compose.yml up
 ```
-This will start all services required for Hypertrace. Once you see the service hypertrace-ui start, you can visit Hypertrace UI at `http://localhost:2020`. 
+This will start all services required for Hypertrace. Once you see the service `Hypertrace-UI` start, you can visit Hypertrace UI at http://localhost:2020 . 
 
 If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace. Even if not you can run sample application using `docker-compose -f docker/docker-compose-zipkin-example.yml` or you can try Hypertrace with sample application by running
 
 ```
-docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up`
+docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up
 ```
 Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
 
 ## Deploying with Kubernetes
-Please refer to [deployments](https://docs.hypertrace.org/deployments/) section in documentation which lists down steps for deploying Hypertrace on different Kubernetes flavors along different operating systems along with all major cloud providers. You can find the helm charts and installation script along with more details [here](/kubernetes).
+Please refer to [deployments](https://docs.hypertrace.org/deployments/) section in documentation which lists down steps for deploying Hypertrace on different Kubernetes flavors across different operating systems along with all major cloud providers. You can find the helm charts and installation script with more details [here](/kubernetes).
 
 ## Community
 [Join the Hypertrace Workspace](https://www.hypertrace.org/get-started) on Slack to connect with other users, contributors and people behind Hypertrace. 
