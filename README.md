@@ -36,9 +36,6 @@ Please refer to [deployments](https://docs.hypertrace.org/deployments/) section 
 
 ## Documentation
 Check out [Hypertrace documentation](https://docs.hypertrace.org) to know more about Hypetrace features, architecture and more cool insights!
-- [Getting started](https://docs.hypertrace.org/getting-started/)
-- [Deployments](https://docs.hypertrace.org/deployments/)
-- [Sample Apps](https://docs.hypertrace.org/sample-app/)
 
 ## Docker imgaes
 Released versions of docker images for various Hypertrace components are availale on [dockerhub](https://hub.docker.com/u/hypertrace).
