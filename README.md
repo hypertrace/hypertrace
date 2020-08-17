@@ -1,32 +1,27 @@
 # Hypertrace
-Hypertrace is a cloud-native distributed tracing based Observability platform
-that gives visibility into your dev and production distributed systems.
+Hypertrace is a highly scalable, cloud-native observability platform that uses distributed tracing to give you visibility into your dev, test and production systems.
 
-Hypertrace was originally developed by Traceable as a highly scalable
-distributed tracing platform and is used by Traceable’s cloud-native
-application security platform. ‍ Realizing that Hypertrace was a powerful
-standalone tracing and observability platform, Traceable created this open source
-project for the software development community to use in their applications.
+Traceable runs its cloud-native application security platform upon Hypertrace. Realizing that Hypertrace was a powerful standalone tracing and observability platform, Traceable created this open source project for the software development community to use in their applications.
 
 ---
-## Quick-start
-If you want to see Hypertrace in action, you can quickly start Hypertrace via Docker.
+## Quick Start
+If you want to see Hypertrace in action, you can quickly start Hypertrace with [Docker Compose](https://docs.docker.com/compose/install/).
 
 ```
 git clone https://github.com/hypertrace/hypertrace.git
 cd hypertrace/docker
 docker-compose -f docker-compose.yml up
 ```
-This will start all services required for Hypertrace. Once you see the service `Hypertrace-UI` start, you can visit Hypertrace UI at http://localhost:2020 . 
+This will pull all images and start all services required for Hypertrace. Within 1 minute, you may see `Hypertrace-UI` is 'Up (healthy)' in the terminal logs. Then you can visit Hypertrace at http://localhost:2020. 
 
-If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace. 
+If you have application that is already instrumented to send traces to Zipkin or Jaeger, you may use it with Hypertrace. 
 
-Even if not you can try Hypertrace with sample application by running
+If you don't, you can try Hypertrace with our sample application by running:
 
 ```
 docker-compose -f docker-compose-zipkin-example.yml up
 ```
-Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
+This example app may be visited at http://localhost:8081. Click a few buttons to generate some sample requests. Then go back to Hypertrace and few the results!
 
 ## Deploying with Kubernetes
 Please refer to [deployments](https://docs.hypertrace.org/deployments/) section in documentation which lists down steps for deploying Hypertrace on different Kubernetes flavors across different operating systems along with all major cloud providers. You can find the helm charts and installation script with more details [here](/kubernetes).
