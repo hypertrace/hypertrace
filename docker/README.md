@@ -10,10 +10,11 @@ If you want to see Hypertrace in action, you can quickly start Hypertrace via Do
 
 ```
 git clone https://github.com/hypertrace/hypertrace.git
+cd hypertrace/docker
 docker-compose -f docker-compose.yml up
 ```
 
-This will start all services required for Hypertrace. Once you see the service hypertrace-ui start, you can visit Hypertrace UI at `http://localhost:2020`. 
+This will start all services required for Hypertrace. Once you see the service hypertrace-ui start, you can visit Hypertrace UI at http://localhost:2020 . 
 
 | ![space-1.jpg](https://s3.amazonaws.com/hypertrace-docs/dashboard-1.png) | 
 |:--:| 
@@ -33,6 +34,6 @@ Here are the default Hypertrace ports:
 
 ### Sample application
 - The example app has two services: frontend and backend. They both report trace data to Hypertrace. To setup the demo, you need to start Frontend, Backend and Hypertrace. 
-- You can start sample by running `docker-compose -f examples/docker-compose.yml up` if you have hypertrace running already. 
-- You can start sample app with Hypertrace using `docker-compose -f docker-compose.yml -f examples/docker-compose.yml up`.
-- Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests or simply run `run.sh` which will generate bunch of requests for you! 
+- You can start sample by running `docker-compose -f docker-compose-zipkin-example.yml up` if you have hypertrace running already. 
+- You can start sample app with Hypertrace using `docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up`.
+- Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!

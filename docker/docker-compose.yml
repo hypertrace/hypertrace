@@ -1,7 +1,8 @@
 ## This does everything you need to get a hypertracing system started.
 ## You can connect to the UI at port 2020 and send data to it on any supported tracing solution.
 ## Note: Our stack is dependent on pinot and it is a cpu heavy during startup. 
-## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command. we are looking at improving this.
+## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command. 
+## we are looking at improving this.
 version: '2.4'
 services:
 

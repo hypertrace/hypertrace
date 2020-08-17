@@ -14,14 +14,17 @@ If you want to see Hypertrace in action, you can quickly start Hypertrace via Do
 
 ```
 git clone https://github.com/hypertrace/hypertrace.git
+cd hypertrace
 docker-compose -f docker/docker-compose.yml up
 ```
+This will start all services required for Hypertrace. Once you see the service hypertrace-ui start, you can visit Hypertrace UI at `http://localhost:2020`. 
 
-If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace. Even if not you can try Hypertrace with sample application by running
+If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace. Even if not you can run sample application using `docker-compose -f docker/docker-compose-zipkin-example.yml` or you can try Hypertrace with sample application by running
 
 ```
-docker-compose -f docker/docker-compose.yml -f docker/examples/docker-compose.yml up
+docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up`
 ```
+Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
 
 ## Deploying with Kubernetes
 Please refer to [deployments](https://docs.hypertrace.org/deployments/) section in documentation which lists down steps for deploying Hypertrace on different Kubernetes flavors along different operating systems along with all major cloud providers. You can find the helm charts and installation script along with more details [here](/kubernetes).
@@ -68,4 +71,4 @@ Released versions of docker images for various Hypertrace components are availal
 Hypertrace follows open core model where "Hypertrace core" (or simply Core) is
 under Apache 2.0 license, which has distributed trace ingestion and exploration
 features. Services, Endpoints, Backends and Service Graph features are under
-Traceable Community license.
+[Traceable Community license](LICENSE).
