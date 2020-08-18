@@ -12,12 +12,6 @@ services:
   hypertrace-ui:
     image: hypertrace/hypertrace-ui
     container_name: hypertrace-ui
-    # todo: move health check to dockerfile
-    healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "2020"]
-      interval: 2s
-      timeout: 1s
-      retries: 8
     ports:
       - 2020:2020
     depends_on:
