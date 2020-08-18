@@ -9,28 +9,38 @@ standalone tracing and observability platform, Traceable created this open sourc
 project for the software development community to use in their applications.
 
 ---
+## Quick-start
+If you want to see Hypertrace in action, you can quickly start Hypertrace via Docker.
 
+```
+git clone https://github.com/hypertrace/hypertrace.git
+cd hypertrace/docker
+docker-compose -f docker-compose.yml up
+```
+This will start all services required for Hypertrace. Once you see the service `Hypertrace-UI` start, you can visit Hypertrace UI at http://localhost:2020 . 
 
-### To start using Hypertrace
+If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace. 
 
-Visit Hypertrace documentation at [docs.hypertrace.org](https://docs.hypertrace.org/).
+Even if not you can try Hypertrace with sample application by running
 
-Follow these steps to get started with hypertrace:
-- [Installation](https://docs.hypertrace.org/getting-started/)
-- [Quick start with sample app](https://docs.hypertrace.org/sample-app/)
+```
+docker-compose -f docker-compose-zipkin-example.yml up
+```
+Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
 
-### To start tracing with Hypertrace
+## Deploying with Kubernetes
+Please refer to [deployments](https://docs.hypertrace.org/deployments/) section in documentation which lists down steps for deploying Hypertrace on different Kubernetes flavors across different operating systems along with all major cloud providers. You can find the helm charts and installation script with more details [here](/kubernetes).
 
-The [community repository]() hosts all information about building Hypertrace from source, how to contribute code and documentation, who to contact about what, etc.
+## Community
+[Join the Hypertrace Workspace](https://www.hypertrace.org/get-started) on Slack to connect with other users, contributors and people behind Hypertrace. 
 
-If you want to deploy hypertrace right away on docker desktop or any cloud platform you can refer to our [deployment docs](https://docs.hypertrace.org/deployments/) or here are steps to quick start with docker desktop.
+## Documentation
+Check out [Hypertrace documentation](https://docs.hypertrace.org) to know more about Hypetrace features, architecture and more cool insights!
 
-
-For the full story, head over to the [developer's documentation](https://docs.hypertrace.org/).
+## Docker imgaes
+Released versions of docker images for various Hypertrace components are availale on [dockerhub](https://hub.docker.com/u/hypertrace).
 
 ## Related Repositories
-### Documentation
-* [Docs website](https://github.com/hypertrace/hypertrace-docs-website)
 
 ### Data Ingestion Pipeline
 * [Span Normalizer](https://github.com/hypertrace/span-normalizer)
@@ -60,4 +70,4 @@ For the full story, head over to the [developer's documentation](https://docs.hy
 Hypertrace follows open core model where "Hypertrace core" (or simply Core) is
 under Apache 2.0 license, which has distributed trace ingestion and exploration
 features. Services, Endpoints, Backends and Service Graph features are under
-Traceable Community license.
+[Traceable Community license](LICENSE).

@@ -1,0 +1,105 @@
+htEnv: ""
+zookeeper:
+  fullnameOverride: "zookeeper"
+  replicaCount: 3
+  javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.1"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "256Mi"
+  volume:
+    storageClassName: "hypertrace"
+    storage: "4Gi"
+
+kafka:
+  fullnameOverride: "kafka"
+  replicaCount: 3
+  javaOpts: "-Xms128M -Xmx384M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+  volume:
+    storageClassName: "hypertrace"
+    storage: "16Gi"
+  config:
+    autoCreateTopicsEnable: false
+    defaultReplicationFactor: 3
+    minInsyncReplicas: 1
+    numRecoveryThreadsPerDataDir: 4
+    offsetsTopicReplicationFactor: 3
+    transactionStateLogReplicationFactor: 3
+
+schema-registry:
+  fullnameOverride: "schema-registry"
+  replicaCount: 2
+  heapOptions: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "256Mi"
+
+pinot:
+  fullnameOverride: "pinot"
+  cluster:
+    name: "hypertrace-views"
+  controller:
+    replicaCount: 1
+    jvmOpts: "-Xms128M -Xmx384M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "0.25"
+        memory: "512Mi"
+      limits:
+        cpu: "1"
+        memory: "512Mi"
+    persistence:
+      size: "8Gi"
+      storageClass: "hypertrace"
+
+  broker:
+    replicaCount: 2
+    jvmOpts: "-Xms256M -Xmx256M -XX:MaxDirectMemorySize=128M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "0.25"
+        memory: "512Mi"
+      limits:
+        cpu: "1"
+        memory: "512Mi"
+
+  server:
+    replicaCount: 2
+    jvmOpts: "-Xms256M -Xmx256M -XX:MaxDirectMemorySize=128M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "0.5"
+        memory: "512Mi"
+      limits:
+        cpu: "1"
+        memory: "512Mi"
+    persistence:
+      size: "32Gi"
+      storageClass: "hypertrace"
+
+  zookeeper:
+    image:
+      repository: "hypertrace/kafka"
+      tag: "0.1.1"
+
+mongodb:
+  fullnameOverride: "mongo"
+  replicaSet:
+    enabled: true
+  persistence:
+    storageClassName: "hypertrace"
+    size: "2Gi"

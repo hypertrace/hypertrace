@@ -1,0 +1,224 @@
+zookeeper:
+  replicaCount: 3
+  javaOpts: "-Xms320M -Xmx320M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"
+
+kafka:
+  replicaCount: 3
+  javaOpts: "-Xms2G -Xmx2G -XX:MaxDirectMemorySize=128M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "1"
+      memory: "8Gi"
+    limits:
+      cpu: "2"
+      memory: "8Gi"
+  volume:
+    storageClassName: "hypertrace"
+    storage: "64Gi"
+
+schema-registry:
+  replicaCount: 2
+  heapOptions: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "256Mi"
+
+pinot:
+  controller:
+    replicaCount: 1
+    jvmOpts: "-Xms1G -Xmx1536M -XX:MaxDirectMemorySize=128M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "2Gi"
+    persistence:
+      size: "64Gi"
+      storageClass: "hypertrace"
+
+  broker:
+    replicaCount: 3
+    jvmOpts: "-Xms1G -Xmx1G -XX:MaxDirectMemorySize=2560M -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "1"
+        memory: "4Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+
+  server:
+    replicaCount: 3
+    jvmOpts: "-Xms1G -Xmx1G -XX:MaxDirectMemorySize=1G -XX:+ExitOnOutOfMemoryError"
+    resources:
+      requests:
+        cpu: "2"
+        memory: "4Gi"
+      limits:
+        cpu: "3"
+        memory: "4Gi"
+    persistence:
+      size: "128Gi"
+      storageClass: "hypertrace"
+
+mongodb:
+  persistence:
+    storageClassName: "hypertrace"
+    size: "2Gi"
+
+hypertrace-oc-collector:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "256Mi"
+
+span-normalizer:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+
+raw-spans-grouper:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "2Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+hypertrace-trace-enricher:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "2Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+hypertrace-view-generator:
+  backendEntityView:
+    generator:
+      resources:
+        requests:
+          cpu: "0.5"
+          memory: "1Gi"
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+  rawServiceView:
+    generator:
+      resources:
+        requests:
+          cpu: "0.5"
+          memory: "1Gi"
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+  rawTraceView:
+    generator:
+      resources:
+        requests:
+          cpu: "0.5"
+          memory: "1Gi"
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+  serviceCallView:
+    generator:
+      resources:
+        requests:
+          cpu: "0.5"
+          memory: "1Gi"
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+  spanEventView:
+    generator:
+      resources:
+        requests:
+          cpu: "0.5"
+          memory: "1Gi"
+        limits:
+          cpu: "1"
+          memory: "1Gi"
+
+gateway-service:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"
+
+entity-service:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"
+
+attribute-service:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"
+
+query-service:
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"
+
+hypertrace-graphql-service:
+  javaOpts: "-Xms512M -Xmx768M"
+  serviceConfig:
+    defaultTenantId: "__default"
+  resources:
+    requests:
+      cpu: "0.5"
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+
+hypertrace-ui:
+  service:
+    type: LoadBalancer
+  nginxConfig:
+    graphqlRedirectEnabled: true
+  resources:
+    requests:
+      cpu: "0.05"
+      memory: "320Mi"
+    limits:
+      cpu: "0.5"
+      memory: "512Mi"
