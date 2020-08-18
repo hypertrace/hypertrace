@@ -26,7 +26,7 @@ Even if not you can try Hypertrace with sample application by running
 ```
 docker-compose -f docker-compose-zipkin-example.yml up
 ```
-Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
+Example app will be served at http://localhost:8081 . You can visit URL and refresh it few times to generate some sample requests!
 
 ## Deploying with Kubernetes
 Please refer to [deployments](https://docs.hypertrace.org/deployments/) section in documentation which lists down steps for deploying Hypertrace on different Kubernetes flavors across different operating systems along with all major cloud providers. You can find the helm charts and installation script with more details [here](/kubernetes).

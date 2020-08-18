@@ -20,6 +20,8 @@ This will start all services required for Hypertrace. Once you see the service h
 |:--:| 
 | *Hypertrace Dashboard* |
 
+If you are facing any issues with docker-compose setup, we have listed down common issues and resolutions [here](https://docs.hypertrace.org/troubleshooting/docker-compose/).
+
 ### Ports
 
 Here are the default Hypertrace ports:
@@ -36,4 +38,4 @@ Here are the default Hypertrace ports:
 - The example app has two services: frontend and backend. They both report trace data to Hypertrace. To setup the demo, you need to start Frontend, Backend and Hypertrace. 
 - You can start sample by running `docker-compose -f docker-compose-zipkin-example.yml up` if you have hypertrace running already. 
 - You can start sample app with Hypertrace using `docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up`.
-- Example app will be served at http://localhost:8081 . You can visit app to generate some sample requests!
+- Example app will be served at http://localhost:8081 . You can visit app and refresh it few times to generate some sample requests!
