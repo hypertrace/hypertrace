@@ -17,7 +17,7 @@ services:
     depends_on:
       hypertrace-federated-service:
         condition: service_started
-  # Serves UI and storage requests that cross different backends like Pinot and Mongo
+  # Serves GraphQL and gRPC requests that cross different backends like Pinot and Mongo
   hypertrace-federated-service:
     image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
