@@ -7,6 +7,14 @@ jobs:
     working_directory: ~/hypertrace
     steps:
       - checkout
+      - setup_remote_docker
+      - run:
+          name: Install Docker Compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+
       - run: jq --version
       - run: docker-compose -f docker/docker-compose.yml up -d
       - run: curl -i http://localhost:8081
