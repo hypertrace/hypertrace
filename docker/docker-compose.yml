@@ -36,6 +36,7 @@ services:
       interval: 2s
       timeout: 1s
       retries: 8
+      start_period: 10s
     depends_on:
       mongo:
         condition: service_healthy
