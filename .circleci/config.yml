@@ -8,12 +8,13 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run:
+      - run: # official docs won't work, see https://github.com/circleci/circleci-docs/issues/1323#issuecomment-323620271
           name: Install Docker Compose
           command: |
             set -x
-            curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
+            curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       - run: jq --version
       - run: docker-compose -f docker/docker-compose.yml up -d
