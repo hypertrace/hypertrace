@@ -23,7 +23,7 @@ services:
     container_name: hypertrace-federated-service
     networks:
       default:
-        # prevents apps from having to use the hostname kafka-zookeeper
+        # In distributed setup, the GraphQL endpoint may be in a different container
         aliases:
           - hypertrace-graphql-service
     environment:
