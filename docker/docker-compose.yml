@@ -27,16 +27,8 @@ services:
         aliases:
           - hypertrace-graphql-service
     environment:
-      - SERVICE_NAME=hypertrace-federated-service
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-    # todo: move health check to dockerfile
-    healthcheck:
-      test: ["CMD", "wget", "-O", "-", "http://localhost:9002/health"]
-      interval: 2s
-      timeout: 1s
-      retries: 8
-      start_period: 10s
     depends_on:
       mongo:
         condition: service_healthy
