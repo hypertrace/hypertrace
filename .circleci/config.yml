@@ -1,0 +1,18 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:2020.01
+    working_directory: ~/hypertrace
+    steps:
+      - checkout
+      - run: jq --version
+      - run: docker-compose -f docker/docker-compose.yml up -d
+      - run: curl -i http://localhost:8081
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
