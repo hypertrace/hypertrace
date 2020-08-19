@@ -15,32 +15,17 @@ services:
     ports:
       - 2020:2020
     depends_on:
-      hypertrace-graphql-service:
+      hypertrace-federated-service:
         condition: service_started
-  # Serves the GraphQL API the UI uses
-  hypertrace-graphql-service:
-    image: hypertrace/hypertrace-graphql-service
-    container_name: hypertrace-graphql-service
-    environment:
-      - DEFAULT_TENANT_ID=__default
-      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace-federated-service
-      - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
-      - GATEWAY_SERVICE_HOST_CONFIG=hypertrace-federated-service
-      - GATEWAY_SERVICE_PORT_CONFIG=9001
-    # todo: move health check to dockerfile
-    healthcheck:
-      test: ["CMD", "wget", "-O", "-", "http://localhost:23432/health"]
-      interval: 2s
-      timeout: 1s
-      retries: 8
-      start_period: 10s
-    depends_on:
-      config-bootstrapper:
-        condition: service_started
-  # Serves storage requests that cross different backends like Pinot and Mongo
+  # Serves UI and storage requests that cross different backends like Pinot and Mongo
   hypertrace-federated-service:
     image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
+    networks:
+      default:
+        # prevents apps from having to use the hostname kafka-zookeeper
+        aliases:
+          - hypertrace-graphql-service
     environment:
       - SERVICE_NAME=hypertrace-federated-service
       - MONGO_HOST=mongo
