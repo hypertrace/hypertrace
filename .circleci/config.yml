@@ -16,7 +16,7 @@ jobs:
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
-      - run: docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d || docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs
+      - run: docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs | grep ERROR); exit 1
       - run: wget --retry-connrefused -T 60 -O /dev/null http://127.0.0.1:2020/
       - run: curl -i http://localhost:8081
       - run: cp .circleci/query.gql.template .circleci/query.gql
