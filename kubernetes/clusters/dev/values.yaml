@@ -279,14 +279,14 @@ hypertrace-view-generator:
 
 hypertrace-federated-service:
   enabled: true
-  javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+  javaOpts: "-Xms256M -Xmx256M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
-      cpu: "0.25"
-      memory: "256Mi"
-    limits:
       cpu: "0.5"
-      memory: "256Mi"
+      memory: "384Mi"
+    limits:
+      cpu: "0.75"
+      memory: "384Mi"
   livenessProbe:
     initialDelaySeconds: 10
     periodSeconds: 5
@@ -350,6 +350,22 @@ query-service:
     app: hypertrace-federated-service
 
 hypertrace-graphql-service:
+  replicaCount: 0
+  serviceSelectorLabels:
+    app: hypertrace-federated-service
+  configMap:
+    name: hypertrace-graphql-service-config
+    data:
+      application.conf: |-
+        defaultTenantId = "__default"
+        gateway.service = {
+          host = localhost
+          port = 9001
+        }
+        attributes.service = {
+          host = localhost
+          port = 9001
+        }
   javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
