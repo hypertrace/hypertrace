@@ -1,0 +1,15 @@
+{
+  traces(
+    type: API_TRACE,
+    limit: 1,
+    between: {
+			startTime: "2020-01-01T00:00:00.000Z"
+			endTime: "%endTime%"
+  }
+  ) {
+    results {
+      id
+      serviceName: attribute(key: "serviceName")
+    }
+  }
+}

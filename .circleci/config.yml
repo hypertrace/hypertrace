@@ -16,9 +16,11 @@ jobs:
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
-      - run: jq --version
-      - run: docker-compose -f docker/docker-compose.yml up -d
+      - run: docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d
       - run: curl -i http://localhost:8081
+      - run: cp .circleci/query.gql.template .circleci/query.gql
+      - run: sed 's/%startTime%/$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")' .circleci/query.gql
+      - run: curl -X POST http://localhost:2020/graphql --data "@.circleci/query.gql" | jq .
 
 workflows:
   version: 2
