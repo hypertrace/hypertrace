@@ -17,6 +17,10 @@ jobs:
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       # we run docker-compose up but if it fails we print the logs for WARNING and ERROR
+      - run: |
+          # makes sure pinot is being provissioned on before hand
+          docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d pinot || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
+          sleep 30
       - run: docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
       # once the containers are up we wait for the frontend of hypertrace to be available
       - run: wget --retry-connrefused -T 60 -O /dev/null http://127.0.0.1:2020/
