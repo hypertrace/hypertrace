@@ -31,17 +31,9 @@ services:
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-    entrypoint: ["sh",
-                 "/usr/bin/wait-for-it.sh",
-                 "-h",
-                 "pinot",
-                 "-p",
-                 "8097",
-                 "--timeout=120",
+    entrypoint: ["sh", "/usr/bin/wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
                  "--" ,
-                 "java",
-                 "-cp",
-                 "/app/resources:/app/classes:/app/libs/*",
+                 "java", "-cp", "/app/resources:/app/classes:/app/libs/*",
                  "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
     depends_on:
       mongo:
