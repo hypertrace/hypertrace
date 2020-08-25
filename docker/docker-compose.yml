@@ -8,27 +8,17 @@ services:
 
 # Frontend Services
 
-  # Serves the Hypertrace UI
-  hypertrace-ui:
-    image: hypertrace/hypertrace-ui
-    container_name: hypertrace-ui
-    ports:
-      - 2020:2020
-    depends_on:
-      hypertrace-federated-service:
-        condition: service_started
   # Serves GraphQL and gRPC requests that cross different backends like Pinot and Mongo
   hypertrace-federated-service:
     image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
-    networks:
-      default:
-        # In distributed setup, the GraphQL endpoint may be in a different container
-        aliases:
-          - hypertrace-graphql-service
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
+    ports:
+      - 2020:2020
+    healthcheck:
+      start_period: 10s
     depends_on:
       mongo:
         condition: service_healthy
