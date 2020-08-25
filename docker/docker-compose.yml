@@ -26,16 +26,27 @@ services:
         # In distributed setup, the GraphQL endpoint may be in a different container
         aliases:
           - hypertrace-graphql-service
+    volumes:
+      - ../scripts/wait-for-it.sh:/usr/bin/wait-for-it.sh
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
+#    entrypoint: ["sh",
+#                 "/app/scripts/wait-for-it.sh",
+#                 "pinot:8097",
+#                 "--timeout=60",
+#                 "--" ,
+#                 "java",
+#                 "-cp",
+#                 "/app/resources:/app/classes:/app/libs/*",
+#                 "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
     depends_on:
       mongo:
         condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
       pinot:
-        condition: service_healthy
+        condition: service_started
 
 # Ingestion pipeline
 
