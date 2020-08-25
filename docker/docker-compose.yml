@@ -31,15 +31,18 @@ services:
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-#    entrypoint: ["sh",
-#                 "/app/scripts/wait-for-it.sh",
-#                 "pinot:8097",
-#                 "--timeout=60",
-#                 "--" ,
-#                 "java",
-#                 "-cp",
-#                 "/app/resources:/app/classes:/app/libs/*",
-#                 "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
+    entrypoint: ["sh",
+                 "/usr/bin/wait-for-it.sh",
+                 "-h",
+                 "pinot",
+                 "-p",
+                 "8097",
+                 "--timeout=120",
+                 "--" ,
+                 "java",
+                 "-cp",
+                 "/app/resources:/app/classes:/app/libs/*",
+                 "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
     depends_on:
       mongo:
         condition: service_healthy
@@ -197,7 +200,7 @@ services:
     image: hypertrace/pinot-servicemanager:0.1.3
     container_name: pinot
     environment:
-      - JAVA_OPTS=-Xms128M -Xmx512M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError
+      - JAVA_OPTS=-Xms256M -Xmx512M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError
     networks:
       default:
         # Usually, Pinot is distributed, and clients connect to the controller
