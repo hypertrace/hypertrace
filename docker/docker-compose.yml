@@ -8,15 +8,6 @@ services:
 
 # Frontend Services
 
-  # Serves the Hypertrace UI
-  hypertrace-ui:
-    image: hypertrace/hypertrace-ui
-    container_name: hypertrace-ui
-    ports:
-      - 2020:2020
-    depends_on:
-      hypertrace-federated-service:
-        condition: service_started
   # Serves GraphQL and gRPC requests that cross different backends like Pinot and Mongo
   hypertrace-federated-service:
     image: hypertrace/hypertrace-federated-service
@@ -35,6 +26,10 @@ services:
                  "--" ,
                  "java", "-cp", "/app/resources:/app/classes:/app/libs/*",
                  "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
+    ports:
+      - 2020:2020
+    healthcheck:
+      start_period: 120s
     depends_on:
       mongo:
         condition: service_healthy
@@ -136,10 +131,18 @@ services:
       # todo : we are in process of making them as part of default.
       - PINOT_BROKER_TAG=DefaultTenant
       - PINOT_SERVER_TAG=DefaultTenant
-    restart: on-failure
+    volumes:
+      - ../scripts/wait-for-it.sh:/usr/bin/wait-for-it.sh
+    entrypoint: ["sh", "/usr/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
+                 "--" ,
+                 "java", "-cp", "/app/resources:/app/classes:/app/libs/*",
+                 "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
+    healthcheck:
+      start_period: 180s
     depends_on:
       pinot:
-        condition: service_healthy
+        condition: service_started
+
   # Creates require attributes into mongo like entity type, its relationship, etc
   config-bootstrapper:
     image: hypertrace/config-bootstrapper
@@ -151,13 +154,21 @@ services:
       - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - MONGO_HOST=mongo
-    command: ["-c", "/app/resources/configs/config-bootstrapper/application.conf",
-      "-C", "/app/resources/configs/config-bootstrapper/", "--upgrade"]
+    volumes:
+      - ../scripts/wait-for-it.sh:/usr/bin/wait-for-it.sh
+    entrypoint: ["sh", "/usr/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
+                 "--" ,
+                 "java", "-cp", "/app/resources:/app/classes:/app/libs/*",
+                 "org.hypertrace.core.bootstrapper.ConfigBootstrapper",
+                 "-c", "/app/resources/configs/config-bootstrapper/application.conf",
+                 "-C", "/app/resources/configs/config-bootstrapper/", "--upgrade"]
+    healthcheck:
+      start_period: 180s
     depends_on:
       mongo:
         condition: service_healthy
       hypertrace-federated-service:
-        condition: service_healthy
+        condition: service_started
 
 # Third-party data services:
 
