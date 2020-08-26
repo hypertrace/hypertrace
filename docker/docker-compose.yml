@@ -19,9 +19,9 @@ services:
       # feature available in commands like docker ps.
       #
       # TODO: Remove this after startup improvement fixes
-      - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
-      - ../scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
-      - ../scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
+      - ../docker/scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+      - ../docker/scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
+      - ../docker/scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
