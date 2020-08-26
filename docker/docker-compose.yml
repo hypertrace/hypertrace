@@ -12,20 +12,30 @@ services:
   hypertrace-federated-service:
     image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
+    volumes: &default-scripts
+      - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+      - ../scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
+      - ../scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
+    # todo : Remove this after startup improvement fixes
+    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
+                 "--" ,
+                 "start-platform.sh"]
     ports:
       - 2020:2020
     healthcheck:
-      start_period: 10s
+      start_period: 120s
     depends_on:
       mongo:
         condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
       pinot:
-        condition: service_healthy
+        # note : To work successfully, it needs pinot to be healthy. This has started parallel for
+        # startup experience.
+        condition: service_started
 
 # Ingestion pipeline
 
@@ -120,10 +130,17 @@ services:
       # todo : we are in process of making them as part of default.
       - PINOT_BROKER_TAG=DefaultTenant
       - PINOT_SERVER_TAG=DefaultTenant
-    restart: on-failure
+    volumes: *default-scripts
+    # todo : Remove this after startup improvement fixes
+    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
+                 "--" ,
+                 "start-platform.sh"]
     depends_on:
       pinot:
-        condition: service_healthy
+        # note : To work successfully, it needs pinot to be healthy. This has started parallel for
+        # startup experience.
+        condition: service_started
+
   # Creates require attributes into mongo like entity type, its relationship, etc
   config-bootstrapper:
     image: hypertrace/config-bootstrapper
@@ -135,13 +152,18 @@ services:
       - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - MONGO_HOST=mongo
-    command: ["-c", "/app/resources/configs/config-bootstrapper/application.conf",
-      "-C", "/app/resources/configs/config-bootstrapper/", "--upgrade"]
+    volumes: *default-scripts
+    # todo : Remove this after startup improvement fixes
+    entrypoint: ["wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
+                 "--" ,
+                 "start-bootstrapper.sh"]
     depends_on:
       mongo:
         condition: service_healthy
       hypertrace-federated-service:
-        condition: service_healthy
+        # note : To work successfully, it needs hypertrace-federated-service to be healthy.
+        # This has started parallel for startup experience.
+        condition: service_started
 
 # Third-party data services:
 
@@ -176,7 +198,7 @@ services:
     image: hypertrace/pinot-servicemanager:0.1.3
     container_name: pinot
     environment:
-      - JAVA_OPTS=-Xms128M -Xmx512M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError
+      - JAVA_OPTS=-Xms256M -Xmx512M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError
     networks:
       default:
         # Usually, Pinot is distributed, and clients connect to the controller
