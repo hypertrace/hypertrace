@@ -26,9 +26,9 @@ jobs:
       # When using docker/docker-compose inside CI we can't ping them directly, hence we need
       # to use another container to run the desired scripts
       # https://circleci.com/docs/2.0/building-docker-images/#accessing-services
-      #- run: |
-      #    docker build -t tests .circleci
-      #    docker run tests --network
+      - run: |
+          docker build -t tests .circleci
+          docker run --network docker_default tests hypertrace-federated-service
 
 workflows:
   version: 2
