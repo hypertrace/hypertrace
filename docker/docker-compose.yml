@@ -18,14 +18,15 @@ services:
         aliases:
           - hypertrace-graphql-service
     volumes:
-      - ../scripts/wait-for-it.sh:/usr/bin/wait-for-it.sh
+      - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+      - ../scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-    entrypoint: ["sh", "/usr/bin/wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
+    # todo : Remove this after startup improvement fixes
+    entrypoint: ["sh", "/usr/local/bin/wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
                  "--" ,
-                 "java", "-cp", "/app/resources:/app/classes:/app/libs/*",
-                 "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
+                 "sh", "/usr/local/bin/start-platform.sh"]
     ports:
       - 2020:2020
     healthcheck:
@@ -132,11 +133,12 @@ services:
       - PINOT_BROKER_TAG=DefaultTenant
       - PINOT_SERVER_TAG=DefaultTenant
     volumes:
-      - ../scripts/wait-for-it.sh:/usr/bin/wait-for-it.sh
-    entrypoint: ["sh", "/usr/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
+      - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+      - ../scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
+    # todo : Remove this after startup improvement fixes
+    entrypoint: ["sh", "/usr/local/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
                  "--" ,
-                 "java", "-cp", "/app/resources:/app/classes:/app/libs/*",
-                 "org.hypertrace.core.serviceframework.PlatformServiceLauncher"]
+                 "sh", "/usr/local/bin/start-platform.sh"]
     healthcheck:
       start_period: 180s
     depends_on:
@@ -155,13 +157,12 @@ services:
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - MONGO_HOST=mongo
     volumes:
-      - ../scripts/wait-for-it.sh:/usr/bin/wait-for-it.sh
-    entrypoint: ["sh", "/usr/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
+      - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+      - ../scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
+    # todo : Remove this after startup improvement fixes
+    entrypoint: ["sh", "/usr/local/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
                  "--" ,
-                 "java", "-cp", "/app/resources:/app/classes:/app/libs/*",
-                 "org.hypertrace.core.bootstrapper.ConfigBootstrapper",
-                 "-c", "/app/resources/configs/config-bootstrapper/application.conf",
-                 "-C", "/app/resources/configs/config-bootstrapper/", "--upgrade"]
+                 "sh", "/usr/local/bin/start-bootstrapper.sh"]
     healthcheck:
       start_period: 180s
     depends_on:

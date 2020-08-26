@@ -1,4 +1,6 @@
 #!/bin/sh
+# Main things from https://github.com/vishnubob/wait-for-it/blob/master/wait-for-it.sh, but removed few
+# things to make it work with busybox sh
 TIMEOUT=15
 usage() {
   exitcode="$1"
