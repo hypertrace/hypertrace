@@ -13,13 +13,19 @@ services:
     image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
     volumes: &default-scripts
+      # These scripts are temporary, allowing a temporary override the ENTRYPOINT with a blocking barrier.
+      # Unlike service_started condition, these barriers can be longer than a minute. These are temporary
+      # because they shadow the ENTRYPOINT, duplicate and ignore the more robust HEALTHCHECK
+      # feature available in commands like docker ps.
+      #
+      # TODO: Remove this after startup improvement fixes
       - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
       - ../scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
       - ../scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-    # todo : Remove this after startup improvement fixes
+    # TODO: Remove this after startup improvement fixes
     entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
                  "--" ,
                  "start-platform.sh"]
@@ -131,7 +137,7 @@ services:
       - PINOT_BROKER_TAG=DefaultTenant
       - PINOT_SERVER_TAG=DefaultTenant
     volumes: *default-scripts
-    # todo : Remove this after startup improvement fixes
+    # TODO: Remove this after startup improvement fixes
     entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
                  "--" ,
                  "start-platform.sh"]
@@ -153,7 +159,7 @@ services:
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - MONGO_HOST=mongo
     volumes: *default-scripts
-    # todo : Remove this after startup improvement fixes
+    # TODO: Remove this after startup improvement fixes
     entrypoint: ["wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
                  "--" ,
                  "start-bootstrapper.sh"]
