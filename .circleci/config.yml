@@ -23,9 +23,9 @@ jobs:
           sleep 60
       - run: docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
       # once the containers are up we wait for the frontend of hypertrace to be available
-      - run: wget --retry-connrefused -T 60 -O /dev/null http://127.0.0.1:2020/
-      - run: curl -i http://localhost:8081
-      - run: curl -i -X POST http://localhost:2020/graphql --data "@.circleci/query.gql" | jq .
+      - run: wget --retry-connrefused -T 60 -O /dev/null http://127.0.0.1:2020/ || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs hypertrace-federated-service; exit 1)
+      - run: curl -i http://127.0.0.1:8081
+      - run: curl -i -X POST http://127.0.0.1:2020/graphql --data "@.circleci/query.gql" | jq .
 
 workflows:
   version: 2
