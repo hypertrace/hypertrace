@@ -12,21 +12,17 @@ services:
   hypertrace-federated-service:
     image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
-    networks:
-      default:
-        # In distributed setup, the GraphQL endpoint may be in a different container
-        aliases:
-          - hypertrace-graphql-service
-    volumes:
+    volumes: &default-scripts
       - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
       - ../scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
+      - ../scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
     # todo : Remove this after startup improvement fixes
-    entrypoint: ["sh", "/usr/local/bin/wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
+    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
                  "--" ,
-                 "sh", "/usr/local/bin/start-platform.sh"]
+                 "start-platform.sh"]
     ports:
       - 2020:2020
     healthcheck:
@@ -37,6 +33,8 @@ services:
       kafka-zookeeper:
         condition: service_healthy
       pinot:
+        # note : To work successfully, it needs pinot to be healthy. This has started parallel for
+        # startup experience.
         condition: service_started
 
 # Ingestion pipeline
@@ -132,17 +130,15 @@ services:
       # todo : we are in process of making them as part of default.
       - PINOT_BROKER_TAG=DefaultTenant
       - PINOT_SERVER_TAG=DefaultTenant
-    volumes:
-      - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
-      - ../scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
+    volumes: *default-scripts
     # todo : Remove this after startup improvement fixes
-    entrypoint: ["sh", "/usr/local/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
+    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
                  "--" ,
-                 "sh", "/usr/local/bin/start-platform.sh"]
-    healthcheck:
-      start_period: 180s
+                 "start-platform.sh"]
     depends_on:
       pinot:
+        # note : To work successfully, it needs pinot to be healthy. This has started parallel for
+        # startup experience.
         condition: service_started
 
   # Creates require attributes into mongo like entity type, its relationship, etc
@@ -156,19 +152,17 @@ services:
       - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - MONGO_HOST=mongo
-    volumes:
-      - ../scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
-      - ../scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
+    volumes: *default-scripts
     # todo : Remove this after startup improvement fixes
-    entrypoint: ["sh", "/usr/local/bin/wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
+    entrypoint: ["wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
                  "--" ,
-                 "sh", "/usr/local/bin/start-bootstrapper.sh"]
-    healthcheck:
-      start_period: 180s
+                 "start-bootstrapper.sh"]
     depends_on:
       mongo:
         condition: service_healthy
       hypertrace-federated-service:
+        # note : To work successfully, it needs hypertrace-federated-service to be healthy.
+        # This has started parallel for startup experience.
         condition: service_started
 
 # Third-party data services:
