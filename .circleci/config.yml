@@ -22,10 +22,13 @@ jobs:
           docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d pinot || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
           sleep 60
       - run: docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
-      # once the containers are up we wait for the frontend of hypertrace to be available
-      - run: wget --retry-connrefused -T 60 -O /dev/null http://127.0.0.1:2020/ || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs hypertrace-federated-service; exit 1)
-      - run: curl -i http://127.0.0.1:8081
-      - run: curl -i -X POST http://127.0.0.1:2020/graphql --data "@.circleci/query.gql" | jq .
+      - run: docker network ls
+      # When using docker/docker-compose inside CI we can't ping them directly, hence we need
+      # to use another container to run the desired scripts
+      # https://circleci.com/docs/2.0/building-docker-images/#accessing-services
+      #- run: |
+      #    docker build -t tests .circleci
+      #    docker run tests --network
 
 workflows:
   version: 2
