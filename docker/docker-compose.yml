@@ -195,10 +195,11 @@ services:
     image: mvertes/alpine-mongo
     container_name: mongo
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "nc", "-z", "localhost", "27017"]
       interval: 5s
       timeout: 2s
       retries: 3
+    command: sh -c  "mongod --quiet | egrep -v 'connections now open'"
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:0.1.3
