@@ -7,7 +7,8 @@ jobs:
     working_directory: ~/hypertrace
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: "19.03.12"
       - run: # official docs won't work, see https://github.com/circleci/circleci-docs/issues/1323#issuecomment-323620271
           name: Install Docker Compose
           command: |
