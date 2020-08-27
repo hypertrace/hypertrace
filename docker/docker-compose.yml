@@ -1,7 +1,7 @@
 ## This does everything you need to get a hypertracing system started.
 ## You can connect to the UI at port 2020 and send data to it on any supported tracing solution.
-## Note: Our stack is dependent on pinot and it is a cpu heavy during startup. 
-## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command. 
+## Note: Our stack is dependent on pinot and it is a cpu heavy during startup.
+## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command.
 ## we are looking at improving this.
 version: '2.4'
 services:
@@ -171,13 +171,8 @@ services:
   # Kafka is used for streaming functionality.
   # ZooKeeper is required by Kafka and Pinot
   kafka-zookeeper:
-    image: hypertrace/kafka-zookeeper:0.1.4
+    image: hypertrace/kafka-zookeeper
     container_name: kafka-zookeeper
-    # todo : we will move this to docker image
-    healthcheck:
-      test: nc -z localhost 9092 && echo ruok | nc localhost 2181
-      interval: 2s
-      timeout: 1s
     networks:
       default:
         # prevents apps from having to use the hostname kafka-zookeeper
