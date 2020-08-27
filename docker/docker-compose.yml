@@ -195,6 +195,7 @@ services:
     image: mvertes/alpine-mongo
     container_name: mongo
     healthcheck:
+      # reduces log output vs `mongo --eval db.adminCommand('ping')
       test: ["CMD", "nc", "-z", "localhost", "27017"]
       interval: 5s
       timeout: 2s
