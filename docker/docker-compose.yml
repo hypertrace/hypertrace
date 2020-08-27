@@ -1,7 +1,7 @@
 ## This does everything you need to get a hypertracing system started.
 ## You can connect to the UI at port 2020 and send data to it on any supported tracing solution.
-## Note: Our stack is dependent on pinot and it is a cpu heavy during startup. 
-## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command. 
+## Note: Our stack is dependent on pinot and it is a cpu heavy during startup.
+## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command.
 ## we are looking at improving this.
 version: '2.4'
 services:
@@ -12,27 +12,13 @@ services:
   hypertrace-federated-service:
     image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
-    volumes: &default-scripts
-      # These scripts are temporary, allowing a temporary override the ENTRYPOINT with a blocking barrier.
-      # Unlike service_started condition, these barriers can be longer than a minute. These are temporary
-      # because they shadow the ENTRYPOINT, duplicate and ignore the more robust HEALTHCHECK
-      # feature available in commands like docker ps.
-      #
-      # TODO: Remove this after startup improvement fixes
-      - ./scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
-      - ./scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
-      - ./scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-    # TODO: Remove this after startup improvement fixes
-    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
-                 "--" ,
-                 "start-platform.sh"]
     ports:
       - 2020:2020
     healthcheck:
-      start_period: 120s
+      start_period: 20s
     depends_on:
       mongo:
         condition: service_healthy
@@ -136,9 +122,18 @@ services:
       # todo : we are in process of making them as part of default.
       - PINOT_BROKER_TAG=DefaultTenant
       - PINOT_SERVER_TAG=DefaultTenant
-    volumes: *default-scripts
+    volumes: &default-scripts
+      # These scripts are temporary, allowing a temporary override the ENTRYPOINT with a blocking barrier.
+      # Unlike service_started condition, these barriers can be longer than a minute. These are temporary
+      # because they shadow the ENTRYPOINT, duplicate and ignore the more robust HEALTHCHECK
+      # feature available in commands like docker ps.
+      #
+      # TODO: Remove this after startup improvement fixes
+      - ./scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
+      - ./scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
+      - ./scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
     # TODO: Remove this after startup improvement fixes
-    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=120",
+    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=180",
                  "--" ,
                  "start-platform.sh"]
     depends_on:
@@ -176,13 +171,8 @@ services:
   # Kafka is used for streaming functionality.
   # ZooKeeper is required by Kafka and Pinot
   kafka-zookeeper:
-    image: hypertrace/kafka-zookeeper:0.1.4
+    image: hypertrace/kafka-zookeeper
     container_name: kafka-zookeeper
-    # todo : we will move this to docker image
-    healthcheck:
-      test: nc -z localhost 9092 && echo ruok | nc localhost 2181
-      interval: 2s
-      timeout: 1s
     networks:
       default:
         # prevents apps from having to use the hostname kafka-zookeeper
