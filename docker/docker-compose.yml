@@ -185,21 +185,13 @@ services:
     image: mvertes/alpine-mongo
     container_name: mongo
     healthcheck:
-<<<<<<< HEAD
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 5s
-      timeout: 2s
-      retries: 3
-    command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
-=======
       # reduces log output vs `mongo --eval db.adminCommand('ping')
       test: ["CMD", "nc", "-z", "localhost", "27017"]
       interval: 5s
       timeout: 2s
       retries: 3
     # overrides normal entrypoint to quiet logs, notably request logging from HEALTHCHECK
-    command: sh -c  "mongod --quiet | egrep -v 'connections now open'"
->>>>>>> 6735e5c8ca593346650a940d30f1d781285bb855
+    command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:0.1.3
