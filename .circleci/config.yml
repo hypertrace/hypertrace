@@ -28,7 +28,7 @@ jobs:
       # https://circleci.com/docs/2.0/building-docker-images/#accessing-services
       - run: |
           docker build -t tests .circleci
-          docker run --network docker_default tests hypertrace-federated-service
+          docker run --network docker_default tests hypertrace-federated-service frontend
 
 workflows:
   version: 2
