@@ -199,6 +199,7 @@ services:
       interval: 5s
       timeout: 2s
       retries: 3
+    # overrides normal entrypoint to quiet logs, notably request logging from HEALTHCHECK
     command: sh -c  "mongod --quiet | egrep -v 'connections now open'"
   # Stores spans and traces and provides aggregation functions
   pinot:
