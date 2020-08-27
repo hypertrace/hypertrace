@@ -189,6 +189,8 @@ services:
       interval: 5s
       timeout: 2s
       retries: 3
+    # overrides normal entrypoint to quiet logs.
+    command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:0.1.3
