@@ -17,7 +17,6 @@ jobs:
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
-      # we run docker-compose up but if it fails we print the logs for WARNING and ERROR
       - run: |
           # makes sure pinot is being provissioned on before hand
           docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d pinot || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
