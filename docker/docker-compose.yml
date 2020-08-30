@@ -171,7 +171,7 @@ services:
   # Kafka is used for streaming functionality.
   # ZooKeeper is required by Kafka and Pinot
   kafka-zookeeper:
-    image: hypertrace/kafka-zookeeper
+    image: hypertrace/kafka-zookeeper:main
     container_name: kafka-zookeeper
     networks:
       default:
@@ -193,30 +193,20 @@ services:
     command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
   # Stores spans and traces and provides aggregation functions
   pinot:
-    image: hypertrace/pinot-servicemanager:0.1.3
+    image: hypertrace/pinot-servicemanager:main
     container_name: pinot
-    environment:
-      - JAVA_OPTS=-Xms256M -Xmx512M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError
     networks:
       default:
         # Usually, Pinot is distributed, and clients connect to the controller
         aliases:
           - pinot-controller
     cpu_shares: 2048
-    # TODO: move health check to dockerfile
-    healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "8097"]
-      interval: 1s
-      timeout: 1s
-      retries: 15
-      start_period: 45s
-    command: StartServiceManager -clusterName hypertrace-views  -zkAddress zookeeper:2181 -port 7098 -bootstrapConfigPaths /opt/pinot/etc/pinot-controller.conf /opt/pinot/etc/pinot-broker.conf /opt/pinot/etc/pinot-server.conf
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
   # Hypertrace formats are defined in Avro. This helps maintain version compatibility.
   schema-registry:
-    image: hypertrace/schema-registry
+    image: hypertrace/schema-registry:main
     container_name: schema-registry
     depends_on:
       kafka-zookeeper:
