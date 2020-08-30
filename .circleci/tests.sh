@@ -40,8 +40,13 @@ TRACES=$(curl http://${TRACES_SERVER_HOST}:2020/graphql -H 'Content-Type: applic
 }"}')
 
 ERROR=$(echo $TRACES | jq -r .errors[0].message)
-if [[ "$ERROR" != "" ]]; then
+if [[ "$ERROR" != "null" ]]; then
   echo ""
   echo "Error while retrieving traces: $ERROR";
   exit 1;
 fi
+
+TRACE_ID=$(echo $TRACES | jq -r .data.traces.results[0].id)
+echo ""
+echo "Found trace $TRACE_ID."
+exit 0;
