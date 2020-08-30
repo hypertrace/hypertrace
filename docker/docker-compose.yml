@@ -185,7 +185,7 @@ services:
     image: mvertes/alpine-mongo
     container_name: mongo
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongo", "--quiet", "--eval", "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'"]
       interval: 5s
       timeout: 2s
       retries: 3
@@ -216,22 +216,8 @@ services:
         condition: service_healthy
   # Hypertrace formats are defined in Avro. This helps maintain version compatibility.
   schema-registry:
-    image: hypertrace/schema-registry:0.1.2
+    image: hypertrace/schema-registry
     container_name: schema-registry
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
-      SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID: hypertrace-schema-registry
-      SCHEMA_REGISTRY_MASTER_ELIGIBILITY: "true"
-      SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL: full_transitive
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
-    # todo: move health check to dockerfile
-    healthcheck:
-      test: wget -qO- http://127.0.0.1:8081 &> /dev/null || exit 1
-      interval: 2s
-      timeout: 1s
-      retries: 8
-      start_period: 20s
