@@ -60,9 +60,9 @@ services:
       - DEFAULT_TENANT_ID=__default
     depends_on:
       schema-registry:
-        condition: service_healthy
+        condition: service_started
       kafka-zookeeper:
-        condition: service_healthy
+        condition: service_started
   # Groups raw spans into traces based on a time interval
   raw-spans-grouper:
     image: hypertrace/raw-spans-grouper
@@ -73,9 +73,9 @@ services:
       - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=10
     depends_on:
       schema-registry:
-        condition: service_healthy
+        condition: service_started
       kafka-zookeeper:
-        condition: service_healthy
+        condition: service_started
   # Enriches traces with entity information like API, service and backend.
   hypertrace-trace-enricher:
     image: hypertrace/hypertrace-trace-enricher
@@ -88,9 +88,9 @@ services:
       - KAFKA_SINK_TOPIC=enriched-structured-traces
     depends_on:
       kafka-zookeeper:
-        condition: service_healthy
+        condition: service_started
       schema-registry:
-        condition: service_healthy
+        condition: service_started
       hypertrace-federated-service:
         condition: service_started
   # materialize enriched traces into pinot views
@@ -104,9 +104,9 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
       kafka-zookeeper:
-        condition: service_healthy
+        condition: service_started
       schema-registry:
-        condition: service_healthy
+        condition: service_started
 
 # One time startup jobs:
 
