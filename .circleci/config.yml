@@ -2,20 +2,20 @@ version: 2
 
 jobs:
   build:
-    docker:
-      - image: cimg/base:2020.01
+    machine:
+      image: ubuntu-1604:201903-01
     working_directory: ~/hypertrace
     steps:
       - checkout
-      - setup_remote_docker:
-          version: "19.03.12"
-      - run: # official docs won't work, see https://github.com/circleci/circleci-docs/issues/1323#issuecomment-323620271
-          name: Install Docker Compose
-          command: |
-            set -x
-            curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      #      - setup_remote_docker:
+      #          version: "19.03.12"
+      #      - run: # official docs won't work, see https://github.com/circleci/circleci-docs/issues/1323#issuecomment-323620271
+      #          name: Install Docker Compose
+      #          command: |
+      #            set -x
+      #            curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+      #            chmod +x ~/docker-compose
+      #            sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
       #- run: |
       #    # makes sure pinot is being provissioned on before hand
@@ -23,6 +23,7 @@ jobs:
       #    sleep 60
       - run: |
           cd ./docker
+          docker-compose -v
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -V -d || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
       #- run: docker network ls
       # When using docker/docker-compose inside CI we can't ping them directly, hence we need
