@@ -11,6 +11,8 @@
 TRACES_SERVER_HOST=${1:-127.0.0.1}
 FRONTEND_SERVICE_HOST=${2:-127.0.0.1}
 
+curl --version
+
 echo ""
 echo "Making sure the traces service is up..."
 echo ""
