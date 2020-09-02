@@ -15,6 +15,7 @@ echo ""
 echo "Making sure the traces service is up..."
 echo ""
 
+# curl --retry-connrefused is only available since 7.52.0.
 NUMBER_OF_RETRIES=5
 RETRY_COUNT=0
 while : ; do
