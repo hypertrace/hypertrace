@@ -55,7 +55,7 @@ TRACES=$(curl http://${TRACES_SERVER_HOST}:2020/graphql -H 'Content-Type: applic
 ERROR=$(echo $TRACES | jq -r .errors[0].message)
 if [[ "$ERROR" != "null" ]]; then
   echo ""
-  echo "Error while retrieving traces: $ERROR";
+  echo "Error while retrieving traces: $ERROR.";
   exit 1;
 fi
 
