@@ -58,10 +58,8 @@ services:
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
-    volumes:
-      - type: bind
-        source: ../docker/configs/log4j2.properties
-        target: /app/resources/log4j2.properties
+    volumes: &default-log-config
+      - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     depends_on:
       schema-registry:
         condition: service_started
@@ -75,10 +73,7 @@ services:
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=10
-    volumes:
-      - type: bind
-        source: ../docker/configs/log4j2.properties
-        target: /app/resources/log4j2.properties
+    volumes: *default-log-config
     depends_on:
       schema-registry:
         condition: service_started
@@ -94,10 +89,7 @@ services:
       - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - KAFKA_SINK_TOPIC=enriched-structured-traces
-    volumes:
-      - type: bind
-        source: ../docker/configs/log4j2.properties
-        target: /app/resources/log4j2.properties
+    volumes: *default-log-config
     depends_on:
       kafka-zookeeper:
         condition: service_started
@@ -114,10 +106,7 @@ services:
       - SERVICE_NAME=all-views
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-    volumes:
-      - type: bind
-        source: ../docker/configs/log4j2.properties
-        target: /app/resources/log4j2.properties
+    volumes: *default-log-config
     depends_on:
       kafka-zookeeper:
         condition: service_started
