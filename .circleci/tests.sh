@@ -26,7 +26,7 @@ while : ; do
 
   (curl -s -o /dev/null "http://$TRACES_SERVER_HOST:2020") && break
   RETRY_COUNT=$((RETRY_COUNT+1)) 
-  sleep 1
+  sleep 3
 done
 
 echo ""

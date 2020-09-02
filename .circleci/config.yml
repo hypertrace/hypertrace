@@ -21,13 +21,13 @@ jobs:
       #            chmod +x ~/docker-compose
       #            sudo mv ~/docker-compose /usr/local/bin/docker-compose
 
-      #- run: |
-      #    # makes sure pinot is being provissioned on before hand
-      #    docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d pinot || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
-      #    sleep 60
+      # makes sure pinot is being provissioned on beforehand
+      - run: |
+          docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d pinot || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
+          sleep 60
       - run: |
           cd ./docker
-          docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -V -d || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
+          docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
       #- run: docker network ls
       # When using docker/docker-compose inside CI we can't ping them directly, hence we need
       # to use another container to run the desired scripts
