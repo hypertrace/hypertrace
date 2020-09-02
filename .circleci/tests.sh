@@ -11,12 +11,22 @@
 TRACES_SERVER_HOST=${1:-127.0.0.1}
 FRONTEND_SERVICE_HOST=${2:-127.0.0.1}
 
-curl --version
-
 echo ""
 echo "Making sure the traces service is up..."
 echo ""
-curl -o /dev/null --retry-connrefused --retry-max-time 60 "http://$TRACES_SERVER_HOST:2020" || { echo "Host $TRACES_SERVER_HOST is down." ; exit 1; }
+
+NUMBER_OF_RETRIES=5
+RETRY_COUNT=0
+while : ; do
+  if [[ "$RETRY_COUNT" == "$NUMBER_OF_RETRIES" ]]; then
+    echo "Failed to connect to $TRACES_SERVER_HOST:2020 after $NUMBER_OF_RETRIES retries."
+    exit 1
+  fi
+
+  (curl -s -o /dev/null "http://$TRACES_SERVER_HOST:2020") && break
+  RETRY_COUNT=$((RETRY_COUNT+1)) 
+  sleep 1
+done
 
 echo ""
 echo "Calling the frontend to generate a trace..."
