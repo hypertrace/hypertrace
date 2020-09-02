@@ -2,8 +2,11 @@ version: 2
 
 jobs:
   build:
+    # We use machine executor as docker executor won't allow mounting of folders.
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-1604:201903-01 # Note: There is an overhead for provisioning a machine executor as a result of spinning
+      # up a private Docker server. Use of the machine key may require additional fees in a future pricing update.
+
     working_directory: ~/hypertrace
     steps:
       - checkout
@@ -23,15 +26,15 @@ jobs:
       #    sleep 60
       - run: |
           cd ./docker
-          docker-compose -v
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -V -d || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
       #- run: docker network ls
       # When using docker/docker-compose inside CI we can't ping them directly, hence we need
       # to use another container to run the desired scripts
       # https://circleci.com/docs/2.0/building-docker-images/#accessing-services
-      - run: |
-          docker build -t tests .circleci/
-          docker run --network docker_default tests hypertrace-federated-service frontend
+      - run: .circleci/tests.sh
+      #- run: |
+      #    docker build -t tests .circleci/
+      #    docker run --network docker_default tests hypertrace-federated-service frontend
 
 workflows:
   version: 2
