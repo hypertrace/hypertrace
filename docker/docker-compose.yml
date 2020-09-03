@@ -10,7 +10,7 @@ services:
 
   # Serves GraphQL and gRPC requests that cross different backends like Pinot and Mongo
   hypertrace-federated-service:
-    image: traceableai-docker.jfrog.io/hypertrace/hypertrace-federated-service:0.1.17-SNAPSHOT
+    image: hypertrace/hypertrace-federated-service
     container_name: hypertrace-federated-service
     environment:
       - MONGO_HOST=mongo
