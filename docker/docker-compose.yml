@@ -147,30 +147,6 @@ services:
         # startup experience.
         condition: service_started
 
-  # Creates require attributes into mongo like entity type, its relationship, etc
-  config-bootstrapper:
-    image: hypertrace/config-bootstrapper
-    container_name: attributes-bootstrapper
-    environment:
-      - SERVICE_NAME=config-bootstrapper
-      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace-federated-service
-      - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
-      - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
-      - ENTITY_SERVICE_PORT_CONFIG=9001
-      - MONGO_HOST=mongo
-    volumes: *default-scripts
-    # TODO: Remove this after startup improvement fixes
-    entrypoint: ["wait-for-it.sh", "-h", "hypertrace-federated-service", "-p", "9002", "--timeout=120",
-                 "--" ,
-                 "start-bootstrapper.sh"]
-    depends_on:
-      mongo:
-        condition: service_healthy
-      hypertrace-federated-service:
-        # note : To work successfully, it needs hypertrace-federated-service to be healthy.
-        # This has started parallel for startup experience.
-        condition: service_started
-
 # Third-party data services:
 
   # Kafka is used for streaming functionality.
