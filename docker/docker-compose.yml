@@ -140,7 +140,7 @@ services:
     command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
   # Stores spans and traces and provides aggregation functions
   pinot:
-    image: jbhire/pinot-servicemanager:test
+    image: jbahire/pinot-servicemanager:test
     container_name: pinot
     networks:
       default:
