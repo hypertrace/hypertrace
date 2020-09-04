@@ -2,14 +2,26 @@
 version: '2.4'
 services:
 
-# Handy tool for manually creating require attributes into mongo like entity type, its relationship, etc
-config-bootstrapper:
-  image: hypertrace/config-bootstrapper
-  container_name: attributes-bootstrapper
-  environment:
-    - SERVICE_NAME=config-bootstrapper
-    - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace-federated-service
-    - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
-    - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
-    - ENTITY_SERVICE_PORT_CONFIG=9001
-    - MONGO_HOST=mongo
+  # Handy tool for manually creating require attributes into mongo like entity type, its relationship, etc
+  config-bootstrapper:
+    image: hypertrace/config-bootstrapper
+    container_name: attributes-bootstrapper
+    environment:
+      - SERVICE_NAME=config-bootstrapper
+      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace-federated-service
+      - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
+      - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
+      - ENTITY_SERVICE_PORT_CONFIG=9001
+      - MONGO_HOST=mongo
+  # Creates require views in pinot like spanEventView, backendEntityView, etc
+  all-views-creator:
+    image: hypertrace/hypertrace-view-creator
+    container_name: all-views-creator
+    environment:
+      - SERVICE_NAME=all-views
+      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - ZK_CONNECT_STR=zookeeper:2181
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      # todo : we are in process of making them as part of default.
+      - PINOT_BROKER_TAG=DefaultTenant
+      - PINOT_SERVER_TAG=DefaultTenant

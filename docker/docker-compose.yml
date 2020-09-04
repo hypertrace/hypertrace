@@ -113,40 +113,6 @@ services:
       schema-registry:
         condition: service_started
 
-# One time startup jobs:
-
-  # Creates require views in pinot like spanEventView, backendEntityView, etc
-  all-views-creator:
-    image: hypertrace/hypertrace-view-creator
-    container_name: all-views-creator
-    environment:
-      - SERVICE_NAME=all-views
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - ZK_CONNECT_STR=zookeeper:2181
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      # todo : we are in process of making them as part of default.
-      - PINOT_BROKER_TAG=DefaultTenant
-      - PINOT_SERVER_TAG=DefaultTenant
-    volumes: &default-scripts
-      # These scripts are temporary, allowing a temporary override the ENTRYPOINT with a blocking barrier.
-      # Unlike service_started condition, these barriers can be longer than a minute. These are temporary
-      # because they shadow the ENTRYPOINT, duplicate and ignore the more robust HEALTHCHECK
-      # feature available in commands like docker ps.
-      #
-      # TODO: Remove this after startup improvement fixes
-      - ./scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh:ro
-      - ./scripts/start-platform.sh:/usr/local/bin/start-platform.sh:ro
-      - ./scripts/start-bootstrapper.sh:/usr/local/bin/start-bootstrapper.sh:ro
-    # TODO: Remove this after startup improvement fixes
-    entrypoint: ["wait-for-it.sh", "-h", "pinot", "-p", "8097", "--timeout=180",
-                 "--" ,
-                 "start-platform.sh"]
-    depends_on:
-      pinot:
-        # note : To work successfully, it needs pinot to be healthy. This has started parallel for
-        # startup experience.
-        condition: service_started
-
 # Third-party data services:
 
   # Kafka is used for streaming functionality.
@@ -174,7 +140,7 @@ services:
     command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
   # Stores spans and traces and provides aggregation functions
   pinot:
-    image: hypertrace/pinot-servicemanager:main
+    image: jbhire/pinot-servicemanager:test
     container_name: pinot
     networks:
       default:
