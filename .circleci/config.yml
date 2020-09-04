@@ -23,7 +23,7 @@ jobs:
 
       # makes sure pinot is being provissioned on beforehand
       - run: |
-          docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d pinot all-views-creator || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
+          docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d pinot || (docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml logs; exit 1)
           sleep 60
       - run: |
           cd ./docker
