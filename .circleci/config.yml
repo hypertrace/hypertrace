@@ -14,13 +14,13 @@ jobs:
       - run: |
           cd ./docker
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d pinot || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
-          sleep 60
+          sleep 80
       - run: |
           cd ./docker
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml ps
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
       - run: |
-          sleep 10
+          sleep 20
           cd ./docker
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml ps
           curl -I localhost:2020
