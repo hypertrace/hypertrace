@@ -25,16 +25,16 @@ appVersion: 0.1.0
 dependencies:
   - name: zookeeper
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.1
+    version: 0.1.2
   - name: kafka
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.5
+    version: 0.1.6
   - name: schema-registry
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.3
+    version: 0.1.5
   - name: pinot
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.5
+    version: 0.1.9
   - name: mongodb
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.0
