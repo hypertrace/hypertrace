@@ -6,12 +6,10 @@
 version: '2.4'
 services:
 
-# Frontend Services
-
-  # Serves GraphQL and gRPC requests that cross different backends like Pinot and Mongo
-  hypertrace-federated-service:
-    image: hypertrace/hypertrace-federated-service
-    container_name: hypertrace-federated-service
+# This container includes the UI and APIs it needs for storage queries.
+  hypertrace:
+    image: hypertrace/hypertrace:test
+    container_name: hypertrace
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
@@ -86,7 +84,7 @@ services:
     environment:
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
+      - ENTITY_SERVICE_HOST_CONFIG=hypertrace
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - KAFKA_SINK_TOPIC=enriched-structured-traces
     volumes: *default-log-config
@@ -95,7 +93,7 @@ services:
         condition: service_started
       schema-registry:
         condition: service_started
-      hypertrace-federated-service:
+      hypertrace:
         condition: service_started
   # materialize enriched traces into pinot views
   all-views-generator:

@@ -8,9 +8,9 @@ services:
     container_name: attributes-bootstrapper
     environment:
       - SERVICE_NAME=config-bootstrapper
-      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace-federated-service
+      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace-service
       - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
-      - ENTITY_SERVICE_HOST_CONFIG=hypertrace-federated-service
+      - ENTITY_SERVICE_HOST_CONFIG=hypertrace-service
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - MONGO_HOST=mongo
   # Creates require views in pinot like spanEventView, backendEntityView, etc
