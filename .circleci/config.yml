@@ -36,7 +36,7 @@ jobs:
       - run: |
           sleep 120
           docker ps
-          .circleci/tests.sh || { docker ps ; exit 1 }
+          .circleci/tests.sh
       #- run: |
       #    docker build -t tests .circleci/
       #    docker run --network docker_default tests hypertrace-federated-service frontend
