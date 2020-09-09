@@ -3,10 +3,9 @@
 ## Note: Our stack is dependent on pinot and it is a cpu heavy during startup.
 ## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command.
 ## we are looking at improving this.
-version: '2.4'
+version: "2.4"
 services:
-
-# Frontend Services
+  # Frontend Services
 
   # Serves GraphQL and gRPC requests that cross different backends like Pinot and Mongo
   hypertrace-federated-service:
@@ -29,7 +28,7 @@ services:
         # startup experience.
         condition: service_started
 
-# Ingestion pipeline
+  # Ingestion pipeline
 
   # Collects spans in different trace formats like Jaeger, Zipkin, etc
   hypertrace-collector:
@@ -113,7 +112,7 @@ services:
       schema-registry:
         condition: service_started
 
-# Third-party data services:
+  # Third-party data services:
 
   # Kafka is used for streaming functionality.
   # ZooKeeper is required by Kafka and Pinot
@@ -132,7 +131,14 @@ services:
     image: mvertes/alpine-mongo
     container_name: mongo
     healthcheck:
-      test: ["CMD", "mongo", "--quiet", "--eval", "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'"]
+      test:
+        [
+          "CMD",
+          "mongo",
+          "--quiet",
+          "--eval",
+          "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'",
+        ]
       interval: 5s
       timeout: 2s
       retries: 3

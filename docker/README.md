@@ -8,7 +8,7 @@
 
 If you want to see Hypertrace in action, you can quickly start Hypertrace via Docker.
 
-```
+```bash
 git clone https://github.com/hypertrace/hypertrace.git
 cd hypertrace/docker
 docker-compose pull
