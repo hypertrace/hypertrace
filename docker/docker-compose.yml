@@ -27,8 +27,6 @@ services:
         # note : To work successfully, it needs pinot to be healthy. This has started parallel for
         # startup experience.
         condition: service_started
-    links:
-      - kafka-zookeeper
 
   # Ingestion pipeline
 
