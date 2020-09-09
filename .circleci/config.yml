@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  build:
+  e2e-test:
     # We use machine executor as docker executor won't allow mounting of folders.
     machine:
       image: ubuntu-1604:201903-01 # Note: There is an overhead for provisioning a machine executor as a result of spinning
@@ -16,12 +16,22 @@ jobs:
           cd ./docker
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
       - run: |
-          sleep 60 # you can decrease it but never increase it
+          sleep 50 # you can decrease it but never increase it
           docker ps
           .circleci/tests.sh
 
 workflows:
   version: 2
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - e2e-test
   commit:
     jobs:
-      - build
+      - e2e-test
