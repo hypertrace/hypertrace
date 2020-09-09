@@ -3,8 +3,9 @@
 ## Note: Our stack is dependent on pinot and it is a cpu heavy during startup.
 ## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command.
 ## we are looking at improving this.
-version: '2.4'
+version: "2.4"
 services:
+
 
 # This container includes the UI and APIs it needs for storage queries.
   hypertrace:
@@ -27,7 +28,7 @@ services:
         # startup experience.
         condition: service_started
 
-# Ingestion pipeline
+  # Ingestion pipeline
 
   # Collects spans in different trace formats like Jaeger, Zipkin, etc
   hypertrace-collector:
@@ -111,7 +112,7 @@ services:
       schema-registry:
         condition: service_started
 
-# Third-party data services:
+  # Third-party data services:
 
   # Kafka is used for streaming functionality.
   # ZooKeeper is required by Kafka and Pinot
@@ -126,16 +127,8 @@ services:
           - zookeeper
   # Stores entities like API, service and backend
   mongo:
-    # Uses less huge MongoDB dist until/unless we make our own
-    image: mvertes/alpine-mongo
+    image: hypertrace/mongodb:main
     container_name: mongo
-    healthcheck:
-      test: ["CMD", "mongo", "--quiet", "--eval", "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'"]
-      interval: 5s
-      timeout: 2s
-      retries: 3
-    # overrides normal entrypoint to quiet logs.
-    command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main

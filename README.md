@@ -1,3 +1,5 @@
+[![hypertrace](https://circleci.com/gh/hypertrace/hypertrace/tree/main.svg?style=svg)](https://circleci.com/gh/hypertrace/hypertrace)
+
 # Hypertrace
 
 Hypertrace is a cloud-native distributed tracing based Observability platform
