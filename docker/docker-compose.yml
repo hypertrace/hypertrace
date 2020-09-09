@@ -127,23 +127,8 @@ services:
           - zookeeper
   # Stores entities like API, service and backend
   mongo:
-    # Uses less huge MongoDB dist until/unless we make our own
-    image: mvertes/alpine-mongo
+    image: hypertrace/mongodb:main
     container_name: mongo
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mongo",
-          "--quiet",
-          "--eval",
-          "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'",
-        ]
-      interval: 5s
-      timeout: 2s
-      retries: 3
-    # overrides normal entrypoint to quiet logs.
-    command: ["mongod", "--quiet", "--bind_ip", "0.0.0.0"]
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main
