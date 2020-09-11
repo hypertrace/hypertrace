@@ -29,7 +29,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
     jobs:
       - e2e-test
   commit:
