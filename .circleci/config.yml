@@ -16,7 +16,7 @@ jobs:
           cd ./docker
           docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d || (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml logs; exit 1)
       - run: |
-          sleep 50 # you can decrease it but never increase it
+          sleep 60 # you can decrease it but never increase it
           docker ps
           .circleci/tests.sh
 
@@ -29,7 +29,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
     jobs:
       - e2e-test
   commit:
