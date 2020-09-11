@@ -1,4 +1,4 @@
-# Contributor Covenant Code of Conduct
+# Hypertrace Code of Conduct
 
 ## Our Pledge
 
