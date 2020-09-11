@@ -81,6 +81,9 @@ Released versions of docker images for various Hypertrace components are availab
 * [Pinot helm charts](https://github.com/hypertrace/pinot)
 * [MongoDB helm charts](https://github.com/hypertrace/mongodb)
 
+## Contributing
+see [CONTRIBUTING](/CONTRIBUTING.md).
+
 ## License
 
 Hypertrace follows open core model where "Hypertrace core" (or simply Core) is
