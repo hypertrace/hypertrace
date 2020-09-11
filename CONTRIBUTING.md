@@ -13,8 +13,7 @@ Please note we have a code of conduct, please follow it in all your interactions
    variables, exposed ports, useful file locations and container parameters.
 3. Increase the version numbers in any examples files and the README.md to the new version that this
    Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-4. You may merge the Pull Request in once you have the approval of other developers, or if you 
-   do not have permission to do that, you may request the second reviewer to merge it for you.
+4. You may merge the Pull Request once you have the required approvals. If you face any issues merging the Pull Request, you can request reviewer to merge it. 
 
 ## Support Channels
 
