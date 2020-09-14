@@ -9,7 +9,7 @@ services:
 
 # This container includes the UI and APIs it needs for storage queries.
   hypertrace:
-    image: hypertrace/hypertrace:test
+    image: hypertrace/hypertrace:main
     container_name: hypertrace
     environment:
       - MONGO_HOST=mongo
