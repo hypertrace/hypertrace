@@ -15,7 +15,7 @@ echo ""
 echo "Making sure the traces service is up..."
 
 # curl --retry-connrefused is only available since 7.52.0.
-NUMBER_OF_RETRIES=30
+NUMBER_OF_RETRIES=50
 RETRY_COUNT=0
 while : ; do
   if [[ "$RETRY_COUNT" == "$NUMBER_OF_RETRIES" ]]; then
@@ -39,7 +39,7 @@ curl -o /dev/null -s http://${FRONTEND_SERVICE_HOST}:8081  || { echo "Host $FRON
 echo "Retrieving the list of traces."
 echo ""
 
-NUMBER_OF_RETRIES=30
+NUMBER_OF_RETRIES=50
 RETRY_COUNT=0
 TRACES=""
 while : ; do
