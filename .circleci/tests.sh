@@ -39,7 +39,7 @@ curl -o /dev/null -s http://${FRONTEND_SERVICE_HOST}:8081  || { echo "Host $FRON
 echo "Retrieving the list of traces."
 echo ""
 
-NUMBER_OF_RETRIES=20
+NUMBER_OF_RETRIES=30
 RETRY_COUNT=0
 TRACES=""
 while : ; do

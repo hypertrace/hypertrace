@@ -62,7 +62,7 @@ services:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     depends_on:
       schema-registry:
-        condition: service_healthy
+        condition: service_started
       kafka-zookeeper:
         condition: service_healthy
   # Groups raw spans into traces based on a time interval
