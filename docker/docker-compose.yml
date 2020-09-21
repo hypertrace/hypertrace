@@ -24,9 +24,7 @@ services:
       kafka-zookeeper:
         condition: service_healthy
       pinot:
-        # note : To work successfully, it needs pinot to be healthy. This has started parallel for
-        # startup experience.
-        condition: service_started
+        condition: service_healthy
 
   # Ingestion pipeline
 
@@ -62,7 +60,7 @@ services:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     depends_on:
       schema-registry:
-        condition: service_started
+        condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
   # Groups raw spans into traces based on a time interval
@@ -76,9 +74,9 @@ services:
     volumes: *default-log-config
     depends_on:
       schema-registry:
-        condition: service_started
+        condition: service_healthy
       kafka-zookeeper:
-        condition: service_started
+        condition: service_healthy
   # Enriches traces with entity information like API, service and backend.
   hypertrace-trace-enricher:
     image: hypertrace/hypertrace-trace-enricher
@@ -92,11 +90,11 @@ services:
     volumes: *default-log-config
     depends_on:
       kafka-zookeeper:
-        condition: service_started
+        condition: service_healthy
       schema-registry:
-        condition: service_started
+        condition: service_healthy
       hypertrace:
-        condition: service_started
+        condition: service_healthy
   # materialize enriched traces into pinot views
   all-views-generator:
     image: hypertrace/hypertrace-view-generator
@@ -109,9 +107,11 @@ services:
     volumes: *default-log-config
     depends_on:
       kafka-zookeeper:
-        condition: service_started
+        condition: service_healthy
       schema-registry:
-        condition: service_started
+        condition: service_healthy
+      pinot:
+        condition: service_healthy
 
   # Third-party data services:
 
@@ -142,6 +142,8 @@ services:
     cpu_shares: 2048
     depends_on:
       kafka-zookeeper:
+        condition: service_healthy
+      schema-registry:
         condition: service_healthy
   # Hypertrace formats are defined in Avro. This helps maintain version compatibility.
   schema-registry:
