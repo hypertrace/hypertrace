@@ -19,7 +19,9 @@ jobs:
           cd ./docker
           sleep 60 # you can decrease it but never increase it
           docker-compose -f docker-compose.yml ps
-          dokcer-compose -f docker-compose.yml images
+          docker-compose -f docker-compose.yml images
+          docker-compose logs raw-spans-grouper
+      - run: |
           .circleci/tests.sh
 
 workflows:
