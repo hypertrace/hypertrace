@@ -70,7 +70,7 @@ services:
     environment:
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=10
+      - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=2
     volumes: *default-log-config
     depends_on:
       schema-registry:
@@ -87,6 +87,7 @@ services:
       - ENTITY_SERVICE_HOST_CONFIG=hypertrace
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - KAFKA_SINK_TOPIC=enriched-structured-traces
+      - PRE_CREATE_TOPICS=true
     volumes: *default-log-config
     depends_on:
       kafka-zookeeper:
@@ -94,7 +95,7 @@ services:
       schema-registry:
         condition: service_healthy
       hypertrace:
-        condition: service_healthy
+        condition: service_started
   # materialize enriched traces into pinot views
   all-views-generator:
     image: hypertrace/hypertrace-view-generator
