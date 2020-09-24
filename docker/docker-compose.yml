@@ -71,6 +71,8 @@ services:
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=2
+      - PRE_CREATE_TOPICS=true
+      - REPLICATION_FACTOR=1
     volumes: *default-log-config
     depends_on:
       schema-registry:
