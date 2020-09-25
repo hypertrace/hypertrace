@@ -107,6 +107,7 @@ services:
       - SERVICE_NAME=all-views
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - PRE_CREATE_TOPICS=true
     volumes: *default-log-config
     depends_on:
       kafka-zookeeper:
