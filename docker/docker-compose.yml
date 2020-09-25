@@ -24,9 +24,9 @@ services:
       kafka-zookeeper:
         condition: service_healthy
       pinot:
-        condition: service_healthy
+        condition: service_started
 
-  # Ingestion pipeline
+# Ingestion pipeline
 
   # Collects spans in different trace formats like Jaeger, Zipkin, etc
   hypertrace-collector:
@@ -47,77 +47,29 @@ services:
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
-  # Converts and normalizes incoming spans into Hypertrace format
-  span-normalizer:
-    image: hypertrace/span-normalizer
-    container_name: span-normalizer
+  # all-in-one ingestion pipeline for hypertrace
+  hypertrace-ingester:
+    image: hypertrace/hypertrace-ingester
+    container_name: hypertrace-ingester
     environment:
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
+      - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=2
+      - REPLICATION_FACTOR=1
+      - ENTITY_SERVICE_HOST_CONFIG=hypertrace
+      - ENTITY_SERVICE_PORT_CONFIG=9001
+      - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
-    volumes: &default-log-config
+    volumes:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     depends_on:
       schema-registry:
         condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
-  # Groups raw spans into traces based on a time interval
-  raw-spans-grouper:
-    image: hypertrace/raw-spans-grouper
-    container_name: raw-spans-grouper
-    environment:
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=2
-      - PRE_CREATE_TOPICS=true
-      - REPLICATION_FACTOR=1
-    volumes: *default-log-config
-    depends_on:
-      schema-registry:
-        condition: service_healthy
-      kafka-zookeeper:
-        condition: service_healthy
-  # Enriches traces with entity information like API, service and backend.
-  hypertrace-trace-enricher:
-    image: hypertrace/hypertrace-trace-enricher
-    container_name: hypertrace-trace-enricher
-    environment:
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - ENTITY_SERVICE_HOST_CONFIG=hypertrace
-      - ENTITY_SERVICE_PORT_CONFIG=9001
-      - KAFKA_SINK_TOPIC=enriched-structured-traces
-      - PRE_CREATE_TOPICS=true
-    volumes: *default-log-config
-    depends_on:
-      kafka-zookeeper:
-        condition: service_healthy
-      schema-registry:
-        condition: service_healthy
-      hypertrace:
-        condition: service_started
-  # materialize enriched traces into pinot views
-  all-views-generator:
-    image: hypertrace/hypertrace-view-generator
-    container_name: all-views-generator
-    environment:
-      # TODO: maintain uniformity. service names should be aligned with container names.
-      - SERVICE_NAME=all-views
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - PRE_CREATE_TOPICS=true
-    volumes: *default-log-config
-    depends_on:
-      kafka-zookeeper:
-        condition: service_healthy
-      schema-registry:
-        condition: service_healthy
-      pinot:
-        condition: service_healthy
 
-  # Third-party data services:
+# Third-party data services:
 
   # Kafka is used for streaming functionality.
   # ZooKeeper is required by Kafka and Pinot
