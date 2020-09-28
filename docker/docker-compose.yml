@@ -68,6 +68,8 @@ services:
         condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
+      hypertrace:
+        condition: service_started
 
 # Third-party data services:
 
