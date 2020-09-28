@@ -10,6 +10,7 @@
 
 TRACES_SERVER_HOST=${1:-127.0.0.1}
 FRONTEND_SERVICE_HOST=${2:-127.0.0.1}
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 echo ""
 echo "Making sure the traces service is up..."
@@ -20,6 +21,7 @@ RETRY_COUNT=0
 while : ; do
   if [[ "$RETRY_COUNT" == "$NUMBER_OF_RETRIES" ]]; then
     echo "Failed to connect to $TRACES_SERVER_HOST:2020 after $NUMBER_OF_RETRIES retries."
+    sh $SCRIPT_DIR/inspect.sh 
     exit 1
   fi
 
@@ -45,6 +47,7 @@ TRACES=""
 while : ; do
   if [[ "$RETRY_COUNT" == "$NUMBER_OF_RETRIES" ]]; then
     echo "Failed to retrieve traces from $TRACES_SERVER_HOST:2020 after $NUMBER_OF_RETRIES retries."
+    sh $SCRIPT_DIR/inspect.sh 
     exit 1
   fi
 
@@ -71,6 +74,7 @@ while : ; do
   if [[ "$ERROR" != "null" ]]; then
     echo ""
     echo "Error while retrieving traces: $ERROR.";
+    sh $SCRIPT_DIR/inspect.sh 
     exit 1;
   fi
 
