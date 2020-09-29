@@ -175,6 +175,7 @@ span-normalizer:
     enabled: false
 
 raw-spans-grouper:
+  replicaCount: 1
   javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
@@ -193,15 +194,23 @@ raw-spans-grouper:
     span:
       groupby:
         internal: 10
+    kafka:
+      streams:
+        config:
+          metricsRecordingLevel: INFO
+          numStreamThreads: 2
+          bootstrapServers: "bootstrap:9092"
+          schemaRegistryUrl: "http://schema-registry-service:8081"
+          rocksdbBlockCacheSize: 33554432
+          rocksdbWriteBufferSize: 8388608
+          rocksdbMaxWriteBuffers: 2
+          rocksdbCacheIndexAndFilterBlocks: true
   volumeClaimTemplates:
     name: hypertrace
     storageClassName: hypertrace
     storageRequestSize: 1Gi
   kafka-topic-creator:
     enabled: false
-  volume:
-    storageClassName: "hypertrace"
-    storage: "1Gi"
 
 hypertrace-trace-enricher:
   javaOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
