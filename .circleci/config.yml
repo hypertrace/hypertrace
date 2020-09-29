@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
 
 jobs:
   e2e-test:
@@ -28,6 +31,31 @@ jobs:
           command: |
             .circleci/tests.sh
 
+  e2e-test-windows:
+    executor: win/default
+
+    working_directory: ~/hypertrace
+    steps:
+      - checkout
+      - run:
+          name: "Pull and up containers"
+          shell: powershell.exe
+          command: |
+            cd ./docker
+            docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml pull
+            (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d) -or ((../.circleci/inspect.sh) -and (Exit 1))
+      - run:
+          name: "Waits for some stability"
+          shell: powershell.exe
+          command: |
+            cd ./docker
+            Start-Sleep -s 60 # you can decrease it but never increase it
+            docker-compose -f docker-compose.yml ps
+      - run:
+          name: "Runs tests"
+          shell: powershell.exe
+          command: |
+            .circleci/tests.sh
 workflows:
   version: 2
   nightly:
@@ -43,3 +71,4 @@ workflows:
   commit:
     jobs:
       - e2e-test
+      - e2e-test-windows
