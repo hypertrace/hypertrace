@@ -193,8 +193,15 @@ raw-spans-grouper:
     span:
       groupby:
         internal: 10
+  volumeClaimTemplates:
+    name: hypertrace
+    storageClassName: hypertrace
+    storageRequestSize: 1Gi
   kafka-topic-creator:
     enabled: false
+  volume:
+    storageClassName: "hypertrace"
+    storage: "1Gi"
 
 hypertrace-trace-enricher:
   javaOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
