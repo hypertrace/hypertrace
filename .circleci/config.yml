@@ -39,7 +39,7 @@ jobs:
     
     steps:
       - run:
-          name: "install docker-compose"
+          name: "Install docker-compose"
           command: |
             choco install docker-compose
       - checkout
