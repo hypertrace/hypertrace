@@ -1,7 +1,10 @@
-version: 2
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
 
 jobs:
-  e2e-test:
+  e2e-test-linux:
     # We use machine executor as docker executor won't allow mounting of folders.
     machine:
       image: ubuntu-1604:201903-01 # Note: There is an overhead for provisioning a machine executor as a result of spinning
@@ -9,6 +12,7 @@ jobs:
     resource_class: large
 
     working_directory: ~/hypertrace
+    
     steps:
       - checkout
       - run:
@@ -28,6 +32,36 @@ jobs:
           command: |
             .circleci/tests.sh
 
+  e2e-test-windows:
+    executor: win/default
+
+    working_directory: ~/hypertrace
+    
+    steps:
+      - run:
+          name: "Install docker-compose"
+          command: |
+            choco install docker-compose
+      - checkout
+      - run:
+          name: "Pull and up containers"
+          shell: powershell.exe
+          command: |
+            cd ./docker
+            docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml pull
+            (docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d) -or ((../.circleci/inspect.sh) -and (Exit 1))
+      - run:
+          name: "Waits for some stability"
+          shell: powershell.exe
+          command: |
+            cd ./docker
+            Start-Sleep -s 60 # you can decrease it but never increase it
+            docker-compose -f docker-compose.yml ps
+      - run:
+          name: "Runs tests"
+          shell: powershell.exe
+          command: |
+            .circleci/tests.sh
 workflows:
   version: 2
   nightly:
@@ -39,7 +73,8 @@ workflows:
               only:
                 - main
     jobs:
-      - e2e-test
+      - e2e-test-linux
   commit:
     jobs:
-      - e2e-test
+      - e2e-test-linux
+      - e2e-test-windows
