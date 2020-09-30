@@ -4,7 +4,7 @@ orbs:
   win: circleci/windows@2.2.0
 
 jobs:
-  e2e-test:
+  e2e-test-linux:
     # We use machine executor as docker executor won't allow mounting of folders.
     machine:
       image: ubuntu-1604:201903-01 # Note: There is an overhead for provisioning a machine executor as a result of spinning
@@ -73,8 +73,8 @@ workflows:
               only:
                 - main
     jobs:
-      - e2e-test
+      - e2e-test-linux
   commit:
     jobs:
-      - e2e-test
+      - e2e-test-linux
       - e2e-test-windows
