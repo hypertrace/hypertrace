@@ -12,6 +12,7 @@ jobs:
     resource_class: large
 
     working_directory: ~/hypertrace
+    
     steps:
       - checkout
       - run:
@@ -35,7 +36,12 @@ jobs:
     executor: win/default
 
     working_directory: ~/hypertrace
+    
     steps:
+      - run:
+          name: "install docker-compose"
+          command: |
+            choco install docker-compose
       - checkout
       - run:
           name: "Pull and up containers"
