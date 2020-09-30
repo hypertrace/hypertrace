@@ -52,7 +52,6 @@ services:
     image: hypertrace/hypertrace-ingester
     container_name: hypertrace-ingester
     environment:
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
       - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=2
@@ -61,11 +60,10 @@ services:
       - ENTITY_SERVICE_PORT_CONFIG=9001
       - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
+      - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
     volumes:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     depends_on:
-      schema-registry:
-        condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
       hypertrace:
@@ -99,15 +97,6 @@ services:
         aliases:
           - pinot-controller
     cpu_shares: 2048
-    depends_on:
-      kafka-zookeeper:
-        condition: service_healthy
-      schema-registry:
-        condition: service_healthy
-  # Hypertrace formats are defined in Avro. This helps maintain version compatibility.
-  schema-registry:
-    image: hypertrace/schema-registry:main
-    container_name: schema-registry
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
