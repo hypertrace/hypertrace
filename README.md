@@ -15,9 +15,13 @@ project for the software development community to use in their applications.
 
 ## Quick-start
 
-If you want to see Hypertrace in action, you can quickly start Hypertrace via Docker. 
+If you want to see Hypertrace in action, you can quickly start Hypertrace.
 
-:IMPORTANT: **We recommend you change the [Docker Desktop default settings](https://hypertrace-docs.s3.amazonaws.com/docker-desktop.png) from `2 GB` of memory to `4 GB` of memory, and set CPUs to at least 4 CPUs.** When reporting problems, please include the output of `docker stats --no-stream`.
+### Requirements:
+- [docker-engine](https://docs.docker.com/engine/install/) (17.12.0+)
+- [docker-compose](https://docs.docker.com/compose/install/) (1.21.0 +)
+- **We recommend you change the [Docker Desktop default settings](https://hypertrace-docs.s3.amazonaws.com/docker-desktop.png) from `2 GB` of memory to `4 GB` of memory, and set CPUs to at least 4 CPUs.** 
+`Note`: When reporting problems, please include the output of `docker stats --no-stream`.
 
 ```bash
 git clone https://github.com/hypertrace/hypertrace.git
