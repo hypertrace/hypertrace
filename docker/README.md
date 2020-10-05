@@ -12,7 +12,7 @@ If you want to see Hypertrace in action, you can quickly start Hypertrace via Do
 git clone https://github.com/hypertrace/hypertrace.git
 cd hypertrace/docker
 docker-compose pull
-docker-compose -f docker-compose.yml up
+docker-compose up
 ```
 
 This will start all services required for Hypertrace. Once you see the service hypertrace-ui start, you can visit Hypertrace UI at http://localhost:2020 . 
