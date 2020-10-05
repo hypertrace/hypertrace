@@ -3,7 +3,7 @@ Welcome to the Hypertrace repo!
 
 - Please be respectful and considerate of others when commenting on issues.
 - Please search for existing issues in order to make sure we don't have duplicate bugs/feature requests.
-- If you have a question please ask it on our Gitter chat https://join.slack.com/t/hypertrace/shared_invite/zt-hgjlblic-Tq2_N4sHJj4RMqx5nirS9w instead of creating an issue.
+- If you have a question please ask it on our Slack chat https://join.slack.com/t/hypertrace/shared_invite/zt-hgjlblic-Tq2_N4sHJj4RMqx5nirS9w instead of creating an issue.
 - Please provide as much information as possible so we all understand the issue.
 -->
 
