@@ -15,13 +15,15 @@ project for the software development community to use in their applications.
 
 ## Quick-start
 
-If you want to see Hypertrace in action, you can quickly start Hypertrace via Docker.
+If you want to see Hypertrace in action, you can quickly start Hypertrace via Docker. 
+
+:IMPORTANT: **We recommend you change the [Docker Desktop default settings](https://hypertrace-docs.s3.amazonaws.com/docker-desktop.png) from `2 GB` of memory to `4 GB` of memory, and set CPUs to at least 4 CPUs.** When reporting problems, please include the output of `docker stats --no-stream`.
 
 ```bash
 git clone https://github.com/hypertrace/hypertrace.git
 cd hypertrace/docker
-docker-compose -f docker-compose.yml pull
-docker-compose -f docker-compose.yml up --force-recreate
+docker-compose pull
+docker-compose up --force-recreate
 ```
 
 This will start all services required for Hypertrace. Once you see the service `Hypertrace-UI` start, you can visit the UI at http://localhost:2020.
