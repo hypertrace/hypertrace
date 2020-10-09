@@ -1,5 +1,6 @@
 # Contributing
- 
+We like contributions, Thanks for taking time to contribute and helping us make this project better! The following is a set of guidelines for contributing to Hypertrace. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+
 When contributing to this repository, please first discuss the change you wish to make via issue,
 or [Hypertrace slack](https://bit.ly/hypertrace-slack) with the owners of this repository before making a change.
  
@@ -13,17 +14,6 @@ Please note we have a code of conduct, please follow it in all your interactions
 Before submitting a bug, please do the following:
  
 * Perform **basic troubleshooting** steps:
- 
-   * **Make sure you're on the latest version.** If you're not on the most
-     recent version, your problem may have been solved already! Upgrading is
-     always the best first step.
-   * **Try older versions.** If you're already *on* the latest release, try
-     rolling back a few minor versions (e.g. if on 1.7, try 1.5 or 1.6) and
-     see if the problem goes away. This will help the devs narrow down when
-     the problem first arose in the commit log.
-   * **Try switching up dependency versions.** If the software in question has
-     dependencies (other libraries, etc) try upgrading/downgrading those as
-     well.
  
 * **Search the GitHub issues** to make sure it's not a known
  issue.
