@@ -35,7 +35,7 @@ constitutes a bare minimum; more info is almost always better:
  followed the advice above and have ruled out (or verified that the problem
  exists in) a few different versions.
 * **How can the developers recreate the bug on their end?** If possible,
- include a copy of your code, the command you used to invoke it, and the full
+ include a copy of your code or an example repo, the command you used to invoke it, and the full
  output of your run (if applicable.)
  
 ### Version control branching
