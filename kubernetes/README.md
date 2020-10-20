@@ -72,4 +72,4 @@ Once your Hypertrace installation is successful you can navigate to`http://local
 | *Hypertrace Dashboard* |
 
 ## Sending data to Hypertrace
-Now you know things are running, let's get some data into Hypertrace. If your applications already send trace data, you can configure them to send data to Hypertrace using the default ports for Jaeger, OpenCensus or Zipkin. If you are just getting started, try out our [demo app](https://docs.hypertrace.org/sample-app]). Once you have data in Hypertrace, you are ready to [explore its advanced features](https://docs.hypertrace.org/platform-ui). 
+Now you know things are running, let's get some data into Hypertrace. If your applications already send trace data, you can configure them to send data to Hypertrace using the default ports for Jaeger, OpenCensus or Zipkin. If you are just getting started, try out our [demo app](https://docs.hypertrace.org/sample-app). Once you have data in Hypertrace, you are ready to [explore its advanced features](https://docs.hypertrace.org/platform-ui). 
