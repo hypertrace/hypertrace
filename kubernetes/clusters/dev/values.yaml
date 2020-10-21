@@ -278,7 +278,7 @@ hypertrace-view-generator:
             - retention.ms=10800000
 
 hypertrace-federated-service:
-  enabled: true
+  enabled: false
   javaOpts: "-Xms256M -Xmx256M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
@@ -295,7 +295,7 @@ hypertrace-federated-service:
     periodSeconds: 5
 
 gateway-service:
-  replicaCount: 0
+  replicaCount: 1
   containerPortName: grpc-port
   serviceSelectorLabels:
     app: hypertrace-federated-service
@@ -317,7 +317,7 @@ gateway-service:
         }
 
 entity-service:
-  replicaCount: 0
+  replicaCount: 1
   serviceSelectorLabels:
     app: hypertrace-federated-service
   config-bootstrapper:
@@ -331,7 +331,7 @@ entity-service:
         memory: "256Mi"
 
 attribute-service:
-  replicaCount: 0
+  replicaCount: 1
   serviceSelectorLabels:
     app: hypertrace-federated-service
   config-bootstrapper:
@@ -345,12 +345,12 @@ attribute-service:
         memory: "256Mi"
 
 query-service:
-  replicaCount: 0
+  replicaCount: 1
   serviceSelectorLabels:
     app: hypertrace-federated-service
 
 hypertrace-graphql-service:
-  replicaCount: 0
+  replicaCount: 1
   serviceSelectorLabels:
     app: hypertrace-federated-service
   configMap:
