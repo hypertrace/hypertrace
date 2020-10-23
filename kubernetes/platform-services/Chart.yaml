@@ -31,7 +31,7 @@ dependencies:
     version: 0.1.23
   - name: raw-spans-grouper
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.14
+    version: 0.1.23
   - name: hypertrace-trace-enricher
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.26
