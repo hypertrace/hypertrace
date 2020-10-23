@@ -113,7 +113,7 @@ curl http://${TRACES_SERVER_HOST}:2020/endpoint/${TRACE_ID}/traces -s -f -o /dev
 curl http://${TRACES_SERVER_HOST}:2020/endpoint/${TRACE_ID}/metrics -s -f -o /dev/null   || { echo "endpoint dashboard metrics link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/services/endpoint -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/application-flow -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/explorer -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
+curl http://${TRACES_SERVER_HOST}:2020/explorer -s -f -o /dev/null   || { echo "explorer link is not available" ; exit 1; }
 
 
 
@@ -121,4 +121,3 @@ curl http://${TRACES_SERVER_HOST}:2020/explorer -s -f -o /dev/null   || { echo "
 echo "all links available"
 
 exit 0;
-
