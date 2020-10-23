@@ -1,5 +1,4 @@
 zookeeper:
-  replicaCount: 3
   javaOpts: "-Xms320M -Xmx320M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
@@ -10,7 +9,6 @@ zookeeper:
       memory: "512Mi"
 
 kafka:
-  replicaCount: 3
   javaOpts: "-Xms2G -Xmx2G -XX:MaxDirectMemorySize=128M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
@@ -24,7 +22,6 @@ kafka:
     storage: "64Gi"
 
 schema-registry:
-  replicaCount: 2
   heapOptions: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
