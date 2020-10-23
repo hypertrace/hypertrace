@@ -3,10 +3,10 @@ services:
   # Generate traffic by hitting http://localhost:8081
   frontend:
     container_name: frontend
-    image: openzipkin/example-sleuth-webmvc
-    command: Frontend
+    image: openzipkin/example-brave:armeria
+    command: frontend
     environment: 
-        - SPRING_SLEUTH_SUPPORTS-JOIN=false
+        - ZIPKIN_SUPPORTS_JOIN=false
     ports:
       - 8081:8081
     depends_on:
@@ -14,7 +14,7 @@ services:
         condition: service_started
   backend:
     container_name: backend
-    image: openzipkin/example-sleuth-webmvc
-    command: Backend
+    image: openzipkin/example-brave:armeria
+    command: backend
     environment: 
-        - SPRING_SLEUTH_SUPPORTS-JOIN=false
+        - ZIPKIN_SUPPORTS_JOIN=false
