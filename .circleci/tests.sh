@@ -106,9 +106,9 @@ curl http://${TRACES_SERVER_HOST}:2020/application-flow -s -f -o /dev/null   || 
 curl http://${TRACES_SERVER_HOST}:2020/explorer -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 
 
-links-to-test = ("services" "backends")
-sub-links = ("service" "backend")
-pages = ("overview" "traces" "metrics")
+links-to-test=(services backends)
+sub-links=(service backend)
+pages=(overview traces metrics)
 function test-deep-links() {
   for i in ${links-to-test}
     do
