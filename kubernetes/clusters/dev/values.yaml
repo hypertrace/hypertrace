@@ -23,7 +23,7 @@ zookeeper:
     failureThreshold: 8
 
 kafka:
-  replicaCount: 3
+  replicaCount: 1
   javaOpts: "-Xms128M -Xmx384M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
