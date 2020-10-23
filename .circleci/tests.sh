@@ -109,7 +109,7 @@ curl http://${TRACES_SERVER_HOST}:2020/explorer -s -f -o /dev/null   || { echo "
 links-to-test = ["services", "backends"]
 sub-links = ["service", "backend"]
 pages = ["overview", "traces", "metrics"]
-func test-deep-links(${links-to-tests}, ${sub-links}, ${pages}) {
+func test-deep-links() {
   for i in ${links-to-test}
     do
       curl http://${TRACES_SERVER_HOST}:2020/${i} -s -f -o /dev/null   || { echo "\"$i\" link is not available" ; exit 1; }
@@ -121,6 +121,7 @@ func test-deep-links(${links-to-tests}, ${sub-links}, ${pages}) {
           curl http://${TRACES_SERVER_HOST}:2020/${i}/${j}/${TRACE_ID}/${k} -s -f -o /dev/null || { echo "\"$i\" "\" \"$j\" "\" \"$k\" link is not available" ; exit 1; } 
 }
 
+test-deep-links "${links-to-tests}" "${sub-links}" "${pages}"
 
 
 echo "all links available"
