@@ -105,6 +105,9 @@ curl http://${TRACES_SERVER_HOST}:2020/services/endpoint -s -f -o /dev/null   ||
 curl http://${TRACES_SERVER_HOST}:2020/application-flow -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/explorer -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 
+declare -a links-to-test
+declare -a sub-links
+declare -a pages
 
 links-to-test=(services backends)
 sub-links=(service backend)
