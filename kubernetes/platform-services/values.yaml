@@ -99,6 +99,10 @@ raw-spans-grouper:
     limits:
       cpu: "1"
       memory: "1Gi"
+  volumeClaimTemplates:
+    name: hypertrace
+    storageClassName: hypertrace
+    storageRequestSize: 1Gi
   kafka-topic-creator:
     kafka:
       topics:
