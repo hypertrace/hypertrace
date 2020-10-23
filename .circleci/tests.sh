@@ -96,17 +96,7 @@ echo "Found trace \"$TRACE_ID\"."
 echo "Checking for broken links"
 
 curl http://${TRACES_SERVER_HOST}:2020/ -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/services -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/services/service -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/services/service/${TRACE_ID}/overview -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/services/service/${TRACE_ID}/endpoints -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/services/service/${TRACE_ID}/traces -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/services/service/${TRACE_ID}/metrics -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/backends -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/backends/backend -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/backends/backend/${TRACE_ID}/overview -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/backends/backend/${TRACE_ID}/traces -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
-curl http://${TRACES_SERVER_HOST}:2020/backends/backend/${TRACE_ID}/metrics -s -f -o /dev/null || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/api-trace -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/endpoint/${TRACE_ID}/overview -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/endpoint/${TRACE_ID}/traces -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
@@ -114,6 +104,27 @@ curl http://${TRACES_SERVER_HOST}:2020/endpoint/${TRACE_ID}/metrics -s -f -o /de
 curl http://${TRACES_SERVER_HOST}:2020/services/endpoint -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/application-flow -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
 curl http://${TRACES_SERVER_HOST}:2020/explorer -s -f -o /dev/null   || { echo "link is not available" ; exit 1; }
+
+
+links-to-test = ["services", "backends"]
+sub-links = ["service", "backend"]
+pages = ["overview", "traces", "metrics"]
+func test-deep-links(links-to-tests, sub-links, pages) {
+
+  for i in links-to-test
+    do
+      curl http://${TRACES_SERVER_HOST}:2020/${i} -s -f -o /dev/null   || { echo "\"$i\" link is not available" ; exit 1; }
+      for j in  sub-links
+      do
+        curl http://${TRACES_SERVER_HOST}:2020/${i}/{j} -s -f -o /dev/null || { echo "\"$i\"\"$j\" link is not available" ; exit 1; }
+        for k in pages
+        do
+          curl http://${TRACES_SERVER_HOST}:2020/${i}/${j}/${TRACE_ID}/${k} -s -f -o /dev/null || { echo "\"$i\" "\" \"$j\" "\" \"$k\" link is not available" ; exit 1; }
+      
+    
+}
+
+
 
 echo "all links available"
 
