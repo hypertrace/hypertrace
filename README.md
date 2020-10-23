@@ -15,30 +15,36 @@ project for the software development community to use in their applications.
 
 ## Quick-start
 
-If you want to see Hypertrace in action, you can quickly start Hypertrace via Docker.
+If you want to see Hypertrace in action, you can quickly start Hypertrace.
+
+### Requirements:
+- [docker-engine](https://docs.docker.com/engine/install/) (17.12.0+)
+- [docker-compose](https://docs.docker.com/compose/install/) (1.21.0 +)
+- **We recommend you change the [Docker Desktop default settings](https://hypertrace-docs.s3.amazonaws.com/docker-desktop.png) from `2 GB` of memory to `4 GB` of memory, and set CPUs to at least 4 CPUs.** 
+`Note`: When reporting problems, please include the output of `docker stats --no-stream`.
 
 ```bash
 git clone https://github.com/hypertrace/hypertrace.git
 cd hypertrace/docker
-docker-compose -f docker-compose.yml pull
-docker-compose -f docker-compose.yml up --force-recreate
+docker-compose pull
+docker-compose up --force-recreate
 ```
 
 This will start all services required for Hypertrace. Once you see the service `Hypertrace-UI` start, you can visit the UI at http://localhost:2020.
 
-If you have application instrumented to send traces to Zipkin or Jaeger, you are already covered with Hypertrace.
+If your application is already instrumented to send traces to Zipkin or Jaeger, it will work with Hypertrace.
 
-Even if not you can try Hypertrace with sample application by running
+If not, you can try Hypertrace with our sample application by running
 
 ```bash
 docker-compose -f docker-compose-zipkin-example.yml up
 ```
 
-Example app will be served at http://localhost:8081. You can visit URL and refresh it few times to generate some sample requests!
+the sample app will run at http://localhost:8081. You should request the URL a few times to generate some sample trace requests!
 
 ## Deploying with Kubernetes
 
-Please refer to [deployments](https://docs.hypertrace.org/deployments/) section in documentation which lists down steps for deploying Hypertrace on different Kubernetes flavors across different operating systems along with all major cloud providers. You can find the helm charts and installation script with more details [here](/kubernetes).
+Please refer to the [deployments](https://docs.hypertrace.org/deployments/) section in our documentation which lists the steps to deploy Hypertrace on different Kubernetes flavors across different operating systems and cloud providers. You can find the Helm Charts and installation scripts with more details [here](/kubernetes).
 
 ## Community
 
@@ -46,11 +52,11 @@ Please refer to [deployments](https://docs.hypertrace.org/deployments/) section 
 
 ## Documentation
 
-Check out [Hypertrace documentation](https://docs.hypertrace.org) to know more about Hypetrace features, architecture and more cool insights!
+Check out [Hypertrace documentation](https://docs.hypertrace.org) to learn more about Hypetrace features, it's architecture and other insights!
 
 ## Docker images
 
-Released versions of docker images for various Hypertrace components are available on [dockerhub](https://hub.docker.com/u/hypertrace).
+Released versions of Docker images for various Hypertrace components are available on [dockerhub](https://hub.docker.com/u/hypertrace).
 
 ## Related Repositories
 
@@ -84,7 +90,5 @@ Released versions of docker images for various Hypertrace components are availab
 
 ## License
 
-Hypertrace follows open core model where "Hypertrace core" (or simply Core) is
-under Apache 2.0 license, which has distributed trace ingestion and exploration
-features. Services, Endpoints, Backends and Service Graph features are under
+Hypertrace follows the open core model where "Hypertrace core" (or simply Core) is made available under the Apache 2.0 license, which has distributed trace ingestion and exploration features. The Services, Endpoints, Backends and Service Graph features of Hypertrace Community Edition are made available under the
 [Traceable Community license](LICENSE).

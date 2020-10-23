@@ -128,9 +128,6 @@ pinot:
       timeoutSeconds: 1
       failureThreshold: 8
 
-  servicemanager:
-    enabled: false
-
 mongodb:
   replicaSet:
     enabled: false
@@ -175,6 +172,7 @@ span-normalizer:
     enabled: false
 
 raw-spans-grouper:
+  replicaCount: 1
   javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:
@@ -190,6 +188,10 @@ raw-spans-grouper:
     initialDelaySeconds: 10
     periodSeconds: 5
   rawSpansGrouperConfig:
+    kafka:
+      streams:
+        config:
+          replicationFactor: 1
     span:
       groupby:
         internal: 10
@@ -277,49 +279,12 @@ hypertrace-view-generator:
             - retention.bytes=1073741824
             - retention.ms=10800000
 
-hypertrace-federated-service:
-  enabled: true
-  javaOpts: "-Xms256M -Xmx256M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
-  resources:
-    requests:
-      cpu: "0.5"
-      memory: "384Mi"
-    limits:
-      cpu: "0.75"
-      memory: "384Mi"
-  livenessProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 5
-  readinessProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 5
-
 gateway-service:
-  replicaCount: 0
+  replicaCount: 1
   containerPortName: grpc-port
-  serviceSelectorLabels:
-    app: hypertrace-federated-service
-  configMap:
-    name: gateway-service-config
-    data:
-      application.conf: |-
-        entity.service.config = {
-          host = localhost
-          port = 9001
-        }
-        query.service.config = {
-          host = localhost
-          port = 9001
-        }
-        attributes.service.config = {
-          host = localhost
-          port = 9001
-        }
 
 entity-service:
-  replicaCount: 0
-  serviceSelectorLabels:
-    app: hypertrace-federated-service
+  replicaCount: 1
   config-bootstrapper:
     javaOpts: "-Xms128M -Xmx128M"
     resources:
@@ -331,9 +296,7 @@ entity-service:
         memory: "256Mi"
 
 attribute-service:
-  replicaCount: 0
-  serviceSelectorLabels:
-    app: hypertrace-federated-service
+  replicaCount: 1
   config-bootstrapper:
     javaOpts: "-Xms128M -Xmx128M"
     resources:
@@ -345,27 +308,10 @@ attribute-service:
         memory: "256Mi"
 
 query-service:
-  replicaCount: 0
-  serviceSelectorLabels:
-    app: hypertrace-federated-service
+  replicaCount: 1
 
 hypertrace-graphql-service:
-  replicaCount: 0
-  serviceSelectorLabels:
-    app: hypertrace-federated-service
-  configMap:
-    name: hypertrace-graphql-service-config
-    data:
-      application.conf: |-
-        defaultTenantId = "__default"
-        gateway.service = {
-          host = localhost
-          port = 9001
-        }
-        attributes.service = {
-          host = localhost
-          port = 9001
-        }
+  replicaCount: 1
   javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
   resources:
     requests:

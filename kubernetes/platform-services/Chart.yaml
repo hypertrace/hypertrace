@@ -28,34 +28,34 @@ dependencies:
     version: 0.1.5
   - name: span-normalizer
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.17
+    version: 0.1.23
   - name: raw-spans-grouper
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.14
+    version: 0.1.24
   - name: hypertrace-trace-enricher
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.17
+    version: 0.1.26
   - name: hypertrace-view-generator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.15
+    version: 0.1.22
   - name: hypertrace-ui
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.33.1
+    version: 0.46.0
   - name: hypertrace-graphql-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.3.0
+    version: 0.4.3
   - name: attribute-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.3.2
+    version: 0.6.0
   - name: gateway-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.24
+    version: 0.1.30
   - name: query-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.15
+    version: 0.3.3
   - name: entity-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.19
+    version: 0.1.27
   - name: hypertrace-federated-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.13
