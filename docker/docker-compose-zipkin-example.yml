@@ -6,7 +6,7 @@ services:
     image: openzipkin/example-brave:armeria
     command: frontend
     environment: 
-        - ZIPKIN_SUPPORTS_JOIN=false
+        - BRAVE_SUPPORTS_JOIN=false
     ports:
       - 8081:8081
     depends_on:
@@ -17,4 +17,4 @@ services:
     image: openzipkin/example-brave:armeria
     command: backend
     environment: 
-        - ZIPKIN_SUPPORTS_JOIN=false
+        - BRAVE_SUPPORTS_JOIN=false
