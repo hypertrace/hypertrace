@@ -4,7 +4,12 @@ set -eEu -o functrace
 script=$0
 
 function clean() {
-  kubectl get ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS} >/dev/null 2>&1
+  EXIT_CODE=0
+  kubectl get ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS} >/dev/null 2>&1 || EXIT_CODE=$?
+  if [ ${EXIT_CODE} != 0 ]; then
+    echo "[ERROR] Couldn't find namespace to uninstall. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
+    exit 1
+  fi
 
   EXIT_CODE=0
   helm get all hypertrace-platform-services ${HELM_FLAGS} >/dev/null 2>&1 || EXIT_CODE=$?
@@ -12,7 +17,7 @@ function clean() {
     echo "[INFO] found existing platform services deployment. running helm uninstall. release: 'hypertrace-platform-services'"
     helm uninstall hypertrace-platform-services ${HELM_FLAGS}
   else
-    echo "[INFO]'hypertrace-platform-services' not found"
+    echo "[INFO] Couldn't find helm release 'hypertrace-platform-services'"
   fi
 
   EXIT_CODE=0
@@ -21,7 +26,7 @@ function clean() {
     echo "[INFO] found existing data services deployment. running helm uninstall. release: 'hypertrace-data-services'"
     helm uninstall hypertrace-data-services ${HELM_FLAGS}
   else
-    echo "[INFO]'hypertrace-data-services' not found"
+    echo "[INFO] Couldn't find helm release 'hypertrace-data-services'"
   fi
   echo "[INFO] We are clean! good to go!"
 }
@@ -126,31 +131,7 @@ case "$subcommand" in
     select yn in "Yes" "No"; do
         case $yn in
             Yes )
-              EXIT_CODE=0
-              kubectl get ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS} >/dev/null 2>&1 || EXIT_CODE=$?
-              if [ ${EXIT_CODE} != 0 ]; then
-                echo "[ERROR] Hypertrace uninstall failed. Couldn't find namespace to uninstall. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
-                exit 1
-              fi
-
-              EXIT_CODE=0
-              helm get all hypertrace-platform-services ${HELM_FLAGS} >/dev/null 2>&1 || EXIT_CODE=$?
-              if [ ${EXIT_CODE} == 0 ]; then
-                echo "[INFO] helm uninstall. release: 'hypertrace-platform-services'"
-                helm uninstall hypertrace-platform-services ${HELM_FLAGS}
-              else
-                echo "[WARN] helm uninstall failed. Couldn't find helm release 'hypertrace-platform-services'"
-              fi
-
-              EXIT_CODE=0
-              helm get all hypertrace-data-services ${HELM_FLAGS} >/dev/null 2>&1 || EXIT_CODE=$?
-              if [ ${EXIT_CODE} == 0 ]; then
-                echo "[INFO] helm uninstall. release: 'hypertrace-data-services'"
-                helm uninstall hypertrace-data-services ${HELM_FLAGS}
-              else
-                echo "[WARN] helm uninstall failed. Couldn't find helm release 'hypertrace-data-services'"
-              fi
-
+              clean
               kubectl delete ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS}
               echo "[INFO] Uninstall successful."
               break;;
