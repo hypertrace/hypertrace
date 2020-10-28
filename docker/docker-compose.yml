@@ -91,6 +91,8 @@ services:
   pinot:
     image: hypertrace/pinot-servicemanager:main
     container_name: pinot
+    environment:
+      - LOG_LEVEL=error
     networks:
       default:
         # Usually, Pinot is distributed, and clients connect to the controller
