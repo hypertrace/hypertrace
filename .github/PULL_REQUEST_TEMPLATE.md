@@ -6,33 +6,20 @@ Please include a summary of the change, motivation and context
 - **on a refactor**: describe why this is better than previous situation e.g. this PR changes logic for retry on healthchecks to avoid false positives
 - **on a bugfix**: link relevant information about the bug (github issue or slack thread) and how this change solves it e.g. this change fixes #99999 by adding a lock on read/write to avoid data races.
 
-### How has this been tested?
+### Testing
 
 Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
 
 - [ ] Docker-compose
 - [ ] Helm install
 
-**Test Configuration**:
-* Docker Engine version:
-* Resources:
-
 ### Checklist:
-
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published in downstream modules
 
-
-#### References
-
-(optional)
+#### Documentation
+Make sure that you have made corresponding changes to the documentation in README and [hypertrace docs repo](https://github.com/hypertrace/hypertrace-docs-website) if required.  
 
 Include __important__ links regarding the implementation of this PR.
-This usually includes and RFC or an aggregation of issues and/or individual conversations
-that helped put this solution together. This helps ensure there is a good aggregation
-of resources regarding the implementation.
+This usually includes and RFC or an aggregation of issues and/or individual conversations that helped put this solution together. This helps ensure there is a good aggregation of resources regarding the implementation.
