@@ -18,7 +18,7 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] Any dependent changes have been merged and published in downstream modules
 
-#### Documentation
+### Documentation
 Make sure that you have made corresponding changes to the documentation in README and [hypertrace docs repo](https://github.com/hypertrace/hypertrace-docs-website) if required.  
 
 Include __important__ links regarding the implementation of this PR.
