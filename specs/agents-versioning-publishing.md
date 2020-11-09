@@ -5,7 +5,7 @@ All Hypertrace agents follow these requirements:
 
 * Semantic versioning for all released artifacts.
 * Release every merge commit into the main or maintenance branch as `"snapshot"`.
-* Maintenance branches for older versions should be named as `release-<major>.<minor>` e.g. `release-1.0`.
+* Maintenance branches follow naming convention `<major>.<minor>.x` e.g. `1.0.x`.
 
 #### Semantic versioning
 
@@ -57,6 +57,6 @@ TBD
 
 Maintenance branches contain bug fixes and backported features. The maintenance branch is only
 created on demand: for instance when a bug fix has to be applied to an older version and the `main` branch
-contains newer versions.
+contains next minor version.
 
-The maintenance branches are created for minor versions e.g. `release-1.0`.
+The maintenance branches follow this naming convention `<major>.<minor>.x` e.g. `1.0.x` for release `1.0`.
