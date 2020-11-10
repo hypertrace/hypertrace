@@ -2,7 +2,8 @@
 
 # Hypertrace
 
-
+Hypertrace is a cloud-native distributed tracing based Observability platform
+that gives visibility into your dev and production distributed systems.
 
 Hypertrace was originally developed by Traceable as a highly scalable
 distributed tracing platform and it is used by Traceable’s cloud-native
