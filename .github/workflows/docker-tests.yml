@@ -1,8 +1,6 @@
 name: e2e test
 on:
   push:
-    branches:
-      - main
     paths:
       - 'docker/**'
       - '.github/**'
@@ -10,6 +8,7 @@ on:
   # workflow_dispatch will let us manually trigger the workflow from GitHub actions dashboard.
   # See https://docs.github.com/en/free-pro-team@latest/actions/managing-workflow-runs/manually-running-a-workflow 
   workflow_dispatch:
+  create:
 
 jobs:
   build-on-linux:

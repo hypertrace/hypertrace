@@ -40,6 +40,3 @@ workflows:
                 - main
     jobs:
       - e2e-test
-  commit:
-    jobs:
-      - e2e-test
