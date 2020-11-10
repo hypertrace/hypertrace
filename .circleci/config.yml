@@ -16,7 +16,7 @@ jobs:
           command: |
             cd ./docker
             docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml pull
-            docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d || { ../.circleci/inspect.sh ; exit 1 ; }
+            docker-compose -f docker-compose.yml -f docker-compose-zipkin-example.yml up -d || { ../.github/workflows/inspect.sh ; exit 1 ; }
       - run:
           name: "Waits for some stability"
           command: |
@@ -26,7 +26,7 @@ jobs:
       - run:
           name: "Runs tests"
           command: |
-            .circleci/tests.sh
+            .github/workflows/tests.sh
 
 workflows:
   version: 2
@@ -38,8 +38,5 @@ workflows:
             branches:
               only:
                 - main
-    jobs:
-      - e2e-test
-  commit:
     jobs:
       - e2e-test
