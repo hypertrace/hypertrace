@@ -25,41 +25,41 @@ appVersion: 0.1.0
 dependencies:
   - name: hypertrace-oc-collector
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.5
+    version: 0.1.6
   - name: span-normalizer
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.23
+    version: 0.3.0
   - name: raw-spans-grouper
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.24
+    version: 0.3.0
   - name: hypertrace-trace-enricher
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.26
+    version: 0.3.0
   - name: hypertrace-view-generator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.22
+    version: 0.3.0
   - name: hypertrace-ui
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.46.0
+    version: 0.61.1
   - name: hypertrace-graphql-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.4.3
+    version: 0.6.0
   - name: attribute-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.0
+    version: 0.6.1
   - name: gateway-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.30
+    version: 0.1.34
   - name: query-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.3.3
+    version: 0.3.6
   - name: entity-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.27
-  - name: hypertrace-federated-service
+    version: 0.2.3
+  - name: kafka-topic-creator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.13
-    condition: hypertrace-federated-service.enabled
+    version: 0.1.5
+    condition: kafka-topic-creator.enablede.enabled
   - name: kafka-topic-creator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.5
