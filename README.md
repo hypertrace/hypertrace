@@ -1,4 +1,5 @@
 [![hypertrace](https://circleci.com/gh/hypertrace/hypertrace/tree/main.svg?style=svg)](https://circleci.com/gh/hypertrace/hypertrace)
+![e2e test](https://github.com/hypertrace/hypertrace/workflows/e2e%20test/badge.svg)
 
 # Hypertrace
 
@@ -7,7 +8,7 @@ that gives visibility into your dev and production distributed systems.
 
 Hypertrace was originally developed by Traceable as a highly scalable
 distributed tracing platform and it is used by Traceable’s cloud-native
-application security platform. ‍Realizing that Hypertrace was a powerful
+application security platform. Realizing that Hypertrace was a powerful
 standalone tracing and observability platform, Traceable created this open source
 project for the software development community to use in their applications.
 
@@ -43,9 +44,13 @@ docker-compose -f docker-compose-zipkin-example.yml up
 
 the sample app will run at http://localhost:8081. You should request the URL a few times to generate some sample trace requests!
 
-## Deploying with Kubernetes
+## Deploy in production with Kubernetes
 
-Please refer to the [deployments](https://docs.hypertrace.org/deployments/) section in our documentation which lists the steps to deploy Hypertrace on different Kubernetes flavors across different operating systems and cloud providers. You can find the Helm Charts and installation scripts with more details [here](/kubernetes).
+We support helm charts to simplify deploying Hypertrace in Kubernetes environment, maybe on your on-premise server or cloud instance! 
+
+Please refer to the [deployments section](https://docs.hypertrace.org/deployments/) in our documentation which lists the steps to deploy Hypertrace on different Kubernetes flavors across different operating systems and cloud providers. You can find the Helm Charts and installation scripts with more details [here](https://github.com/hypertrace/hypertrace/tree/main/kubernetes).
+
+`Note:` We have created `hypertrace-ingester` and `hypertrace-service` to simplify local deployment and quick-start with Hypertrace. As of now, we don't support them for production because of some limitations and some unreliabiliy with scaling. So, we will encourage you to deploy individual components for staging as well as production deployments. 
 
 ## Community
 
