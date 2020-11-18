@@ -91,6 +91,8 @@ services:
   pinot:
     image: hypertrace/pinot-servicemanager:main
     container_name: pinot
+    ports:
+      - 9000:9000
     environment:
       - LOG_LEVEL=error
     networks:
