@@ -58,6 +58,8 @@ services:
       - REPLICATION_FACTOR=1
       - ENTITY_SERVICE_HOST_CONFIG=hypertrace
       - ENTITY_SERVICE_PORT_CONFIG=9001
+      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace
+      - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
       - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
