@@ -9,18 +9,22 @@ services:
 
 # This container includes the UI and APIs it needs for storage queries.
   hypertrace:
-    image: hypertrace/hypertrace:main
+    image: traceableai-docker.jfrog.io/hypertrace/hypertrace:test
     container_name: hypertrace
     environment:
-      - MONGO_HOST=mongo
+      - DATA_STORE_TYPE=postgres
+      - POSTGRES_HOST=postgres
+      #- MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
     ports:
       - 2020:2020
     healthcheck:
       start_period: 20s
     depends_on:
-      mongo:
-        condition: service_healthy
+#      mongo:
+#        condition: service_healthy
+      postgres:
+        condition: service_started
       kafka-zookeeper:
         condition: service_healthy
       pinot:
@@ -86,9 +90,18 @@ services:
           - kafka
           - zookeeper
   # Stores entities like API, service and backend
-  mongo:
-    image: hypertrace/mongodb:main
-    container_name: mongo
+#  mongo:
+#    image: hypertrace/mongodb:main
+#    container_name: mongo
+
+  postgres:
+    image: postgres:13.1
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    ports:
+      - 5432:5432
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main
