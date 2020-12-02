@@ -1,20 +1,23 @@
 version: '2.4'
+
+# BRAVE_EXAMPLE choices are listed here https://github.com/openzipkin/brave-example#example-projects
+
 services:
   # Generate traffic by hitting http://localhost:8081
   frontend:
     container_name: frontend
-    image: ghcr.io/openzipkin/brave-example:armeria
-    command: frontend
+    image: ghcr.io/openzipkin/brave-example:${BRAVE_EXAMPLE:-armeria}
+    entrypoint: start-frontend
     environment: 
         - BRAVE_SUPPORTS_JOIN=false
     ports:
       - 8081:8081
     depends_on:
       backend:
-        condition: service_started
+        condition: service_healthy
   backend:
     container_name: backend
-    image: ghcr.io/openzipkin/brave-example:armeria
-    command: backend
+    image: ghcr.io/openzipkin/brave-example:${BRAVE_EXAMPLE:-armeria}
+    entrypoint: start-backend
     environment: 
         - BRAVE_SUPPORTS_JOIN=false
