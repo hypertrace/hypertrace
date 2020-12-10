@@ -68,10 +68,7 @@ Released versions of Docker images for various Hypertrace components are availab
 
 ### Data Ingestion Pipeline
 
-* [Span Normalizer](https://github.com/hypertrace/span-normalizer)
-* [Span Aggregator](https://github.com/hypertrace/raw-spans-grouper)
-* [Trace Enrichers](https://github.com/hypertrace/hypertrace-trace-enricher)
-* [View Generators](https://github.com/hypertrace/hypertrace-view-generator)
+* [Hypertrace Ingester](https://github.com/hypertrace/hypertrace-ingester)
 
 ### Query Layer Services
 
