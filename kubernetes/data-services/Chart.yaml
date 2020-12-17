@@ -34,7 +34,7 @@ dependencies:
     version: 0.1.5
   - name: pinot
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.2.5
+    version: 0.2.7
   - name: mongodb
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.0
