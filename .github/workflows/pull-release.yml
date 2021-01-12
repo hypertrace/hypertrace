@@ -1,0 +1,139 @@
+name: get latest helm charts
+on:
+  schedule:
+    - cron: '00 06 * * 5' #every friday at 11:30 AM IST/ 6 AM UST
+  # workflow_dispatch will let us manually trigger the workflow from GitHub actions dashboard.
+  # See https://docs.github.com/en/free-pro-team@latest/actions/managing-workflow-runs/manually-running-a-workflow 
+  workflow_dispatch:
+
+jobs:
+  get-latest-releases:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get latest charts for kafka
+        id: kafka
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/kafka
+
+      - name: Get latest charts for zookeeper
+        id: zookeeper
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/zookeeper
+
+      - name: Get latest charts for pinot
+        id: pinot
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/pinot
+
+      - name: Get latest charts for schema-registry 
+        id: schema-registry
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/schema-registry
+
+      - name: Get latest charts for mongodb
+        id: mongodb
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/mongodb
+
+      - name: Get latest charts for oc-collector
+        id: opencensus-service
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/opencensus-service
+
+      - name: Get latest charts for ingester
+        id: hypertrace-ingester
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/hypertrace-ingester
+   
+      - name: Get latest charts for ui
+        id: hypertrace-ui
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/hypertrace-ui
+
+      - name: Get latest charts for graphql
+        id: hypertrace-graphql
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/hypertrace-graphql
+
+      - name: Get latest charts for attribute-service
+        id: attribute-service
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/attribute-service
+
+      - name: Get latest charts for gateway-service
+        id: gateway-service
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/gateway-service
+
+      - name: Get latest charts for query-service
+        id: query-service
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/query-service
+
+      - name: Get latest charts for entity-service
+        id: entity-service
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/entity-service
+
+      - uses: actions/checkout@v2
+
+      - name: Update data services charts
+        run: ./.github/workflows/create-charts.sh data-services
+        env: 
+          kafka_version: ${{ steps.kafka.outputs.tag }}
+          pinot_version: ${{ steps.pinot.outputs.tag }}
+          schema_registry_version: ${{ steps.schema-registry.outputs.tag }}
+          mongodb_version: ${{ steps.mongodb.outputs.tag }}
+          zookeeper_version: ${{ steps.zookeeper.outputs.tag }}
+      
+      - name: Update platform services charts
+        run: ./.github/workflows/create-charts.sh platform-services
+        env: 
+          hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
+          hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
+          hypertrace_ui_version: ${{ steps.hypertrace-ui.outputs.tag }}
+          hypertrace_graphql_version: ${{ steps.hypertrace-graphql.outputs.tag }}
+          attribute_service_version: ${{ steps.attribute-service.outputs.tag }}
+          query_service_version: ${{ steps.query-service.outputs.tag }}
+          gateway_service_version: ${{ steps.gateway-service.outputs.tag }}
+          entity_service_version: ${{ steps.entity-service.outputs.tag }}
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.TOKEN }}
+          commit-message: Updates helm charts
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: update-helm-charts
+          delete-branch: true
+          title: '[chore] updates helm charts'
+          body: |
+            This PR,
+            - Updates helm charts as per the latest releases of all services. 
+            - **Note: This is auto-generated PR so please test and verify before merging.** 
+          labels: |
+            helm-updates
+            automated pr
+            release
+          assignees: JBAhire
+          reviewers: JBAhire, kotharironak, rish691
+          team-reviewers: |
+            owners
+            maintainers
+          draft: false
