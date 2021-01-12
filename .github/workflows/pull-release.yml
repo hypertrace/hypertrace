@@ -129,8 +129,8 @@ jobs:
             helm-updates
             automated pr
             release
-          assignees: JBAhire
-          reviewers: JBAhire
+          assignees: JBAhire, kotharironak, rish691
+          reviewers: JBAhire, kotharironak, rish691
           team-reviewers: |
             owners
             maintainers
