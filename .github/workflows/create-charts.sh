@@ -1,3 +1,5 @@
+#!/bin/bash
+# This script prepares the charts.yaml files for data-services and platform-services of hypertrace based on the latest version of those services.
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 HELM_GCS_REPO='"https://storage.googleapis.com/hypertrace-helm-charts"'
 
