@@ -1,0 +1,229 @@
+{
+  entities(
+    type: SERVICE
+    limit: 100
+    between: {
+      startTime: "2020-07-12T11:15:35.649Z"
+      endTime: "2020-07-12T12:15:35.649Z"
+    }
+  ) {
+    results {
+      id
+      name: attribute(key: "name")
+      duration: metric(key: "duration") {
+        p99: percentile(size: 99) {
+          value
+        }
+        p50: percentile(size: 50) {
+          value
+        }
+      }
+      errorCount: metric(key: "errorCount") {
+        avg {
+          value
+        }
+        sum {
+          value
+        }
+      }
+      numCalls: metric(key: "numCalls") {
+        avg {
+          value
+        }
+        avgrate_sec: avgrate(units: SECONDS, size: 1) {
+          value
+        }
+        sum {
+          value
+        }
+      }
+      outgoingEdges_SERVICE: outgoingEdges(neighborType: SERVICE) {
+        results {
+          duration: metric(key: "duration") {
+            p99: percentile(size: 99) {
+              value
+            }
+            p50: percentile(size: 50) {
+              value
+            }
+          }
+          errorCount: metric(key: "errorCount") {
+            avg {
+              value
+            }
+            sum {
+              value
+            }
+          }
+          numCalls: metric(key: "numCalls") {
+            avg {
+              value
+            }
+            avgrate_sec: avgrate(units: SECONDS, size: 1) {
+              value
+            }
+            sum {
+              value
+            }
+          }
+          neighbor {
+            id
+            name: attribute(key: "name")
+            duration: metric(key: "duration") {
+              p99: percentile(size: 99) {
+                value
+              }
+              p50: percentile(size: 50) {
+                value
+              }
+            }
+            errorCount: metric(key: "errorCount") {
+              avg {
+                value
+              }
+              sum {
+                value
+              }
+            }
+            numCalls: metric(key: "numCalls") {
+              avg {
+                value
+              }
+              avgrate_sec: avgrate(units: SECONDS, size: 1) {
+                value
+              }
+              sum {
+                value
+              }
+            }
+          }
+        }
+      }
+      outgoingEdges_BACKEND: outgoingEdges(neighborType: BACKEND) {
+        results {
+          duration: metric(key: "duration") {
+            p99: percentile(size: 99) {
+              value
+            }
+            p50: percentile(size: 50) {
+              value
+            }
+          }
+          errorCount: metric(key: "errorCount") {
+            avg {
+              value
+            }
+            sum {
+              value
+            }
+          }
+          numCalls: metric(key: "numCalls") {
+            avg {
+              value
+            }
+            avgrate_sec: avgrate(units: SECONDS, size: 1) {
+              value
+            }
+            sum {
+              value
+            }
+          }
+          neighbor {
+            id
+            name: attribute(key: "name")
+            type: attribute(key: "type")
+            duration: metric(key: "duration") {
+              p99: percentile(size: 99) {
+                value
+              }
+              p50: percentile(size: 50) {
+                value
+              }
+            }
+            errorCount: metric(key: "errorCount") {
+              avg {
+                value
+              }
+              sum {
+                value
+              }
+            }
+            numCalls: metric(key: "numCalls") {
+              avg {
+                value
+              }
+              avgrate_sec: avgrate(units: SECONDS, size: 1) {
+                value
+              }
+              sum {
+                value
+              }
+            }
+          }
+        }
+      }
+      incomingEdges_SERVICE: incomingEdges(neighborType: SERVICE) {
+        results {
+          duration: metric(key: "duration") {
+            p99: percentile(size: 99) {
+              value
+            }
+            p50: percentile(size: 50) {
+              value
+            }
+          }
+          errorCount: metric(key: "errorCount") {
+            avg {
+              value
+            }
+            sum {
+              value
+            }
+          }
+          numCalls: metric(key: "numCalls") {
+            avg {
+              value
+            }
+            avgrate_sec: avgrate(units: SECONDS, size: 1) {
+              value
+            }
+            sum {
+              value
+            }
+          }
+          neighbor {
+            id
+            name: attribute(key: "name")
+            duration: metric(key: "duration") {
+              p99: percentile(size: 99) {
+                value
+              }
+              p50: percentile(size: 50) {
+                value
+              }
+            }
+            errorCount: metric(key: "errorCount") {
+              avg {
+                value
+              }
+              sum {
+                value
+              }
+            }
+            numCalls: metric(key: "numCalls") {
+              avg {
+                value
+              }
+              avgrate_sec: avgrate(units: SECONDS, size: 1) {
+                value
+              }
+              sum {
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

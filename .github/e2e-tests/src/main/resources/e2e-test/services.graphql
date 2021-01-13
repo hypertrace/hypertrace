@@ -1,0 +1,50 @@
+{
+  entities(type: SERVICE, limit: 100, offset: 0, between: {startTime: "2019-10-28T17:31:45.073Z", endTime: "2019-10-28T18:31:45.073Z"}) {
+    results {
+      id
+      name: attribute(key: "name")
+      duration: metric(key: "duration") {
+        avg {
+          value
+          __typename
+        }
+        __typename
+      }
+      errorCount: metric(key: "errorCount") {
+        sum {
+          value
+          __typename
+        }
+        __typename
+      }
+      numCalls: metric(key: "numCalls") {
+        avgrate_sec: avgrate(units: SECONDS, size: 1) {
+          value
+          __typename
+        }
+        sum {
+          value
+          __typename
+        }
+        __typename
+      }
+      bytesReceived: metric(key: "bytesReceived") {
+        sum {
+          value
+          __typename
+        }
+        __typename
+      }
+      bytesSent: metric(key: "bytesSent") {
+        sum {
+          value
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    total
+    __typename
+  }
+}
