@@ -28,8 +28,8 @@ class RequestBuilder {
     builder = new Request.Builder()
         .url(graphQLUrl)
         .header("Accept", "application/json")
-        .header("Content-Type", "application/json")
-        .header("Authorization", "Bearer " + graphQlJwtToken);
+        .header("Content-Type", "application/json");
+        //.header("Authorization", "Bearer " + graphQlJwtToken);
 
     InputStream in = getClass().getClassLoader().getResourceAsStream(filePath);
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));

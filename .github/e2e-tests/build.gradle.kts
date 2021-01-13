@@ -3,6 +3,10 @@ plugins {
   application
 }
 
+repositories {
+  mavenCentral()
+}
+
 dependencies {
   implementation("com.squareup.okhttp3:okhttp:4.8.0")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.11.1")
@@ -11,13 +15,7 @@ dependencies {
 }
 
 application {
-  mainClass.set("org.hypertrace.core.serviceframework.PlatformServiceLauncher")
-}
-
-tasks.register<Copy>("copyDependencies") {
-  from(configurations.runtimeClasspath)
-  from(tasks.jar)
-  into("$projectDir/build/dependencies")
+  mainClass.set("org.junit.platform.console.ConsoleLauncher")
 }
 
 tasks.withType<Test>().configureEach {
@@ -25,19 +23,10 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.run<JavaExec> {
-  jvmArgs = listOf("-Dservice.name=${project.name}")
+  args = listOf("--select-package=org.hypertrace")
 }
 
 // Point test source set at main so IDE recognizes
 sourceSets.test {
   allSource.source(sourceSets.main.get().allSource)
-}
-
-hypertraceDocker {
-  defaultImage {
-    dependsOn("copyDependencies")
-    javaApplication {
-      port.set(23431)
-    }
-  }
 }
