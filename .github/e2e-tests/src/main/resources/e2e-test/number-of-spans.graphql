@@ -1,0 +1,21 @@
+{
+  spans(
+    limit: 100
+    between: {
+      startTime: "2021-01-08T02:38:06.349Z"
+      endTime: "2021-01-15T02:38:06.349Z"
+    }
+    offset: 0
+    orderBy: [{ key: "startTime", direction: DESC }]
+    filterBy: [
+      {
+        key: "traceId"
+        operator: EQUALS
+        value: "00000000000000005b77f6f6303ee9ba"
+        type: ATTRIBUTE
+      }
+    ]
+  ) {
+    total
+  }
+}

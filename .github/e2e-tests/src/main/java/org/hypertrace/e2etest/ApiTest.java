@@ -70,6 +70,18 @@ public class ApiTest {
     assertResponseSanity(response, this::verifyNonZeroEntityResults);
   }
 
+  @Test
+  public void traceIDQuery_shouldSucceed() throws IOException {
+    Response response = executeGraphQLQuery("e2e-test/find-trace.graphql");
+    assertResponseBasedOnTraceData(response, "1", "traces");
+  }
+
+  @Test
+  public void numberOfSpansQuery_shouldSucceed() throws IOException {
+    Response response = executeGraphQLQuery("e2e-test/number-of-spans.graphql");
+    assertResponseBasedOnTraceData(response, "50", "spans");
+  }
+
 
   private Response executeGraphQLQuery(String filePath) throws IOException {
     Request request =
@@ -91,6 +103,22 @@ public class ApiTest {
     assertNull(responseJson.findValue("errors"));
     assertNotNull(responseJson.findValue("data"));
     specificAssertion.accept(responseJson.findValue("data"));
+  }
+
+  private void assertResponseBasedOnTraceData(Response response, String actualValue, String typeOfData)
+          throws IOException {
+    assertEquals(200, response.code());
+    JsonNode responseJson = readResponseJsonIntoTree(response);
+    assertNull(responseJson.findValue("errors"));
+    assertNotNull(responseJson.findValue("data"));
+    if (typeOfData == "traces") {
+      String numberOfTraces = responseJson.at("/data/traces/total").asText();
+      assertEquals(numberOfTraces, actualValue);
+    }
+    else if (typeOfData == "spans"){
+      String numberOfSpans = responseJson.at("/data/spans/total").asText();
+      assertEquals(numberOfSpans, actualValue);
+    }
   }
 
   private JsonNode readResponseJsonIntoTree(Response response) throws IOException {
