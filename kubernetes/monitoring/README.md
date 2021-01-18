@@ -6,7 +6,7 @@ as default reporter. Each pod of the `hypertrace-service` and  `hypertrace-inges
 with `prometheus.io/scrape: true`, so by deploying Prometheus-operator (https://prometheus-community.github.io/helm-charts/) 
 in your kube environment, you can have access to all the metrics. 
 
-All of the metrics are exposed via /metrics endpoint of each pod deployment's admin port. These metrics 
+All of the metrics are exposed via `/metrics` endpoint of each pod deployment's admin port. These metrics 
 can be grouped into three categories as described below.
 
 #### Resource Related Metrics
