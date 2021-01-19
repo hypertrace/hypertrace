@@ -93,17 +93,10 @@ Measure the time taken by executing the query to pinot via different request han
 | pinot\_query\_latency\_seconds\_count | Total number of pinot request, helps in calculating QPS |
 
 Based on the above metrics, we have prepared below dashboard for each of the categories, and it can be 
-imported in your grafana instance as below.
+imported into any metric visualisation platform like grafana etc
 ```
 dashboards/000-jvm-metrics.json - JVM/Process/System related metrics
 dashboards/001-ingestion-pipeline-metrics.json - Application metrics for ingestion pipeline
 dashboards/002-query-layer-pipeline-metrics.json - Application metrics for query layer metrics 
 ```
-Step 1: Click on `+` to get import option on your grafana
-
-![Select Import](./grafana-import-screen-1.png?raw=true)
-
-Step 2: Copy paste the JSON given in this repository
-
-![Paste JSON](./grafana-import-screen-2.png?raw=true)
 
