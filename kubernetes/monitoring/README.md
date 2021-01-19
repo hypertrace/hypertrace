@@ -106,8 +106,11 @@ dashboards/002-query-layer-pipeline-metrics.json - Application metrics for query
 ```
 
 ### Misc
-- kubernetes resources metrics can be derived by using kubelet metrics endpoints and [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics).
-- kafka related metrics can be derived using [kafka-exporter-operator](https://github.com/danielqsj/kafka_exporter).
+Prometheus operator provides a collection of helm charts, grafana dashboards and prometheus rules 
+which help in monitoring different components of deployment. Find more information [here](https://github.com/prometheus-community/helm-charts/).
+As an example,
+- kubernetes resources metrics can be derived by using kubelet metrics endpoints and [kube-state-metrics](https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/Chart.yaml).
+- kafka related metrics can be derived using [kafka-exporter-operator](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-kafka-exporter).
 
 
 
