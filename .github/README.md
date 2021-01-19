@@ -2,7 +2,7 @@
 
 ### Setup
 - Start Hypertrace using [docker-compose](https://github.com/hypertrace/hypertrace/tree/main/docker) or deploy on kubernetes with helm charts available [here](https://github.com/hypertrace/hypertrace/tree/main/kubernetes).
-- You can ingest these traces using the `ingest-traces.sh` script, run `./ingest-traces.sh`. 
+- Run `ingest-traces.sh` script to ingest pre-defined traces
 
 
 ### Run GraphQL Tests
