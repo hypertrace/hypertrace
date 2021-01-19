@@ -1,13 +1,11 @@
 ## Testing Hypertrace deployment using end to end tests
 
-### Pre-requisites
-- Java 11
-- NPM 
-- Chrome webdriver
-
 ### Run GraphQL Tests
 
-To run GraphQL tests, 
+### Pre-requisites
+- Java 11
+
+#### To run GraphQL tests, 
 - go to `graphql-e2e-tests` directory using `cd graphql-e2e-tests`. 
 - These GraphQL tests run on specific set of traces so you can ingest these traces using the `ingest-traces.sh` script. 
 - Run `./ingest-traces.sh`
@@ -21,7 +19,11 @@ To run GraphQL tests,
 
 ### Run UI tests
 
-To run UI tests, 
+#### Pre-requisites
+- NPM 
+- Chrome webdriver
+
+#### To run UI tests, 
 - go to `ui-e2e-tests` directory using `cd ui-e2e-tests`. 
 - UI tests go to each and every page and browse through available data.
 - Now run `npm install` which will install all necessary modules to run tests. 
