@@ -2,7 +2,7 @@
 
 ### Run GraphQL Tests
 
-### Pre-requisites
+#### Pre-requisites
 - Java 11
 
 #### To run GraphQL tests, 
