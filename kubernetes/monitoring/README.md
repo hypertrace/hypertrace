@@ -1,13 +1,14 @@
 ## Monitoring Hypertrace
-To help in monitoring hypetrace, It exposes certain application and resource level metrics by using follwoing libraries 
-- micrometer (https://github.com/micrometer-metrics/micrometer) 
-- DropWizard (https://github.com/dropwizard/metrics). 
+To help in monitoring hypertrace, It exposes certain application and resource level metrics by using 
+[micrometer](https://github.com/micrometer-metrics/micrometer) library.
 
-It is currently configured to report all of the metrics to Prometheus. Each pod of the `hypertrace-service` and  `hypertrace-ingester` are annotated 
-with `prometheus.io/scrape: true`. You can access all the metrics for these services by deploying Prometheus-operator (https://github.com/prometheus-operator/prometheus-operator) in your kube environment. All of the metrics are exposed via `/metrics` endpoint of each pod deployment's admin port. These metrics 
-can be grouped into three categories as described below.
+It is currently configured to report all of the metrics to Prometheus. Each pod of the `hypertrace-service` 
+and  `hypertrace-ingester` are annotated with `prometheus.io/scrape: true`. You can access all the metrics 
+for these services by deploying [Prometheus-operator](https://github.com/prometheus-operator/prometheus-operator) 
+in your kube environment. All of the metrics are exposed via `/metrics` endpoint of each pod deployment's 
+admin port. These metrics can be grouped into three categories as described below.
 
-### Resource Related Metrics
+### Resource Metrics
 #### JVM class loading metrics
 | Name                                   | Description                                                                               |
 | -------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -61,9 +62,14 @@ can be grouped into three categories as described below.
 | process\_cpu\_usage                                  | The "recent cpu usage" for the Java Virtual Machine process |
 
 ### Hypetrace Ingestion Layer
+Hypertrace Ingestion pipeline is kstream application which provides [built-in metrics](https://docs.confluent.io/platform/current/streams/monitoring.html#built-in-metrics), 
+that are exposed via `/metrics` endpoint. So, refer above documentation for kstream related metrics. The below table
+contains additional application metrics,
+
 | Name                  | Description                                         |
 | --------------------- | --------------------------------------------------- |
 | arrival\_lag\_seconds | Time taken to reach to specific ingestion component |
+
 
 ### Hypertrace Query Layer
 #### Gateway Service APIs
@@ -90,6 +96,7 @@ Measure the time taken by executing the query to pinot via different request han
 | pinot\_query\_latency\_seconds        | Time taken by executing pinot query                     |
 | pinot\_query\_latency\_seconds\_count | Total number of pinot request, helps in calculating QPS |
 
+### Pre-built dashboards
 Based on the above metrics, we have prepared below dashboard for each of the categories, and it can be 
 imported into any metric visualisation platform like grafana etc
 ```
@@ -97,4 +104,10 @@ dashboards/000-jvm-metrics.json - JVM/Process/System related metrics
 dashboards/001-ingestion-pipeline-metrics.json - Application metrics for ingestion pipeline
 dashboards/002-query-layer-pipeline-metrics.json - Application metrics for query layer metrics 
 ```
+
+### Misc
+- kubernetes resources metrics can be derived by using kubelet metrics endpoints and [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics).
+- kafka related metrics can be derived using [kafka-exporter-operator](https://github.com/danielqsj/kafka_exporter).
+
+
 
