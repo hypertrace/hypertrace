@@ -188,10 +188,8 @@ raw-spans-grouper:
     initialDelaySeconds: 10
     periodSeconds: 5
   rawSpansGrouperConfig:
-    kafka:
-      streams:
-        config:
-          replicationFactor: 1
+    kafkaStreamsConfig:
+      replicationFactor: 1
     span:
       groupby:
         internal: 10
