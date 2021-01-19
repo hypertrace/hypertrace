@@ -1,22 +1,20 @@
 ## Monitoring Hypertrace
-To help in monitoring hypetrace, it exposes a bunch of application and resource level metrics by using 
-certain libraries - micrometer (https://github.com/micrometer-metrics/micrometer) + DropWizard 
-(https://github.com/dropwizard/metrics). It is also configured to report all of the metrics to Prometheus 
-as default reporter. Each pod of the `hypertrace-service` and  `hypertrace-ingester` are annotated 
-with `prometheus.io/scrape: true`, so by deploying Prometheus-operator (https://prometheus-community.github.io/helm-charts/) 
-in your kube environment, you can have access to all the metrics. 
+To help in monitoring hypetrace, It exposes certain application and resource level metrics by using follwoing libraries 
+- micrometer (https://github.com/micrometer-metrics/micrometer) 
+- DropWizard (https://github.com/dropwizard/metrics). 
 
-All of the metrics are exposed via `/metrics` endpoint of each pod deployment's admin port. These metrics 
+It is currently configured to report all of the metrics to Prometheus. Each pod of the `hypertrace-service` and  `hypertrace-ingester` are annotated 
+with `prometheus.io/scrape: true`. You can access all the metrics for these services by deploying Prometheus-operator (https://github.com/prometheus-operator/prometheus-operator) in your kube environment. All of the metrics are exposed via `/metrics` endpoint of each pod deployment's admin port. These metrics 
 can be grouped into three categories as described below.
 
-#### Resource Related Metrics
-##### JVM class loading metrics
+### Resource Related Metrics
+#### JVM class loading metrics
 | Name                                   | Description                                                                               |
 | -------------------------------------- | ----------------------------------------------------------------------------------------- |
 | jvm\_classes\_loaded\_classes          | The number of classes that are currently loaded in the Java virtual machine               |
 | jvm\_classes\_unloaded\_classes\_total | The total number of classes unloaded since the Java virtual machine has started execution |
 
-##### JVM GC Metrics
+#### JVM GC Metrics
 | Name                                                                                       | Description                                                                                                 |
 | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
 | jvm\_gc\_max\_data\_size\_bytes                                                            | Max size of old generation memory pool                                                                      |
@@ -26,7 +24,7 @@ can be grouped into three categories as described below.
 | jvm\_gc\_pause\_seconds\_count, jvm\_gc\_pause\_seconds\_max, jvm\_gc\_pause\_seconds\_sum | Time spent in GC pause (if not concurrent phase)                                                            |
 | jvm\_gc\_concurrent\_phase time                                                            | Time spent in concurrent phase                                                                              |
 
-##### JVM Thread Metrics
+#### JVM Thread Metrics
 | Name                          | Description                                                                         |
 | ----------------------------- | ----------------------------------------------------------------------------------- |
 | jvm\_threads\_peak\_threads   | The peak live thread count since the Java virtual machine started or peak was reset |
@@ -34,7 +32,7 @@ can be grouped into three categories as described below.
 | jvm\_threads\_live\_threads   | The current number of live threads including both daemon and non-daemon threads     |
 | jvm\_threads\_states\_threads | The current number of threads having <STATE> state.                                 |
 
-##### JVM Memory Metrics
+#### JVM Memory Metrics
 | Name                                | Description                                                                           |
 | ----------------------------------- | ------------------------------------------------------------------------------------- |
 | jvm\_buffer\_count\_buffers         | An estimate of the number of buffers in the pool                                      |
@@ -44,14 +42,14 @@ can be grouped into three categories as described below.
 | jvm\_memory\_committed\_bytes       | The amount of memory in bytes that is committed for the Java virtual machine to use   |
 | jvm\_memory\_max\_bytes             | The maximum amount of memory in bytes that can be used for memory management          |
 
-##### System Metrics
+#### System Metrics
 | Name                      | Description                                                                                                                                                                      |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | system\_cpu\_count        | The number of processors available to the Java virtual machine                                                                                                                   |
 | system\_load\_average\_1m | The sum of the number of runnable entities queued to available processors and the number of runnable entities running on the available processors averaged over a period of time |
 | system\_cpu\_usage        | The "recent cpu usage" for the whole system    
 
-##### Process Metrics
+#### Process Metrics
 | Name                                                 | Description                                                 |
 | ---------------------------------------------------- | ----------------------------------------------------------- |
 | process\_uptime\_seconds                             | The uptime of the Java virtual machine                      |
@@ -62,13 +60,13 @@ can be grouped into three categories as described below.
 | process\_threads                                     | The number of process threads                               |
 | process\_cpu\_usage                                  | The "recent cpu usage" for the Java Virtual Machine process |
 
-#### Hypetrace Ingestion Layer
+### Hypetrace Ingestion Layer
 | Name                  | Description                                         |
 | --------------------- | --------------------------------------------------- |
 | arrival\_lag\_seconds | Time taken to reach to specific ingestion component |
 
-#### Hypertrace Query Layer
-##### Gateway Service APIs
+### Hypertrace Query Layer
+#### Gateway Service APIs
 Measure the taken for each request at the Gateway Service layer which is an entry point for the GraphQL layer.
 
 | Name                                                                       | Description                                                      |
@@ -84,7 +82,7 @@ Measure the taken for each request at the Gateway Service layer which is an entr
 | org\_hypertrace\_core\_serviceframework\_explore\_query\_execution\_count  | Total number of explorer request, helps in calculating QPS       |
 | org\_hypertrace\_core\_serviceframework\_entities\_query\_build\_count     | Total number of entities build request, helps in calculating QPS |
 
-##### Pinot Request Handle
+#### Pinot Request Handle
 Measure the time taken by executing the query to pinot via different request handle based on different views.
 
 | Name                                  | Description                                             |
