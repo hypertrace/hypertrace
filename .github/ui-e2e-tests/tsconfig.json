@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "inlineSourceMap": true,
+    "declaration": false,
+    "noImplicitAny": false,
+    "outDir": "tmp",
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["src/**/*.ts"]
+}
