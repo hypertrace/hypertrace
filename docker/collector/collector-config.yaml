@@ -1,0 +1,20 @@
+exporters:
+  kafka:
+    brokers:
+      - 'kafka-zookeeper:9092'
+    topic: jaeger-spans
+  jaeger-to-jaeger:
+    sender-type: jaeger-thrift-http
+    jaeger-thrift-http:
+      collector-endpoint: "http://127.0.0.1:14268/api/traces"
+      timeout: 5s  
+log-level: WARN
+receivers:
+  jaeger: {}
+  opencensus:
+    keepalive:
+      server-parameters: null
+    max-connection-age: 120s
+    max-connection-age-grace: 30s
+  zipkin: {}
+  

@@ -217,7 +217,7 @@ hypertrace-trace-enricher:
     enabled: false
 
 hypertrace-view-generator:
-  mergeAllViews: true
+  mergeAllViews: false
   allViews:
     creator:
       jobName: views-creation-job
@@ -244,40 +244,40 @@ hypertrace-view-generator:
       readinessProbe:
         initialDelaySeconds: 10
         periodSeconds: 5
-  kafka-topic-creator:
-    enabled: true
-    kafka:
-      topics:
-        - name: backend-entity-view-events
-          replicationFactor: 1
-          partitions: 2
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: raw-trace-view-events
-          replicationFactor: 1
-          partitions: 2
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: raw-service-view-events
-          replicationFactor: 1
-          partitions: 2
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: service-call-view-events
-          replicationFactor: 1
-          partitions: 2
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: span-event-view
-          replicationFactor: 1
-          partitions: 2
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
+#   kafka-topic-creator:
+#     enabled: true
+#     kafka:
+#       topics:
+#         - name: backend-entity-view-events
+#           replicationFactor: 1
+#           partitions: 2
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=10800000
+#         - name: raw-trace-view-events
+#           replicationFactor: 1
+#           partitions: 2
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=10800000
+#         - name: raw-service-view-events
+#           replicationFactor: 1
+#           partitions: 2
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=10800000
+#         - name: service-call-view-events
+#           replicationFactor: 1
+#           partitions: 2
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=10800000
+#         - name: span-event-view
+#           replicationFactor: 1
+#           partitions: 2
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=10800000
 
 gateway-service:
   replicaCount: 1

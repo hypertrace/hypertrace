@@ -1,137 +1,137 @@
-hypertrace-oc-collector:
-  resources:
-    requests:
-      cpu: "0.5"
-      memory: "256Mi"
-    limits:
-      cpu: "1"
-      memory: "256Mi"
-  containerPorts:
-    - name: grpc-opencensus
-      containerPort: 55678
-    - name: http-jaeger
-      containerPort: 14268
-    - name: jaeger-tchannel
-      containerPort: 14267
-    - name: zipkin
-      containerPort: 9411
-  service:
-    type: LoadBalancer
-    ports:
-      - name: grpc-opencensus
-        port: 55678
-        targetPort: 55678
-        protocol: TCP
-      - name: http-jaeger
-        port: 14268
-        targetPort: 14268
-        protocol: TCP
-      - name: jaeger-tchannel
-        port: 14267
-        targetPort: 14267
-        protocol: TCP
-      - name: zipkin
-        port: 9411
-        targetPort: 9411
-        protocol: TCP
-  configMap:
-    name: hypertrace-oc-collector-conf
-    data:
-      log-level: INFO
-      receivers:
-        opencensus:
-          # keepalive settings can help load balancing, see receiver/README.md for more info.
-          keepalive:
-            server-parameters:
-              max-connection-age: 120s
-              max-connection-age-grace: 30s
-        jaeger: {}
-        zipkin: {}
-      exporters:
-        kafka:
-          brokers: ["bootstrap:9092"]
-          topic: "jaeger-spans"
-  kafka-topic-creator:
-    enabled: true
-    kafka:
-      topics:
-        - name: jaeger-spans
-          replicationFactor: 3
-          partitions: 8
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+# hypertrace-oc-collector:
+#   resources:
+#     requests:
+#       cpu: "0.5"
+#       memory: "256Mi"
+#     limits:
+#       cpu: "1"
+#       memory: "256Mi"
+#   containerPorts:
+#     - name: grpc-opencensus
+#       containerPort: 55678
+#     - name: http-jaeger
+#       containerPort: 14268
+#     - name: jaeger-tchannel
+#       containerPort: 14267
+#     - name: zipkin
+#       containerPort: 9411
+#   service:
+#     type: LoadBalancer
+#     ports:
+#       - name: grpc-opencensus
+#         port: 55678
+#         targetPort: 55678
+#         protocol: TCP
+#       - name: http-jaeger
+#         port: 14268
+#         targetPort: 14268
+#         protocol: TCP
+#       - name: jaeger-tchannel
+#         port: 14267
+#         targetPort: 14267
+#         protocol: TCP
+#       - name: zipkin
+#         port: 9411
+#         targetPort: 9411
+#         protocol: TCP
+#   configMap:
+#     name: hypertrace-oc-collector-conf
+#     data:
+#       log-level: INFO
+#       receivers:
+#         opencensus:
+#           # keepalive settings can help load balancing, see receiver/README.md for more info.
+#           keepalive:
+#             server-parameters:
+#               max-connection-age: 120s
+#               max-connection-age-grace: 30s
+#         jaeger: {}
+#         zipkin: {}
+#       exporters:
+#         kafka:
+#           brokers: ["bootstrap:9092"]
+#           topic: "jaeger-spans"
+#   kafka-topic-creator:
+#     enabled: true
+#     kafka:
+#       topics:
+#         - name: jaeger-spans
+#           replicationFactor: 3
+#           partitions: 8
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=21600000
 
-span-normalizer:
-  resources:
-    requests:
-      cpu: "0.5"
-      memory: "512Mi"
-    limits:
-      cpu: "1"
-      memory: "512Mi"
-  spanNormalizerConfig:
-    processor:
-      defaultTenantId: __default
-    flink:
-      job:
-        metrics:
-          reporters: "slf4j"
-    metrics:
-      reporter:
-        names: ["console"]
-  kafka-topic-creator:
-    enabled: true
-    kafka:
-      topics:
-        - name: raw-spans-from-jaeger-spans
-          replicationFactor: 3
-          partitions: 8
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+# span-normalizer:
+#   resources:
+#     requests:
+#       cpu: "0.5"
+#       memory: "512Mi"
+#     limits:
+#       cpu: "1"
+#       memory: "512Mi"
+#   spanNormalizerConfig:
+#     processor:
+#       defaultTenantId: __default
+#     flink:
+#       job:
+#         metrics:
+#           reporters: "slf4j"
+#     metrics:
+#       reporter:
+#         names: ["console"]
+#   kafka-topic-creator:
+#     enabled: true
+#     kafka:
+#       topics:
+#         - name: raw-spans-from-jaeger-spans
+#           replicationFactor: 3
+#           partitions: 8
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=21600000
 
-raw-spans-grouper:
-  resources:
-    requests:
-      cpu: "0.5"
-      memory: "1Gi"
-    limits:
-      cpu: "1"
-      memory: "1Gi"
-  volumeClaimTemplates:
-    name: hypertrace
-    storageClassName: hypertrace
-    storageRequestSize: 1Gi
-  kafka-topic-creator:
-    kafka:
-      topics:
-        - name: structured-traces-from-raw-spans
-          replicationFactor: 3
-          partitions: 8
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+# raw-spans-grouper:
+#   resources:
+#     requests:
+#       cpu: "0.5"
+#       memory: "1Gi"
+#     limits:
+#       cpu: "1"
+#       memory: "1Gi"
+#   volumeClaimTemplates:
+#     name: hypertrace
+#     storageClassName: hypertrace
+#     storageRequestSize: 1Gi
+#   kafka-topic-creator:
+#     kafka:
+#       topics:
+#         - name: structured-traces-from-raw-spans
+#           replicationFactor: 3
+#           partitions: 8
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=21600000
 
-hypertrace-trace-enricher:
-  javaOpts: "-Xms512M -Xmx768M"
-  resources:
-    requests:
-      cpu: "0.5"
-      memory: "1Gi"
-    limits:
-      cpu: "1"
-      memory: "1Gi"
-  kafka-topic-creator:
-    enabled: true
-    kafka:
-      topics:
-        - name: enriched-structured-traces
-          replicationFactor: 3
-          partitions: 8
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+# hypertrace-trace-enricher:
+#   javaOpts: "-Xms512M -Xmx768M"
+#   resources:
+#     requests:
+#       cpu: "0.5"
+#       memory: "1Gi"
+#     limits:
+#       cpu: "1"
+#       memory: "1Gi"
+#   kafka-topic-creator:
+#     enabled: true
+#     kafka:
+#       topics:
+#         - name: enriched-structured-traces
+#           replicationFactor: 3
+#           partitions: 8
+#           configs:
+#             - retention.bytes=1073741824
+#             - retention.ms=21600000
 
 hypertrace-view-generator:
   viewCreatorJobConfig:
@@ -190,100 +190,100 @@ hypertrace-view-generator:
     kafka:
       topics:
         - name: backend-entity-view-events
-          replicationFactor: 3
-          partitions: 8
+          replicationFactor: 1
+          partitions: 1
           configs:
             - retention.bytes=1073741824
             - retention.ms=21600000
         - name: raw-trace-view-events
-          replicationFactor: 3
-          partitions: 8
+          replicationFactor: 1
+          partitions: 1
           configs:
             - retention.bytes=1073741824
             - retention.ms=21600000
         - name: raw-service-view-events
-          replicationFactor: 3
-          partitions: 8
+          replicationFactor: 1
+          partitions: 1
           configs:
             - retention.bytes=1073741824
             - retention.ms=21600000
         - name: service-call-view-events
-          replicationFactor: 3
-          partitions: 8
+          replicationFactor: 1
+          partitions: 1
           configs:
             - retention.bytes=1073741824
             - retention.ms=21600000
         - name: span-event-view
-          replicationFactor: 3
-          partitions: 8
+          replicationFactor: 1
+          partitions: 1
           configs:
             - retention.bytes=1073741824
             - retention.ms=21600000
 
-hypertrace-federated-service:
-  enabled: false
+# hypertrace-federated-service:
+#   enabled: false
 
-gateway-service:
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: "512Mi"
-    limits:
-      cpu: "0.5"
-      memory: "512Mi"
+# gateway-service:
+#   resources:
+#     requests:
+#       cpu: "0.25"
+#       memory: "512Mi"
+#     limits:
+#       cpu: "0.5"
+#       memory: "512Mi"
 
-entity-service:
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: "512Mi"
-    limits:
-      cpu: "0.5"
-      memory: "512Mi"
+# entity-service:
+#   resources:
+#     requests:
+#       cpu: "0.25"
+#       memory: "512Mi"
+#     limits:
+#       cpu: "0.5"
+#       memory: "512Mi"
 
-attribute-service:
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: "512Mi"
-    limits:
-      cpu: "0.5"
-      memory: "512Mi"
-query-service:
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: "512Mi"
-    limits:
-      cpu: "0.5"
-      memory: "512Mi"
-  queryServiceConfig:
-    data:
-      zookeeperConnectionString: zookeeper:2181/pinot/hypertrace-views
-hypertrace-graphql-service:
-  javaOpts: "-Xms128M -Xmx256M"
-  serviceConfig:
-    defaultTenantId: "__default"
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: "320Mi"
-    limits:
-      cpu: "0.5"
-      memory: "320Mi"
+# attribute-service:
+#   resources:
+#     requests:
+#       cpu: "0.25"
+#       memory: "512Mi"
+#     limits:
+#       cpu: "0.5"
+#       memory: "512Mi"
+# query-service:
+#   resources:
+#     requests:
+#       cpu: "0.25"
+#       memory: "512Mi"
+#     limits:
+#       cpu: "0.5"
+#       memory: "512Mi"
+#   queryServiceConfig:
+#     data:
+#       zookeeperConnectionString: zookeeper:2181/pinot/hypertrace-views
+# hypertrace-graphql-service:
+#   javaOpts: "-Xms128M -Xmx256M"
+#   serviceConfig:
+#     defaultTenantId: "__default"
+#   resources:
+#     requests:
+#       cpu: "0.25"
+#       memory: "320Mi"
+#     limits:
+#       cpu: "0.5"
+#       memory: "320Mi"
 
-hypertrace-ui:
-  service:
-    type: LoadBalancer
-  nginxConfig:
-    graphqlRedirectEnabled: true
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: "320Mi"
-    limits:
-      cpu: "0.5"
-      memory: "512Mi"
+# hypertrace-ui:
+#   service:
+#     type: LoadBalancer
+#   nginxConfig:
+#     graphqlRedirectEnabled: true
+#   resources:
+#     requests:
+#       cpu: "0.25"
+#       memory: "320Mi"
+#     limits:
+#       cpu: "0.5"
+#       memory: "512Mi"
 
 kafka-topic-creator:
   enabled: false

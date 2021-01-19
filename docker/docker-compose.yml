@@ -9,7 +9,8 @@ services:
 
 # This container includes the UI and APIs it needs for storage queries.
   hypertrace:
-    image: hypertrace/hypertrace:main
+    #image: hypertrace/hypertrace:main
+    image: traceableai-docker.jfrog.io/hypertrace/hypertrace:test
     container_name: hypertrace
     environment:
       - MONGO_HOST=mongo
@@ -89,6 +90,8 @@ services:
   mongo:
     image: hypertrace/mongodb:main
     container_name: mongo
+    ports:
+      - 27017:27017
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main
