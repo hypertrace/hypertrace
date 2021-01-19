@@ -1,5 +1,10 @@
 ## Testing Hypertrace deployment using end to end tests
 
+### Setup
+- Start Hypertrace using [docker-compose](https://github.com/hypertrace/hypertrace/tree/main/docker) or deploy on kubernetes with helm charts available [here](https://github.com/hypertrace/hypertrace/tree/main/kubernetes).
+- You can ingest these traces using the `ingest-traces.sh` script, run `./ingest-traces.sh`. 
+
+
 ### Run GraphQL Tests
 
 #### Pre-requisites
@@ -7,8 +12,6 @@
 
 #### To run GraphQL tests, 
 - go to `graphql-e2e-tests` directory using `cd graphql-e2e-tests`. 
-- These GraphQL tests run on specific set of traces so you can ingest these traces using the `ingest-traces.sh` script. 
-- Run `./ingest-traces.sh`
 - Now to run tests, run `gradlew run`. This will execute all the GraphQL tests. 
 
 
