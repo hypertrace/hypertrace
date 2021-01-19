@@ -86,10 +86,6 @@ public class ApiTest {
   private Response executeGraphQLQuery(String filePath) throws IOException {
     Request request =
         new RequestBuilder(graphQLUrl, "", filePath)
-            // query for data for the past 1 hour
-//            .withTimeBounds(
-//                Instant.now().minus(DEFAULT_TIMERANGE_QUERY_TEST, ChronoUnit.MINUTES),
-//                Instant.now())
             .build();
 
     return requestExecutor.executeRequest(request);
