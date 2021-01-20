@@ -126,24 +126,8 @@ case "$subcommand" in
 
   uninstall)
     echo "[INFO] Uninstalling Hypertrace deletes the hypertrace namespace and deletes any data stored."
-    echo "Choose an option to continue"
-
-    select yn in "Yes" "No"; do
-        case $yn in
-            Yes )
-              clean
-              kubectl delete ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS}
-              echo "[INFO] Uninstall successful."
-              break;;
-
-            No )
-              echo "[INFO] Uninstall cancelled."
-              exit;;
-        esac
-    done
-    ;;
-  *)
-    echo "[ERROR] Unknown command: ${subcommand}"
-    usage
+    clean
+    kubectl delete ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS}
+    echo "[INFO] Uninstall successful."
     ;;
 esac

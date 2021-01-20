@@ -42,7 +42,7 @@ jobs:
 
       - name: Waits for some stability
         run: |
-          sleep 60 # you can decrease it but never increase it
+          sleep 40 # you can decrease it but never increase it
           kubectl get services -n hypertrace
 
       - name: Ingest traces
@@ -70,9 +70,17 @@ jobs:
           export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           npx protractor protractor.conf.js --suite smoke --baseUrl "http://${HTUI_IP}:2020"
 
-      - name: Clean up
+      - name: Uninstall Hypertrace
         if: ${{ always() }}
-        run: |
+        working-directory: kubernetes
+        run: ./hypertrace.sh uninstall
+          
+          minikube delete --all
+
+      - name: Clean up minikube
+        if: ${{ always() }}
+        run: | 
+          minikube stop
           minikube delete --all
 
       - name: Clean up
