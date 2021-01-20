@@ -1,2 +1,5 @@
 .idea/
 *.idea
+/.github/ui-e2e-tests/node_modules/
+/.github/graphql-e2e-tests/.gradle/
+/.github/graphql-e2e-tests/build/

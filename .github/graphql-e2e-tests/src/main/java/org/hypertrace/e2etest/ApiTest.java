@@ -24,7 +24,8 @@ import org.junit.jupiter.api.Test;
 public class ApiTest {
   // The endpoint i.e host and port or the URL without the "/graphql" part
   private static final Integer DEFAULT_TIMERANGE_QUERY_TEST = 15;
-  private static String graphQLEndpoint = "http://localhost:2020";
+  private static String htuiIp = System.getenv("HTUI_IP");
+  private static String graphQLEndpoint = "http://"+htuiIp+":2020";
   private static String graphQLUrl;
   private static String graphQLResource = "/graphql";
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -38,6 +39,7 @@ public class ApiTest {
       graphQLEndpoint = System.getenv("GRAPHQL_ENDPOINT");
     }
     graphQLUrl = graphQLEndpoint + graphQLResource;
+    System.out.println(graphQLUrl);
   }
 
   @Test
