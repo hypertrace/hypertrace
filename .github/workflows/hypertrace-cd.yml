@@ -23,7 +23,6 @@ jobs:
         run: |
           kubectl create ns hypertrace
           ./hypertrace.sh install --clean
-  
 
       - name: Cluster Info
         if: ${{ failure() }}
@@ -33,14 +32,15 @@ jobs:
           minikube status
 
       - name: Waits for some stability
-        working-directory: kubernetes
         run: |
-          sleep 120 # you can decrease it but never increase it
+          sleep 60 # you can decrease it but never increase it
           kubectl get pods -n hypertrace
+      
       - name: Set up Minikube tunnel
-        run: |
-          mkdir /tmp/minikube-tunnel
-          minikube tunnel > /tmp/minikube-tunnel/a.log &
+        run: minikube tunnel &> /dev/null &
+
+      - name: Print service info
+        run: kubectl get services -n hypertrace
 
       - name: Ingest traces
         working-directory: ./.github/graphql-e2e-tests/
