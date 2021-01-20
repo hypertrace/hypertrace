@@ -77,6 +77,7 @@ Released versions of Docker images for various Hypertrace components are availab
 * [Query Service](https://github.com/hypertrace/query-service)
 * [Entity Service](https://github.com/hypertrace/entity-service)
 * [Attribute Service](https://github.com/hypertrace/attribute-service)
+* [Config Service](https://github.com/hypertrace/config-service)
 
 ### UI
 

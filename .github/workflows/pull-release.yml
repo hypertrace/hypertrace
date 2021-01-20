@@ -88,6 +88,12 @@ jobs:
         with:
           repository: hypertrace/entity-service
 
+      - name: Get latest charts for config-service
+        id: config-service
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/config-service
+
       - uses: actions/checkout@v2
 
       - name: Update data services charts
@@ -114,6 +120,7 @@ jobs:
           query_service_version: ${{ steps.query-service.outputs.tag }}
           gateway_service_version: ${{ steps.gateway-service.outputs.tag }}
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
+          config_service_version: ${{ steps.config-service.outputs.tag }}
 
       - name: Create Pull Request
         id: cpr

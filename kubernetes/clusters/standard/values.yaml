@@ -195,6 +195,15 @@ query-service:
       cpu: "1"
       memory: "512Mi"
 
+config-service:
+  resources:
+    requests:
+      cpu: "0.1"
+      memory: "256Mi"
+    limits:
+      cpu: "0.5"
+      memory: "512Mi"
+
 hypertrace-graphql-service:
   javaOpts: "-Xms512M -Xmx768M"
   serviceConfig:
