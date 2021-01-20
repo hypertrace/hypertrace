@@ -30,19 +30,19 @@ jobs:
           df -h
           minikube logs
           minikube status
+        
+      - name: show data
+        run: |
+          kubectl get pods -n hypertrace
+          kubectl get services -n hypertrace
+
+      - name: Set up Minikube tunnel
+        run: |
+          minikube tunnel > /tmp/minikube-tunnel/a.log &
 
       - name: Waits for some stability
         run: |
           sleep 60 # you can decrease it but never increase it
-          kubectl get pods -n hypertrace
-      
-      - name: Set up Minikube tunnel
-        run: |
-          mkdir /tmp/minikube-tunnel
-          minikube tunnel > /tmp/minikube-tunnel/a.log &
-
-      - name: Print service info
-        run: |
           kubectl get services -n hypertrace
           export COLLECTOR_IP="$(kubectl get service hypertrace-oc-collector -n hypertrace | tr -s " " | cut -d' ' -f4 | grep -v "EXTERNAL-IP")"
           echo $COLLECTOR_IP
