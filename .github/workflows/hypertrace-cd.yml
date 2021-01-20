@@ -17,7 +17,7 @@ jobs:
           ref: parameterised-e2e
 
       - name: Start minikube
-        run: minikube start
+        run: minikube start --driver=none
       - name: Install Hypertrace
         working-directory: kubernetes
         run: |
@@ -44,8 +44,6 @@ jobs:
         run: |
           sleep 60 # you can decrease it but never increase it
           kubectl get services -n hypertrace
-          export COLLECTOR_IP="$(kubectl get service hypertrace-oc-collector -n hypertrace | tr -s " " | cut -d' ' -f4 | grep -v "EXTERNAL-IP")"
-          echo $COLLECTOR_IP
 
       - name: Ingest traces
         working-directory: ./.github/graphql-e2e-tests/
@@ -69,7 +67,7 @@ jobs:
       - name: Clean up
         if: ${{ always() }}
         run: |
-          minikube delete
+          minikube delete --all
 
       - name: Clean up
         if: ${{ always() }}
