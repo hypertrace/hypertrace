@@ -74,8 +74,6 @@ jobs:
         if: ${{ always() }}
         working-directory: kubernetes
         run: ./hypertrace.sh uninstall
-          
-          minikube delete --all
 
       - name: Clean up minikube
         if: ${{ always() }}
