@@ -50,6 +50,11 @@ jobs:
         run: | 
           ./ingest-traces.sh
 
+      - name: Waits for some stability
+        run: |
+          sleep 40 # you can decrease it but never increase it
+          kubectl get services -n hypertrace
+
       - name: run GraphQL tests
         working-directory: ./.github/graphql-e2e-tests/
         run: |
