@@ -39,7 +39,6 @@ public class ApiTest {
       graphQLEndpoint = System.getenv("GRAPHQL_ENDPOINT");
     }
     graphQLUrl = graphQLEndpoint + graphQLResource;
-    System.out.println(graphQLUrl);
   }
 
   @Test
