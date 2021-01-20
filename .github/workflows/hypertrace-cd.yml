@@ -37,14 +37,20 @@ jobs:
           kubectl get pods -n hypertrace
       
       - name: Set up Minikube tunnel
-        run: minikube tunnel &> /dev/null &
+        run: |
+          mkdir /tmp/minikube-tunnel
+          minikube tunnel > /tmp/minikube-tunnel/a.log &
 
       - name: Print service info
-        run: kubectl get services -n hypertrace
+        run: |
+          kubectl get services -n hypertrace
+          export COLLECTOR_IP="$(kubectl get service hypertrace-oc-collector -n hypertrace | tr -s " " | cut -d' ' -f4 | grep -v "EXTERNAL-IP")"
+          echo $COLLECTOR_IP
 
       - name: Ingest traces
         working-directory: ./.github/graphql-e2e-tests/
-        run: ./ingest-traces.sh
+        run: | 
+          ./ingest-traces.sh
 
       - name: run GraphQL tests
         working-directory: ./.github/graphql-e2e-tests/
