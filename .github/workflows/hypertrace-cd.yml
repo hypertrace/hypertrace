@@ -31,7 +31,7 @@ jobs:
           minikube logs
           minikube status
         
-      - name: show data
+      - name: Show Hypertrace deployment data
         run: |
           kubectl get pods -n hypertrace
           kubectl get services -n hypertrace
@@ -62,6 +62,7 @@ jobs:
           npm install 
           npm audit fix
           CHROMEDRIVER_RELEASE="$(google-chrome --product-version)" && npm run install-web-driver -- --versions.chrome=${CHROMEDRIVER_RELEASE}
+          export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           npx protractor protractor.conf.js --suite smoke --baseUrl "http://${HTUI_IP}:2020"
 
       - name: Clean up
