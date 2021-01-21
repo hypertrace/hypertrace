@@ -66,6 +66,9 @@ update_platform_services_charts() {
         echo '  - name: entity-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $entity_service_version
+        echo '  - name: config-service'
+        echo '    repository:' $HELM_GCS_REPO
+        echo '    version:' $config_service_version
         echo '  - name: kafka-topic-creator'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' 0.1.7

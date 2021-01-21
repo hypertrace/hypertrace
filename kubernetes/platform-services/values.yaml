@@ -245,10 +245,10 @@ attribute-service:
   resources:
     requests:
       cpu: "0.25"
-      memory: "512Mi"
+      memory: "128Mi"
     limits:
       cpu: "0.5"
-      memory: "512Mi"
+      memory: "256Mi"
 query-service:
   resources:
     requests:
@@ -260,6 +260,14 @@ query-service:
   queryServiceConfig:
     data:
       zookeeperConnectionString: zookeeper:2181/pinot/hypertrace-views
+config-service:
+  resources:
+    requests:
+      cpu: "0.1"
+      memory: "128Mi"
+    limits:
+      cpu: "0.25"
+      memory: "256Mi"
 hypertrace-graphql-service:
   javaOpts: "-Xms128M -Xmx256M"
   serviceConfig:
@@ -279,11 +287,11 @@ hypertrace-ui:
     graphqlRedirectEnabled: true
   resources:
     requests:
-      cpu: "0.25"
-      memory: "320Mi"
+      cpu: "0.1"
+      memory: "128Mi"
     limits:
-      cpu: "0.5"
-      memory: "512Mi"
+      cpu: "0.25"
+      memory: "256Mi"
 
 kafka-topic-creator:
   enabled: false
