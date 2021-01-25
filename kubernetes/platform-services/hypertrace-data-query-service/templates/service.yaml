@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: grpc-port
+      protocol: TCP
+      name: {{ .Chart.Name }}
+  selector:
+    {{- toYaml .Values.serviceSelectorLabels | nindent 4 }}

@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.queryServiceConfig.name }}
+  labels:
+    release: {{ .Release.Name }}
+data:
+  application.conf: |-
+    service.config = {
+      tenantColumnName = "{{ .Values.queryServiceConfig.data.tenantColumnName }}"
+      attribute.client = {
+        host = {{ .Values.queryServiceConfig.data.attributeClient.host }}
+        port = {{ .Values.queryServiceConfig.data.attributeClient.port }}
+      }
+      clients = [
+        {
+          type = zookeeper
+          connectionString = "{{ .Values.queryServiceConfig.data.zookeeperConnectionString }}"
+        }
+      ]
+      {{- if or .Values.handlers .Values.extraHandlers }}
+      queryRequestHandlersConfig = [
+      {{- range .Values.handlers }}
+        {
+{{ tpl . $ | indent 10 }}
+        }
+      {{- end }}
+      {{- range .Values.extraHandlers }}
+        {
+{{ tpl . $ | indent 10 }}
+        }
+      {{- end }}
+      ]
+      {{- end }}
+    }

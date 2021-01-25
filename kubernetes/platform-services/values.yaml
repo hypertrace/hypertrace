@@ -272,6 +272,9 @@ hypertrace-graphql-service:
   javaOpts: "-Xms128M -Xmx256M"
   serviceConfig:
     defaultTenantId: "__default"
+    gatewayService:
+      host: hypertrace-data-query-service
+      port: 9001    
   resources:
     requests:
       cpu: "0.25"
@@ -295,3 +298,12 @@ hypertrace-ui:
 
 kafka-topic-creator:
   enabled: false
+
+hypertrace-data-query-service:
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: "512Mi"
+    limits:
+      cpu: "0.5"
+      memory: "512Mi"
