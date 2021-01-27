@@ -1,6 +1,7 @@
 import { by, ElementFinder } from 'protractor';
-import { ServiceListPageObject } from '../../apis/list/service-list.po';
-import { ApplicationTopologyPageObject } from '../../apis/topology/application-topology.po';
+import { EndpointListPageObject } from '../../endpoints/list/endpoint-list.po';
+import { ServiceListPageObject } from '../../services/service-list.po';
+import { ApplicationTopologyPageObject } from '../../topology/application-topology.po';
 import { BasePageObject } from '../base.po';
 
 export class LeftNavPageObject extends BasePageObject {
@@ -14,6 +15,11 @@ export class LeftNavPageObject extends BasePageObject {
 
   public async clickOnServices(): Promise<ServiceListPageObject> {
     return this.clickOnNavItem('Services').then(() => new ServiceListPageObject());
+  }
+
+
+  public async clickOnApiEndpoints(): Promise<EndpointListPageObject> {
+    return this.clickOnNavItem('API Endpoints').then(() => new EndpointListPageObject());
   }
 
   private async clickOnNavItem(label: string): Promise<void> {

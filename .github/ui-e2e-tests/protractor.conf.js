@@ -6,7 +6,7 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     'goog:chromeOptions': {
-      args: ['--headless', '--disable-gpu', '--window-size=1280,800']
+      args: ['--disable-gpu', '--window-size=1280,800']
     }
   },
   directConnect: true,
@@ -16,7 +16,7 @@ exports.config = {
     smoke: './src/**/*.smoke.spec.ts'
   },
   params: {
-    timeRange: '1w'
+    timeRange: '2w'
   },
   jasmineNodeOpts: {
     showColors: true,
