@@ -1,9 +1,7 @@
 import { by } from 'protractor';
-import { ApplicationFramePageObject } from '../../common/application-frame.po';
-import { ApisTabsPageObject } from '../apis-tabs.po';
+import { ApplicationFramePageObject } from '../common/application-frame.po';
 
 export class ApplicationTopologyPageObject extends ApplicationFramePageObject {
-  public readonly tabs: ApisTabsPageObject = new ApisTabsPageObject(this.root);
 
   public async hasTopologyChart(): Promise<boolean> {
     return this.root.element(by.css('ht-topology')).isPresent();
