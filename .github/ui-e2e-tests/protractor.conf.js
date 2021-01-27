@@ -6,7 +6,7 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     'goog:chromeOptions': {
-      args: ['--disable-gpu', '--window-size=1280,800']
+      args: ['--headless', '--disable-gpu', '--window-size=1280,800']
     }
   },
   directConnect: true,
