@@ -215,33 +215,16 @@ hypertrace-trace-enricher:
     enabled: false
 
 hypertrace-view-generator:
-  mergeAllViews: true
-  allViews:
-    creator:
-      jobName: views-creation-job
-      resources:
-        requests:
-          cpu: "0.1"
-          memory: "320Mi"
-        limits:
-          cpu: "1.0"
-          memory: "320Mi"
-    generator:
-      deploymentName: views-generator
-      javaOpts: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
-      resources:
-        requests:
-          cpu: "0.2"
-          memory: "384Mi"
-        limits:
-          cpu: "1.0"
-          memory: "384Mi"
-      livenessProbe:
-        initialDelaySeconds: 10
-        periodSeconds: 5
-      readinessProbe:
-        initialDelaySeconds: 10
-        periodSeconds: 5
+  viewGeneratorGroups:
+    - name: all-views-generator  
+      generator:
+        resources:
+          requests:
+            cpu: "0.1"
+            memory: "320Mi"
+          limits:
+            cpu: "1.0"
+            memory: "320Mi"
   kafka-topic-creator:
     enabled: true
     kafka:

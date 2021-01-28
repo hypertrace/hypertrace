@@ -113,52 +113,18 @@ hypertrace-trace-enricher:
       memory: "2Gi"
 
 hypertrace-view-generator:
-  backendEntityView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "1Gi"
-        limits:
-          cpu: "1"
-          memory: "1Gi"
-  rawServiceView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "1Gi"
-        limits:
-          cpu: "1"
-          memory: "1Gi"
-  rawTraceView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "1Gi"
-        limits:
-          cpu: "1"
-          memory: "1Gi"
-  serviceCallView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "1Gi"
-        limits:
-          cpu: "1"
-          memory: "1Gi"
-  spanEventView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "1Gi"
-        limits:
-          cpu: "1"
-          memory: "1Gi"
-
+  replicaCount: 2
+  viewGeneratorGroups:
+    - name: all-views-generator  
+      generator:
+        resources:
+          requests:
+            cpu: "2"
+            memory: "2Gi"
+          limits:
+            cpu: "3"
+            memory: "3Gi"
+            
 gateway-service:
   resources:
     requests:
