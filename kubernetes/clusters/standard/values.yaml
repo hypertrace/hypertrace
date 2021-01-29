@@ -115,15 +115,42 @@ hypertrace-trace-enricher:
 hypertrace-view-generator:
   replicaCount: 2
   viewGeneratorGroups:
-    - name: all-views-generator  
-      generator:
-        resources:
-          requests:
-            cpu: "2"
-            memory: "2Gi"
-          limits:
-            cpu: "3"
-            memory: "3Gi"
+  - name: all-views-generator
+    generator:
+      deploymentName: all-views-generator
+      podLabels:
+        app: all-views-generator
+      deploymentSelectorMatchLabels:
+        app: all-views-generator
+      javaOpts: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+      livenessProbe:
+        initialDelaySeconds: 30
+        periodSeconds: 10
+      readinessProbe:
+        initialDelaySeconds: 30
+        periodSeconds: 10
+      resources:
+        limits:
+          cpu: 3
+          memory: 3Gi
+        requests:
+          cpu: 2
+          memory: 2Gi
+    viewGeneratorServiceConfig:
+      name: all-views-generator-config
+      viewgenerators:
+        - view-gen-backend-entity
+        - view-gen-raw-service
+        - view-gen-raw-traces
+        - view-gen-service-call
+        - view-gen-span-event
+      kafka:
+        streams:
+          config:
+            metricsRecordingLevel: INFO
+            numStreamThreads: 2
+            bootstrapServers: "bootstrap:9092"
+            schemaRegistryUrl: "http://schema-registry-service:8081"
             
 gateway-service:
   resources:
