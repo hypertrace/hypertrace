@@ -1,0 +1,15 @@
+# Default values for the helm chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# Note about Namespace
+# --------------------
+# It is deliberately left out here and using the helm -n or --namespace flag you can deploy your resources to the same
+# namespace as the release. If you leave it out, your resources will be deployed to the default namespace.
+# Also, not that the namespace you are deploying to should already exist otherwise the helm command will fail.
+# You can always specify a different namespace for a resource by setting it directly in it's yaml file or
+# making it configurable by defining it in this file.
+
+###########
+# Job
+###########

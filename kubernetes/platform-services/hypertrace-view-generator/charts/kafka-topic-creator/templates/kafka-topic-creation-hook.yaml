@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.jobName }}
+  labels:
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": {{ .Values.helmHook }}
+spec:
+  # Cancel job if it has not finished after 3 minutes
+  activeDeadlineSeconds: 180
+  # Keep the job's pod around for 15 minutes. This will be better once we implement pod crashes and errors
+  # monitoring.
+  ttlSecondsAfterFinished: 900
+  template:
+    {{- with .Values.podAnnotations }}
+    metadata:
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end}}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: OnFailure
+      containers:
+        {{- range $topic := .Values.kafka.topics }}
+        - name: {{ $topic.name }}
+          image: solsson/kafka:2.1.0@sha256:ac3f06d87d45c7be727863f31e79fbfdcb9c610b51ba9cf03c75a95d602f15e1
+          command:
+            - "/bin/bash"
+            - "-cex"
+            - |
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper {{ $.Values.zookeeper.address | quote }} \
+              --topic {{ $topic.name | quote }} \
+              {{- range $topic.configs }}
+              --config {{ . | quote }} \
+              {{- end }}
+              --replication-factor {{ $topic.replicationFactor | quote }} \
+              --partitions {{ $topic.partitions | quote }}
+            {{- if $topic.configs }}
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper {{ $.Values.zookeeper.address | quote }} \
+              --add-config \
+              {{ range $i, $c := $topic.configs }}{{ if $i }}{{ printf "," }}{{ end }}{{ $c | quote }}{{ end }} \
+              --entity-type topics \
+              --entity-name {{ $topic.name | quote }}
+            {{- end }}
+        {{- end }}
+  backoffLimit: 100
