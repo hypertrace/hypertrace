@@ -1,0 +1,111 @@
+## This is the copy of main docker-compose.yml.
+## It runs hypertrace with Postgres as document store, while default one runs with mongo
+version: "2.4"
+services:
+
+# This container includes the UI and APIs it needs for storage queries.
+  hypertrace:
+    image: hypertrace/hypertrace:main
+    container_name: hypertrace
+    environment:
+      - DATA_STORE_TYPE=postgres
+      - POSTGRES_HOST=postgres
+      - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
+    ports:
+      - 2020:2020
+    healthcheck:
+      start_period: 20s
+    depends_on:
+      postgres:
+        condition: service_started
+      kafka-zookeeper:
+        condition: service_healthy
+      pinot:
+        condition: service_started
+
+  # Ingestion pipeline
+
+  # Collects spans in different trace formats like Jaeger, Zipkin, etc
+  hypertrace-collector:
+    image: hypertrace/hypertrace-oc-collector
+    container_name: hypertrace-collector
+    command: ["--config=/config/collector-config.yaml"]
+    ports:
+      - 14268:14268 # Jaeger Thrift
+      - 14267:14267 # Jaeger HTTP
+      - 9411:9411 # Zipkin HTTP
+    networks:
+      default:
+        # Allows sample apps to connect with platform-specific hostnames
+        aliases:
+          - jaeger
+          - jaeger-collector
+          - zipkin
+    depends_on:
+      kafka-zookeeper:
+        condition: service_healthy
+  # all-in-one ingestion pipeline for hypertrace
+  hypertrace-ingester:
+    image: hypertrace/hypertrace-ingester
+    container_name: hypertrace-ingester
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - DEFAULT_TENANT_ID=__default
+      - SPAN_GROUPBY_SESSION_WINDOW_INTERVAL=2
+      - REPLICATION_FACTOR=1
+      - ENTITY_SERVICE_HOST_CONFIG=hypertrace
+      - ENTITY_SERVICE_PORT_CONFIG=9001
+      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace
+      - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
+      - CONFIG_SERVICE_HOST_CONFIG=hypertrace
+      - CONFIG_SERVICE_PORT_CONFIG=9001
+      - NUM_STREAM_THREADS=1
+      - PRE_CREATE_TOPICS=true
+      - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
+    volumes:
+      - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
+    depends_on:
+      kafka-zookeeper:
+        condition: service_healthy
+      hypertrace:
+        # service_started, not service_healthy as pinot and deps can take longer than 60s to start
+        condition: service_started
+
+  # Third-party data services:
+
+  # Kafka is used for streaming functionality.
+  # ZooKeeper is required by Kafka and Pinot
+  kafka-zookeeper:
+    image: hypertrace/kafka-zookeeper:main
+    container_name: kafka-zookeeper
+    networks:
+      default:
+        # prevents apps from having to use the hostname kafka-zookeeper
+        aliases:
+          - kafka
+          - zookeeper
+  # Stores entities like API, service and backend
+  postgres:
+    image: postgres:13.1
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+
+  # Stores spans and traces and provides aggregation functions
+  pinot:
+    image: hypertrace/pinot-servicemanager:main
+    container_name: pinot
+    environment:
+      - LOG_LEVEL=error
+    networks:
+      default:
+        # Usually, Pinot is distributed, and clients connect to the controller
+        aliases:
+          - pinot-controller
+          - pinot-server
+          - pinot-broker
+    cpu_shares: 2048
+    depends_on:
+      kafka-zookeeper:
+        condition: service_healthy
