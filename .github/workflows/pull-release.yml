@@ -1,8 +1,10 @@
 name: get latest helm charts
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '00 06 * * 5' #every friday at 11:30 AM IST/ 6 AM UST
+  # workflow_dispatch will let us manually trigger the workflow from GitHub actions dashboard.
+  # See https://docs.github.com/en/free-pro-team@latest/actions/managing-workflow-runs/manually-running-a-workflow 
+  workflow_dispatch:
 
 jobs:
   get-latest-releases:
@@ -169,7 +171,7 @@ jobs:
             automated pr
             release
           assignees: JBAhire
-          reviewers: 
+          reviewers: kotharironak, rish691
           team-reviewers: |
             owners
             maintainers
