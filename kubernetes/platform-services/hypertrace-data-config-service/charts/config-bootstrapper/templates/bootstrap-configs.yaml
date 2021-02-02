@@ -1,0 +1,19 @@
+{{ if eq .Values.job.prefix "default" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  default-bootstrap-configs
+  labels:
+    release: {{ .Release.Name }}
+data:
+{{- range $path, $bytes := .Files.Glob "configs/**" }}
+{{- $name := base ($path) }}
+{{ tpl ($.Files.Glob (printf "configs/%s" $name)).AsConfig $ | indent 2 }}
+{{- end }}
+{{- if .Values.configurationCommands }}
+{{- range $key, $value := .Values.configurationCommands }}
+  {{ $key }}: |
+{{ $value | indent 4 }}
+{{- end }}
+{{- end }}
+{{ end }}

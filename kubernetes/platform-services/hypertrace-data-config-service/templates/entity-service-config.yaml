@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.entityServiceConfig.name }}
+  labels:
+    release: {{ .Release.Name }}
+data:
+  application.conf: |-
+    entity.service.config = {
+      entity-service {
+        {{- $dst := .Values.entityServiceConfig.dataStoreType }}
+        dataStoreType = {{ $dst }}
+        {{ $dst }} {
+          {{- range $key, $value := (index .Values "entityServiceConfig" (printf "%s" $dst)) }}
+          {{- if $value }}
+          {{ $key }} = {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+        }
+      }
+    }
+  {{- if .Values.entityServiceConfig.attributes }}
+    entity.service.attributeMap = [
+  {{- range $i, $v := .Values.entityServiceConfig.attributes }}
+  {{- if gt $i 0 }},{{- end}}
+      {
+        "scope": {{ $v.scope | quote }},
+        "name": {{ $v.name | quote }},
+        "subDocPath": {{ $v.subDocPath | quote }}
+      }
+  {{- end }}
+  {{- range $i, $v := .Values.entityServiceConfig.extraAttributes }}
+  {{- if or ($.Values.entityServiceConfig.attributes) (gt $i 0) }},{{- end}}
+      {
+        "scope": {{ $v.scope | quote }},
+        "name": {{ $v.name | quote }},
+        "subDocPath": {{ $v.subDocPath | quote }}
+      }
+  {{- end }}
+    ]
+  {{- end -}}

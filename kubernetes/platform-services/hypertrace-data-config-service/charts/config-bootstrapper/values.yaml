@@ -1,0 +1,101 @@
+# Default values for the helm chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# Note about Namespace
+# --------------------
+# It is deliberately left out here and using the helm -n or --namespace flag you can deploy your resources to the same
+# namespace as the release. If you leave it out, your resources will be deployed to the default namespace.
+# Also, not that the namespace you are deploying to should already exist otherwise the helm command will fail.
+# You can always specify a different namespace for a resource by setting it directly in it's yaml file or
+# making it configurable by defining it in this file.
+
+###########
+# Job
+###########
+
+image:
+  repository: hypertrace/config-bootstrapper
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nodeLabels: {}
+
+javaOpts: "-Xms256M -Xmx768M"
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  requests:
+    cpu: 0.1
+    memory: 896Mi
+  limits:
+    cpu: 1
+    memory: 1024Mi
+
+jobLabels:
+  app: config-bootstrapper
+
+podLabels:
+  app: config-bootstrapper
+
+# The Deployment Selector match labels are different from the pod labels. Note that they should be a subset of the pod
+# labels. You append new labels to them but cannot remove labels. If you remove or modify the labels you will need to
+# delete the existing deployment bearing the same name and then redeploy. This is the reason why they are separated from
+# the pod labels. You can add and remove pod labels without having an effect on the deployment.
+# Also, please use "apiVersion: apps/v1" instead of the deprecated "apiVersion: extensions/v1beta1" for the deployment
+# apiVersion in the yaml file.
+deploymentSelectorMatchLabels:
+  app: config-bootstrapper
+
+serviceSelectorLabels:
+  app: config-bootstrapper
+
+###########
+# Config Maps
+###########
+configBootstrapperConfig:
+  name: config-bootstrapper-config
+
+job:
+  prefix: default
+
+configurationCommands: {}
+
+entityServiceConfig:
+  name: entity-service-config
+  data:
+    host: entity-service
+    port: 50061
+
+attributeServiceConfig:
+  name: attribute-service-config
+  data:
+    host: attribute-service
+    port: 9012
+
+dataStoreType: "mongo"
+mongoConfig:
+  name: mongo-config
+  data:
+    host: mongo
+    port: 27017
+    url: ""
+
+postgresConfig:
+  name: postgres-config
+  data:
+    host: postgres
+    port: 5432
+    url: ""
+
+logConfig:
+  name: config-bootstrapper-log-appender-config
+  rootLogger:
+    level: INFO
+  appender:
+    rolling:
+      enabled: false

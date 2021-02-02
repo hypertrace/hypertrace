@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.2.3
+description: Config Bootstrapper chart
+name: config-bootstrapper
+type: application
+version: 0.2.3

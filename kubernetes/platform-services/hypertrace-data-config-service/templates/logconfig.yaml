@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.logConfig.name }}
+  labels:
+    release: {{ .Release.Name }}
+data:
+  log4j2.properties: |-
+    status = error
+    name = PropertiesConfig
+    {{- if .Values.logConfig.monitorInterval}}
+    monitorInterval = {{ .Values.logConfig.monitorInterval }}
+    {{- end }}
+
+    appender.console.type = Console
+    appender.console.name = STDOUT
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %c{1.} - %msg%n
+
+    {{- if .Values.logConfig.appender.rolling.enabled }}
+    appender.rolling.type = RollingFile
+    appender.rolling.name = ROLLING_FILE
+    appender.rolling.fileName = ${env:SERVICE_NAME:-service}.log
+    appender.rolling.filePattern = ${env:SERVICE_NAME:-service}-%d{MM-dd-yy-HH-mm-ss}-%i.log.gz
+    appender.rolling.layout.type = PatternLayout
+    appender.rolling.layout.pattern = %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %c{1.} - %msg%n
+    appender.rolling.policies.type = Policies
+    appender.rolling.policies.time.type = TimeBasedTriggeringPolicy
+    appender.rolling.policies.time.interval = 3600
+    appender.rolling.policies.time.modulate = true
+    appender.rolling.policies.size.type = SizeBasedTriggeringPolicy
+    appender.rolling.policies.size.size = 20MB
+    appender.rolling.strategy.type = DefaultRolloverStrategy
+    appender.rolling.strategy.max = 5
+    {{- end }}
+
+    rootLogger.level = {{ .Values.logConfig.rootLogger.level }}
+    rootLogger.appenderRef.stdout.ref = STDOUT
+    {{- if .Values.logConfig.appender.rolling.enabled }}
+    rootLogger.appenderRef.rolling.ref = ROLLING_FILE
+    {{- end }}
+    loggers = PINOT_HANDLER
+    logger.PINOT_HANDLER.name = org.hypertrace.core.query.service.pinot.PinotBasedRequestHandler
+    logger.PINOT_HANDLER.level = INFO

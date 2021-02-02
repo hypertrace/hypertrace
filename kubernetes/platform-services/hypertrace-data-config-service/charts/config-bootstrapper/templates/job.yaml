@@ -1,0 +1,92 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.job.prefix }}-{{ .Chart.Name }}
+  labels:
+    release: {{ .Release.Name }}
+  {{- with .Values.jobLabels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+spec:
+  # Cancel job if it has not finished after 10 minutes
+  activeDeadlineSeconds: 600
+  # Keep the job's pod around for 15 minutes. This will be better once we implement pod crashes and errors
+  # monitoring.
+  ttlSecondsAfterFinished: 900
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      restartPolicy: OnFailure
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+        - name: job-config
+          configMap:
+            name: {{ .Values.job.prefix }}-{{ .Values.configBootstrapperConfig.name }}
+        - name: log4j-config
+          configMap:
+            name: {{ .Values.job.prefix }}-{{ .Values.logConfig.name }}
+        {{- if .Values.configurationCommands }}
+        - name: bootstrap-configs
+          configMap:
+            name: {{ .Values.job.prefix }}-bootstrap-configs
+        {{- end }}
+    {{- with .Values.nodeLabels }}
+      nodeSelector:
+      {{- toYaml . | nindent 8}}
+    {{- end }}
+      initContainers:
+        {{- if or (eq .Values.job.prefix "default") (eq .Values.job.prefix "attribute") }}
+        - name: attribute-service-ready
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c"]
+          args: ["until nc -zv {{ .Values.attributeServiceConfig.data.host }} {{ .Values.attributeServiceConfig.data.port }}; \
+                  do echo 'waiting for {{ .Values.attributeServiceConfig.data.host }} {{ .Values.attributeServiceConfig.data.port }}'; \
+                  sleep 5; done"]
+        {{- end }}
+        {{- if or (eq .Values.job.prefix "default") (eq .Values.job.prefix "entity") }}
+        - name: entity-service-ready
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c"]
+          args: ["until nc -zv {{ .Values.entityServiceConfig.data.host }} {{ .Values.entityServiceConfig.data.port }}; \
+                  do echo 'waiting for {{ .Values.entityServiceConfig.data.host }} {{ .Values.entityServiceConfig.data.port }}'; \
+                  sleep 5; done"]
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [ "-c", "/etc/config-bootstrapper/application.conf", "-C", "/app/resources/configs/config-bootstrapper/{{ .Values.job.prefix }}-service", "--upgrade" ]
+          env:
+            - name: SERVICE_NAME
+              value: "{{ .Chart.Name }}"
+            - name: LOG4J_CONFIGURATION_FILE
+              value: "/var/{{ .Chart.Name }}/log/log4j2.properties"
+            - name: JAVA_TOOL_OPTIONS
+              value: {{ .Values.javaOpts | quote }}
+          volumeMounts:
+            - name: job-config
+              mountPath: /etc/config-bootstrapper/application.conf
+              subPath: application.conf
+            - name: log4j-config
+              mountPath: /var/{{ .Chart.Name }}/log
+            {{- range $key, $value := .Values.configurationCommands }}
+            - name: bootstrap-configs
+              mountPath: /app/resources/configs/config-bootstrapper/{{ $.Values.job.prefix }}-service/extras/{{ $key }}
+              subPath: {{ $key }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+  backoffLimit: 100

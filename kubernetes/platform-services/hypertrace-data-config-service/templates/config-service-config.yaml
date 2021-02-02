@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configServiceConfig.name }}
+  labels:
+    release: {{ .Release.Name }}
+data:
+  application.conf: |-
+    service.port = {{ .Values.containerPort }}
+    service.admin.port = {{ .Values.containerAdminPort }}
+
+    generic.config.service {
+      document.store {
+        {{- $dst := .Values.configServiceConfig.dataStoreType }}
+        dataStoreType = {{ $dst }}
+        {{ $dst }} {
+          {{- range $key, $value := (index .Values "configServiceConfig" (printf "%s" $dst)) }}
+          {{- if $value }}
+          {{ $key }} = {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+        }
+      }
+    }

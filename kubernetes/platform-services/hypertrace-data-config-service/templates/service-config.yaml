@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.hypertraceDataConfigServiceConfig.name }}
+  labels:
+    release: {{ .Release.Name }}
+data:
+  {{- toYaml .Values.hypertraceDataConfigServiceConfig.data | nindent 2 }}

@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+- name: config-bootstrapper
+  repository: https://storage.googleapis.com/hypertrace-helm-charts
+  version: 0.2.3
+description: Hypertrace Service Chart
+name: hypertrace-data-config-service
+type: application
+version: 1.0.0
