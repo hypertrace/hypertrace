@@ -15,7 +15,6 @@ on:
 jobs:
   default-docker-compose-verification:
     runs-on: ubuntu-20.04
-    name: Build and run Docker images
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -35,7 +34,6 @@ jobs:
 
   docker-compose-verification-with-postgres:
     runs-on: ubuntu-20.04
-    name: Build and run Docker images
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
