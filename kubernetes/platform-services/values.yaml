@@ -139,8 +139,6 @@ hypertrace-view-generator:
       application.conf: |-
         pinot.retentionTimeValue = 5
         pinot.retentionTimeUnit = DAYS
-  mergeAllViewsCreator: true
-
               
   kafka-topic-creator:
     enabled: true
