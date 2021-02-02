@@ -1,0 +1,22 @@
+{
+  explore(
+    context: API_TRACE
+    limit: 500
+    between: {
+      startTime: "2021-01-13T04:41:25.319Z"
+      endTime: "2021-01-20T04:41:25.319Z"
+    }
+    interval: { size: 30, units: MINUTES }
+  ) {
+    results {
+      __intervalStart: intervalStart
+      count_calls: selection(key: "calls", aggregation: COUNT) {
+        value
+        type
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

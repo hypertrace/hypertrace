@@ -1,7 +1,7 @@
 import { by } from 'protractor';
-import { ApiDetailPageObject } from '../api-detail.po';
+import { EndpointDetailPageObject } from '../endpoint-detail.po';
 
-export class ApiOverviewPageObject extends ApiDetailPageObject {
+export class EndpointOverviewPageObject extends EndpointDetailPageObject {
   public async getMetricChartCount(): Promise<number> {
     return this.root.all(by.css('ht-metric-display-widget-renderer')).count();
   }

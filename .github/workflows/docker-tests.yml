@@ -1,9 +1,8 @@
 name: e2e test
 on:
   push:
-    paths:
-      - 'docker/**'
-      - '.github/**'
+    branches:
+      - main
   pull_request:
     paths:
       - 'docker/**'
@@ -14,9 +13,8 @@ on:
 
 
 jobs:
-  build-on-linux:
+  default-docker-compose-verification:
     runs-on: ubuntu-20.04
-    name: Build and run Docker images
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -30,6 +28,25 @@ jobs:
         run: |
           sleep 60 # you can decrease it but never increase it
           docker-compose -f docker-compose.yml ps
+      - name: Runs tests
+        working-directory: ./.github/workflows/
+        run: ./tests.sh
+
+  docker-compose-verification-with-postgres:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Verify hypertrace deployment
+        working-directory: docker
+        run: |
+          docker-compose -f postgres/docker-compose.yml -f docker-compose-zipkin-example.yml pull
+          docker-compose -f postgres/docker-compose.yml -f docker-compose-zipkin-example.yml up -d || { ../.github/workflows/inspect.sh ; exit 1 ; }
+      - name: Waits for some stability
+        working-directory: docker
+        run: |
+          sleep 60 # you can decrease it but never increase it
+          docker-compose -f postgres/docker-compose.yml ps
       - name: Runs tests
         working-directory: ./.github/workflows/
         run: ./tests.sh
