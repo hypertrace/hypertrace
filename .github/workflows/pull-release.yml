@@ -127,19 +127,24 @@ jobs:
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
 
-      - name: Update release notes
+      - name: update release notes
         run: |
           ./.github/workflows/create-charts.sh release-notes
+        env: 
+          hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
+          hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
+          hypertrace_ui_version: ${{ steps.hypertrace-ui.outputs.tag }}
+          hypertrace_graphql_version: ${{ steps.hypertrace-graphql.outputs.tag }}
+          attribute_service_version: ${{ steps.attribute-service.outputs.tag }}
+          query_service_version: ${{ steps.query-service.outputs.tag }}
+          gateway_service_version: ${{ steps.gateway-service.outputs.tag }}
+          entity_service_version: ${{ steps.entity-service.outputs.tag }}
+          config_service_version: ${{ steps.config-service.outputs.tag }}
 
-      - name: Update compatibility matrix
+      - name: update compatibility matrix
         run: |
           ./.github/workflows/create-charts.sh compatibility-matrix 
         env:
-          kafka_version: ${{ steps.kafka.outputs.tag }}
-          pinot_version: ${{ steps.pinot.outputs.tag }}
-          schema_registry_version: ${{ steps.schema-registry.outputs.tag }}
-          mongodb_version: ${{ steps.mongodb.outputs.tag }}
-          zookeeper_version: ${{ steps.zookeeper.outputs.tag }}
           hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
           hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
           hypertrace_ui_version: ${{ steps.hypertrace-ui.outputs.tag }}

@@ -87,22 +87,22 @@ write_to_tmp_source() {
 }
 
 write_changelog() {
-    echo '### Attribute service'
-    changelog -m hypertrace attribute-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^attribute-service:" | cut -d":" -f2-)
-    echo '### Gateway service' 
-    changelog -m hypertrace gateway-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^gateway-service:" | cut -d":" -f2-)
-    echo '### Query service' 
-    changelog -m hypertrace query-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^query-service:" | cut -d":" -f2-)
-    echo '### Entity service' 
-    changelog -m hypertrace entity-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^entity-service:" | cut -d":" -f2-)
-    echo '### Config service' 
-    changelog -m hypertrace config-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^config-service:" | cut -d":" -f2-)
-    echo '### Hypertrace GraphQL service' 
-    changelog -m hypertrace hypertrace-graphql $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-graphql:" | cut -d":" -f2-)
-    echo '### Hypertrace UI' 
-    changelog -m hypertrace hypertrace-ui $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ui:" | cut -d":" -f2-)
-    echo '### Hypertrace Ingester' 
-    changelog -m hypertrace hypertrace-ingester $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ingester:" | cut -d":" -f2-)
+    echo '### Attribute service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^attribute-service:" | cut -d":" -f2-) '--->' $attribute_service_version')'
+    changelog -m hypertrace attribute-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^attribute-service:" | cut -d":" -f2-) $attribute_service_version
+    echo '### Gateway service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^gateway-service:" | cut -d":" -f2-) '--->' $gateway_service_version')'
+    changelog -m hypertrace gateway-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^gateway-service:" | cut -d":" -f2-) $gateway_service_version
+    echo '### Query service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^query-service:" | cut -d":" -f2-) '--->' $query_service_version')' 
+    changelog -m hypertrace query-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^query-service:" | cut -d":" -f2-) $query_service_version
+    echo '### Entity service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^entity-service:" | cut -d":" -f2-) '--->' $entity_service_version')' 
+    changelog -m hypertrace entity-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^entity-service:" | cut -d":" -f2-) $entity_service_version
+    echo '### Config service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^config-service:" | cut -d":" -f2-) '--->' $config_service_version')' 
+    changelog -m hypertrace config-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^config-service:" | cut -d":" -f2-) $config_service_version
+    echo '### Hypertrace GraphQL service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-graphql:" | cut -d":" -f2-) '--->' $hypertrace_graphql_version')' 
+    changelog -m hypertrace hypertrace-graphql $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-graphql:" | cut -d":" -f2-) $hypertrace_graphql_version
+    echo '### Hypertrace UI ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ui:" | cut -d":" -f2-) '--->' $hypertrace_ui_version')' 
+    changelog -m hypertrace hypertrace-ui $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ui:" | cut -d":" -f2-) $hypertrace_ui_version
+    echo '### Hypertrace Ingester ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ingester:" | cut -d":" -f2-) '--->' $hypertrace_ingester_version')' 
+    changelog -m hypertrace hypertrace-ingester $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ingester:" | cut -d":" -f2-) $hypertrace_ingester_version
 }
 
 if [ $1 == "data-services" ]; then
