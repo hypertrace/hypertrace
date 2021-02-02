@@ -1,9 +1,8 @@
 name: e2e test
 on:
   push:
-    paths:
-      - 'docker/**'
-      - '.github/**'
+    branches:
+      - main
   pull_request:
     paths:
       - 'docker/**'
