@@ -36,7 +36,7 @@ dependencies:
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.5.0
   - name: hypertrace-view-generator
-    repository: "file://hypertrace-view-generator"
+    repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.5.0
   - name: hypertrace-ui
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
