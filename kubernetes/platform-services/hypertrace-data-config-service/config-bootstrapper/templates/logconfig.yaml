@@ -1,9 +1,12 @@
+{{ $global := . }}
+{{- range $k, $job := .Values.jobs }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.job.prefix }}-{{ .Values.logConfig.name }}
+  name: {{ $job.prefix }}-{{ $global.Values.logConfig.name }}
   labels:
-    release: {{ .Release.Name }}
+    release: {{ $global.Release.Name }}
 data:
   log4j2.properties: |-
     status = error
@@ -14,7 +17,7 @@ data:
     appender.console.layout.type = PatternLayout
     appender.console.layout.pattern = %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %c{1.} - %msg%n
 
-    {{- if .Values.logConfig.appender.rolling.enabled }}
+    {{- if $global.Values.logConfig.appender.rolling.enabled }}
     appender.rolling.type = RollingFile
     appender.rolling.name = ROLLING_FILE
     appender.rolling.fileName = ${env:SERVICE_NAME:-service}.log
@@ -31,8 +34,9 @@ data:
     appender.rolling.strategy.max = 5
     {{- end }}
 
-    rootLogger.level = {{ .Values.logConfig.rootLogger.level }}
+    rootLogger.level = {{ $global.Values.logConfig.rootLogger.level }}
     rootLogger.appenderRef.stdout.ref = STDOUT
-    {{- if .Values.logConfig.appender.rolling.enabled }}
+    {{- if $global.Values.logConfig.appender.rolling.enabled }}
     rootLogger.appenderRef.rolling.ref = ROLLING_FILE
     {{- end }}
+{{- end }}

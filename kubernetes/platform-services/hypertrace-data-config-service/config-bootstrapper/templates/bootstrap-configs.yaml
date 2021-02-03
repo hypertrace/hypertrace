@@ -1,4 +1,4 @@
-{{ if eq .Values.job.prefix "default" }}
+{{ if .Values.jobs.default }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

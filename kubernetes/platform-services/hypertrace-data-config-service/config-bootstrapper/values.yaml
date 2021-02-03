@@ -60,10 +60,10 @@ serviceSelectorLabels:
 configBootstrapperConfig:
   name: config-bootstrapper-config
 
-job:
-  prefix: default
-
-configurationCommands: {}
+jobs:
+  default:
+    prefix: default
+    configurationCommands: {}
 
 entityServiceConfig:
   name: entity-service-config

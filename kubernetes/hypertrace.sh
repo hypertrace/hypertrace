@@ -114,9 +114,9 @@ case "$subcommand" in
     rm -rf ${HYPERTRACE_HOME}/platform-services/tmpcharts
     rm -rf ${HYPERTRACE_HOME}/platform-services/Chart.lock
 
-    echo "[INFO] installing hypertrace data services. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
-    helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
-    helm upgrade hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install --wait ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
+    # echo "[INFO] installing hypertrace data services. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
+    # helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
+    # helm upgrade hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install --wait ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
 
     echo "[INFO] installing hypertrace platform services. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
     helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}

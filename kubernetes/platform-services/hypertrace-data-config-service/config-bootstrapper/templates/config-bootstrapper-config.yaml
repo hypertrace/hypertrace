@@ -1,0 +1,49 @@
+{{ $global := . }}
+{{- range $k, $job := .Values.jobs }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $job.prefix }}-{{ $global.Values.configBootstrapperConfig.name }}
+  labels:
+    release: {{ $global.Release.Name }}
+data:
+  application.conf: |-
+    attributes.service.config = {
+        host={{ $global.Values.attributeServiceConfig.data.host }}
+        port={{ $global.Values.attributeServiceConfig.data.port }}
+    }
+    entity.service.config = {
+        host={{ $global.Values.entityServiceConfig.data.host }}
+        port={{ $global.Values.entityServiceConfig.data.port }}
+    }
+    dataStoreType = {{ $global.Values.dataStoreType }}
+    {{- if eq $global.Values.dataStoreType "mongo" }}
+    mongo = {
+          {{- if $global.Values.mongoConfig.data.url }}
+          url = {{ $global.Values.mongoConfig.data.url | quote }}
+          {{- else }}
+          host={{ $global.Values.mongoConfig.data.host }}
+          port={{ $global.Values.mongoConfig.data.port }}
+          {{- end }}
+        }
+    {{ else if eq $global.Values.dataStoreType "postgres" }}
+    postgres = {
+          {{- if $global.Values.postgresConfig.data.url }}
+          url={{ $global.Values.postgresConfig.data.url | quote }}
+          {{- else }}
+          host={{ $global.Values.postgresConfig.data.host }}
+          port={{ $global.Values.postgresConfig.data.port }}
+          {{- end }}
+          {{- if $global.Values.postgresConfig.data.database }}
+          database= {{ $global.Values.postgresConfig.data.database }}
+          {{- end }}
+          {{- if $global.Values.postgresConfig.data.user }}
+          user={{ $global.Values.postgresConfig.data.user }}
+          {{- end }}
+          {{- if $global.Values.postgresConfig.data.password }}
+          password={{ $global.Values.postgresConfig.data.password }}
+          {{- end }}
+        }
+    {{- end }}
+{{- end }}
