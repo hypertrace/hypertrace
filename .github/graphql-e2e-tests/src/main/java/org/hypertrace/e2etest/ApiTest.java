@@ -115,11 +115,11 @@ public class ApiTest {
     assertNotNull(responseJson.findValue("data"));
     if (typeOfData == "traces") {
       String numberOfTraces = responseJson.at("/data/traces/total").asText();
-      assertEquals(numberOfTraces, actualValue);
+      assertEquals(actualValue, numberOfTraces);
     }
     else if (typeOfData == "spans"){
       String numberOfSpans = responseJson.at("/data/spans/total").asText();
-      assertEquals(numberOfSpans, actualValue);
+      assertEquals(actualValue, numberOfSpans);
     }
   }
 

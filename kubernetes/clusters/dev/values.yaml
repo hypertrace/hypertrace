@@ -219,11 +219,12 @@ hypertrace-view-generator:
     all-views-generator:
       generator:
         resources:
+          replicaCount: 1
           limits:
-            cpu: 3
+            cpu: 1
             memory: 1.5Gi
           requests:
-            cpu: 1
+            cpu: 0.5
             memory: 1.5Gi
 
   kafka-topic-creator:

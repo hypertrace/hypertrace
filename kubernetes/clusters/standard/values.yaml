@@ -119,7 +119,7 @@ hypertrace-view-generator:
         replicaCount: 2
         resources:
           limits:
-            cpu: 3.0
+            cpu: 1.0
             memory: 3Gi
           requests:
             cpu: 1.0
