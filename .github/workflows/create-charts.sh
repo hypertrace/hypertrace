@@ -8,6 +8,11 @@ print_header() {
     echo
 }
 
+get_prior_service_version() {
+  prior_version="$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^$1:" | cut -d":" -f2-)"
+  echo ${prior_version}
+}
+
 update_data_services_charts() {
         print_header
         echo ""
@@ -87,22 +92,37 @@ write_to_tmp_source() {
 }
 
 write_changelog() {
-    echo '### Attribute service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^attribute-service:" | cut -d":" -f2-) '--->' $attribute_service_version')'
-    changelog -m hypertrace attribute-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^attribute-service:" | cut -d":" -f2-) $attribute_service_version
-    echo '### Gateway service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^gateway-service:" | cut -d":" -f2-) '--->' $gateway_service_version')'
-    changelog -m hypertrace gateway-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^gateway-service:" | cut -d":" -f2-) $gateway_service_version
-    echo '### Query service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^query-service:" | cut -d":" -f2-) '--->' $query_service_version')' 
-    changelog -m hypertrace query-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^query-service:" | cut -d":" -f2-) $query_service_version
-    echo '### Entity service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^entity-service:" | cut -d":" -f2-) '--->' $entity_service_version')' 
-    changelog -m hypertrace entity-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^entity-service:" | cut -d":" -f2-) $entity_service_version
-    echo '### Config service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^config-service:" | cut -d":" -f2-) '--->' $config_service_version')' 
-    changelog -m hypertrace config-service $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^config-service:" | cut -d":" -f2-) $config_service_version
-    echo '### Hypertrace GraphQL service ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-graphql:" | cut -d":" -f2-) '--->' $hypertrace_graphql_version')' 
-    changelog -m hypertrace hypertrace-graphql $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-graphql:" | cut -d":" -f2-) $hypertrace_graphql_version
-    echo '### Hypertrace UI ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ui:" | cut -d":" -f2-) '--->' $hypertrace_ui_version')' 
-    changelog -m hypertrace hypertrace-ui $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ui:" | cut -d":" -f2-) $hypertrace_ui_version
-    echo '### Hypertrace Ingester ('$(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ingester:" | cut -d":" -f2-) '--->' $hypertrace_ingester_version')' 
-    changelog -m hypertrace hypertrace-ingester $(cat "kubernetes/tmp/compatibility_matrix.txt" | grep "^hypertrace-ingester:" | cut -d":" -f2-) $hypertrace_ingester_version
+    attribute_service_old_version=$(get_prior_service_version "attribute-service")
+    echo '#### `Attribute service` ' '('$attribute_service_old_version '..' $attribute_service_version')'
+    changelog -m hypertrace attribute-service $attribute_service_old_version $attribute_service_version
+
+    gateway_service_old_version=$(get_prior_service_version "gateway-service")
+    echo '#### `Gateway service` ' '('$gateway_service_old_version '..' $gateway_service_version')'
+    changelog -m hypertrace gateway-service $gateway_service_old_version $gateway_service_version
+
+    query_service_old_version=$(get_prior_service_version "query-service")
+    echo '#### `Query service` ' '('$query_service_old_version '..' $query_service_version')'
+    changelog -m hypertrace query-service $query_service_old_version $query_service_version
+
+    entity_service_old_version=$(get_prior_service_version "entity-service")
+    echo '#### `Entity service` ' '('$entity_service_old_version '..' $entity_service_version')'
+    changelog -m hypertrace entity-service $entity_service_old_version $entity_service_version
+
+    config_service_old_version=$(get_prior_service_version "config-service")
+    echo '#### `Config service` ' '('$config_service_old_version '..' $config_service_version')'
+    changelog -m hypertrace config-service $config_service_old_version $config_service_version
+
+    hypertrace_graphql_old_version=$(get_prior_service_version "hypertrace-graphql")
+    echo '#### `Hypertrace GraphQL` ' '(' $hypertrace_graphql_old_version '..' $hypertrace_graphql_version')' 
+    changelog -m hypertrace hypertrace-graphql $hypertrace_graphql_old_version $hypertrace_graphql_version
+
+    hypertrace_ui_old_version=$(get_prior_service_version "hypertrace-ui")
+    echo '#### `Hypertrace UI` ' '(' $hypertrace_ui_old_version '..' $hypertrace_ui_version')' 
+    changelog -m hypertrace hypertrace-ui $hypertrace_ui_old_version $hypertrace_ui_version
+
+    hypertrace_ingester_old_version=$(get_prior_service_version "hypertrace-ingester")
+    echo '#### `Hypertrace inegster` ' '(' $hypertrace_ingester_old_version '..' $hypertrace_ingester_version')' 
+    changelog -m hypertrace hypertrace-ingester $hypertrace_ingester_old_version $hypertrace_ingester_version
 }
 
 if [ $1 == "data-services" ]; then
@@ -121,6 +141,9 @@ if [ $1 == "release-notes" ]; then
     release_notes_file="release_notes.md"
     write_changelog > "${release_notes_file}"
 fi
+
+# This compatiblity matrix file will be written at the end of each run so it will have current versions of all services. 
+# Whenever the workflow to update helm charts will run it will compare current i.e. latest version of service with one from this file and create changelog with write_changelog function. 
 
 if [ $1 == "compatibility-matrix" ]; then
     compatibilty_matrix_file="kubernetes/tmp/compatibility_matrix.txt"
