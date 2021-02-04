@@ -7,5 +7,5 @@ postgresql:
   enabled: true
   fullnameOverride: "postgres"
   persistence:
-    storageClassName: "hypertrace"
+    storageClass: "hypertrace"
     size: "2Gi"

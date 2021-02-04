@@ -108,6 +108,7 @@ mongodb:
 postgresql:
   enabled: false
   fullnameOverride: "postgres"
+  storageClass: "hypertrace"
   replication:
     enabled: false
   postgresqlUsername: "postgres"

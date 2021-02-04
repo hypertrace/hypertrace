@@ -138,11 +138,6 @@ mongodb:
 postgresql:
   replication:
     enabled: false
-  persistence:
-    storageClassName: "hypertrace"
-    size: "2Gi"
-  postgresqlUsername: "postgres"
-  postgresqlPassword: "postgres"
 
 hypertrace-oc-collector:
   replicaCount: 1
@@ -227,8 +222,8 @@ hypertrace-view-generator:
   viewGeneratorGroups:
     all-views-generator:
       generator:
+        replicaCount: 1
         resources:
-          replicaCount: 1
           limits:
             cpu: 1
             memory: 1.5Gi
