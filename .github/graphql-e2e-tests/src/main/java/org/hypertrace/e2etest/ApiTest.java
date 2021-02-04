@@ -71,6 +71,12 @@ public class ApiTest {
   }
 
   @Test
+  public void explorerQuery_shouldSucceed() throws IOException {
+    Response response = executeGraphQLQuery("e2e-test/explorer.graphql");
+    assertResponseSanity(response, this::verifyNonZeroExplorerResults);
+  }
+
+  @Test
   public void traceIDQuery_shouldSucceed() throws IOException {
     Response response = executeGraphQLQuery("e2e-test/find-trace.graphql");
     assertResponseBasedOnTraceData(response, "1", "traces");
@@ -109,11 +115,11 @@ public class ApiTest {
     assertNotNull(responseJson.findValue("data"));
     if (typeOfData == "traces") {
       String numberOfTraces = responseJson.at("/data/traces/total").asText();
-      assertEquals(numberOfTraces, actualValue);
+      assertEquals(actualValue, numberOfTraces);
     }
     else if (typeOfData == "spans"){
       String numberOfSpans = responseJson.at("/data/spans/total").asText();
-      assertEquals(numberOfSpans, actualValue);
+      assertEquals(actualValue, numberOfSpans);
     }
   }
 
@@ -123,6 +129,13 @@ public class ApiTest {
 
   private void verifyNonZeroEntityResults(JsonNode dataJsonNode) {
     ArrayNode resultArray = (ArrayNode) dataJsonNode.findValue("entities").get("results");
+    if (resultArray.size() == 0) {
+      fail(String.format("Results array is empty. It should not be. %n %s", dataJsonNode));
+    }
+  }
+
+  private void verifyNonZeroExplorerResults(JsonNode dataJsonNode) {
+    ArrayNode resultArray = (ArrayNode) dataJsonNode.findValue("explore").get("results");
     if (resultArray.size() == 0) {
       fail(String.format("Results array is empty. It should not be. %n %s", dataJsonNode));
     }

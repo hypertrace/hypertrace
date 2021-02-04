@@ -16,7 +16,7 @@ exports.config = {
     smoke: './src/**/*.smoke.spec.ts'
   },
   params: {
-    timeRange: '1w'
+    timeRange: '2w'
   },
   jasmineNodeOpts: {
     showColors: true,

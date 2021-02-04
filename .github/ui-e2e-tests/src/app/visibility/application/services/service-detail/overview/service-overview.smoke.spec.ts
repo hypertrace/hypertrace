@@ -1,5 +1,5 @@
-import { launch } from '../../../../launch';
-import { expectNoSevereLogs } from '../../common/expectation-utils';
+import { launch } from '../../../../../launch';
+import { expectNoSevereLogs } from '../../../common/expectation-utils';
 
 describe('Service Overview', () => {
   it('should display all components', async () => {

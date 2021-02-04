@@ -1,5 +1,5 @@
-import { launch } from '../../../../launch';
-import { expectNoSevereLogs } from '../../common/expectation-utils';
+import { launch } from '../../../launch';
+import { expectNoSevereLogs } from '../common/expectation-utils';
 
 describe('Application Topology', () => {
   it('should display all components', async () => {

@@ -1,5 +1,5 @@
 import { by } from 'protractor';
-import { ApplicationFramePageObject } from '../common/application-frame.po';
+import { ApplicationFramePageObject } from '../../common/application-frame.po';
 
 export abstract class ServiceDetailPageObject extends ApplicationFramePageObject {
   public async getActiveNavigableTabTitle(): Promise<string> {

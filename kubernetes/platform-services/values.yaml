@@ -139,52 +139,7 @@ hypertrace-view-generator:
       application.conf: |-
         pinot.retentionTimeValue = 5
         pinot.retentionTimeUnit = DAYS
-  mergeAllViews: false
-  backendEntityView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "512Mi"
-        limits:
-          cpu: "1"
-          memory: "512Mi"
-  rawServiceView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "512Mi"
-        limits:
-          cpu: "1"
-          memory: "512Mi"
-  rawTraceView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "512Mi"
-        limits:
-          cpu: "1"
-          memory: "512Mi"
-  serviceCallView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "512Mi"
-        limits:
-          cpu: "1"
-          memory: "512Mi"
-  spanEventView:
-    generator:
-      resources:
-        requests:
-          cpu: "0.5"
-          memory: "512Mi"
-        limits:
-          cpu: "1"
-          memory: "512Mi"
+              
   kafka-topic-creator:
     enabled: true
     kafka:
