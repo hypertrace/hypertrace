@@ -218,8 +218,8 @@ hypertrace-view-generator:
   viewGeneratorGroups:
     all-views-generator:
       generator:
+        replicaCount: 1
         resources:
-          replicaCount: 1
           limits:
             cpu: 1
             memory: 1.5Gi
