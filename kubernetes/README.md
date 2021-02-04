@@ -17,7 +17,7 @@ Here are the default Hypertrace ports:
 
 | Port  | Service                 |
 |-------|-------------------------|
-| 2020   | Used by Hypertrace UI   |
+| 2020  | Used by Hypertrace UI   |
 | 14267 | Jaeger thrift collector |
 | 14268 | Jaeger HTTP collector   |
 | 9411  | Zipkin collector        |
@@ -52,6 +52,7 @@ Please follow docs below to get instructions specific to deployment environment.
 | `HT_PROFILE`         | Profile is size of your deployment. (Memory, No. of CPU's, etc.).                                             | dev, mini, standard |
 | `HT_ENV`             | Platform you are deploying Hypertrace on.                                                                     | aws, gcp, docker-desktop, minikube, microk8s      |
 | `HT_KUBE_CONTEXT`    | Kubernetes context to deploy Hypertrace.                                                                      | specific to platform |
+| `HT_DATA_STORE`      | Data store to be used with Hypertrace deployment.                                                             | mongo, postgres      |
 | `HT_KUBE_NAMESPACE`  | Kubernetes namespace to deploy Hypertrace.                                                                    | hypertrace           |
 | `HT_ENABLE_DEBUG`    | In case of any issue, install Hypertrace in debug mode to get more logs and traces to identify the rootcause. | true, false          |
 | `HT_INSTALL_TIMEOUT` | Helm install wait timeout.                                                                                    | in minutes           |

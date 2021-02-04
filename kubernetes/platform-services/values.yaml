@@ -204,6 +204,7 @@ attribute-service:
     limits:
       cpu: "0.5"
       memory: "256Mi"
+
 query-service:
   resources:
     requests:
@@ -215,6 +216,7 @@ query-service:
   queryServiceConfig:
     data:
       zookeeperConnectionString: zookeeper:2181/pinot/hypertrace-views
+
 config-service:
   resources:
     requests:
@@ -223,6 +225,7 @@ config-service:
     limits:
       cpu: "0.25"
       memory: "256Mi"
+
 hypertrace-graphql-service:
   javaOpts: "-Xms128M -Xmx256M"
   serviceConfig:

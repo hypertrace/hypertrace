@@ -97,9 +97,19 @@ pinot:
       tag: "0.1.1"
 
 mongodb:
+  enabled: true
   fullnameOverride: "mongo"
   replicaSet:
     enabled: true
   persistence:
     storageClassName: "hypertrace"
     size: "2Gi"
+
+postgresql:
+  enabled: false
+  fullnameOverride: "postgres"
+  storageClass: "hypertrace"
+  replication:
+    enabled: false
+  postgresqlUsername: "postgres"
+  postgresqlPassword: "postgres"

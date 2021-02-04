@@ -87,9 +87,10 @@ Released versions of Docker images for various Hypertrace components are availab
 
 ### Data Service Deployment
 
-* [Kafka helm charts](https://github.com/hypertrace/kafka)
-* [Pinot helm charts](https://github.com/hypertrace/pinot)
-* [MongoDB helm charts](https://github.com/hypertrace/mongodb)
+* [Kafka helm chart](https://github.com/hypertrace/kafka)
+* [Pinot helm chart](https://github.com/hypertrace/pinot)
+* [MongoDB helm chart](https://github.com/hypertrace/mongodb)
+* [PostgreSQL helm chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
 
 ## License
 

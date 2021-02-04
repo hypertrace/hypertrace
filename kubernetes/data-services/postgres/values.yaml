@@ -1,0 +1,11 @@
+mongodb:
+  enabled: false
+  replicaSet:
+    enabled: false
+
+postgresql:
+  enabled: true
+  fullnameOverride: "postgres"
+  persistence:
+    storageClass: "hypertrace"
+    size: "2Gi"

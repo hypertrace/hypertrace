@@ -116,11 +116,18 @@ case "$subcommand" in
 
     echo "[INFO] installing hypertrace data services. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
     helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
-    helm upgrade hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install --wait ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
-
+    if [ $HT_DATA_STORE == "postgres" ]; then
+      helm upgrade hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/data-services/postgres/values.yaml  -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install --wait ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
+    else
+      helm upgrade hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install --wait ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
+    fi
     echo "[INFO] installing hypertrace platform services. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
     helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
-    helm upgrade hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
+    if [ $HT_DATA_STORE == "postgres" ]; then
+      helm upgrade hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
+    else
+      helm upgrade hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --install ${HELM_FLAGS} --timeout ${HT_INSTALL_TIMEOUT}m --set htEnv=${HT_ENV}
+    fi
     echo "[INFO] Hypertrace installation completed"
     ;;
 
