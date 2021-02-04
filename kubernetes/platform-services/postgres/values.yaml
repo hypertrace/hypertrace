@@ -1,0 +1,17 @@
+entity-service:
+  entityServiceConfig:
+    dataStoreType : "postgres"
+  config-bootstrapper:
+    dataStoreType: "postgres"  
+attribute-service:
+  configMap:
+    dataStoreType : "postgres"
+  config-bootstrapper:
+    dataStoreType: "postgres"       
+config-service:
+  configServiceConfig:
+    dataStoreType: "postgres"
+    postgres:
+      host: postgres
+      port: 5432
+      url: ""

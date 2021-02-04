@@ -135,6 +135,13 @@ mongodb:
     storageClassName: "hypertrace"
     size: "2Gi"
 
+postgresql:
+  replicaSet:
+    enabled: false
+  persistence:
+    storageClassName: "hypertrace"
+    size: "2Gi"
+
 hypertrace-oc-collector:
   replicaCount: 1
   resources:

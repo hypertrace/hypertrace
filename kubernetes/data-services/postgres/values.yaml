@@ -1,0 +1,8 @@
+mongodb:
+  enabled: false
+
+postgresql:
+  enabled: true
+  fullnameOverride: "postgres"
+  replicaSet:
+    enabled: true

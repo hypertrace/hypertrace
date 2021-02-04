@@ -55,10 +55,10 @@ dependencies:
     version: 0.5.3
   - name: entity-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.5.6
+    version: 0.5.7
   - name: config-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.0
+    version: 0.1.1
   - name: kafka-topic-creator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.7
