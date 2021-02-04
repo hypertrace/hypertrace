@@ -1,14 +1,17 @@
 entity-service:
+  replicaCount: 1
   entityServiceConfig:
     dataStoreType : "postgres"
   config-bootstrapper:
     dataStoreType: "postgres"  
 attribute-service:
+  replicaCount: 1
   configMap:
     dataStoreType : "postgres"
   config-bootstrapper:
     dataStoreType: "postgres"       
 config-service:
+  replicaCount: 1
   configServiceConfig:
     dataStoreType: "postgres"
     postgres:
