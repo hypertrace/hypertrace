@@ -32,6 +32,12 @@ update_data_services_charts() {
         echo '  - name: mongodb'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $mongodb_version
+        echo '    condition: mongodb.enabled'
+        echo '  - name: postgresql'
+        echo '    repository:' '"https://charts.bitnami.com/bitnami"'
+        echo '    version:' 10.2.6
+        echo '    condition: postgresql.enabled'
+        
 } 
 
 update_platform_services_charts() {
