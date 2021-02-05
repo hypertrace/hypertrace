@@ -166,7 +166,7 @@ jobs:
           signoff: false
           branch: update-helm-charts
           delete-branch: true
-          title: '[chore] updates helm charts'
+          title: 'chore: updates helm charts'
           body: |
             This PR,
             - Updates helm charts as per the latest releases of all services. 
