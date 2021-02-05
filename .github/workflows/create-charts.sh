@@ -144,7 +144,7 @@ if [ $1 == "platform-services" ]; then
 fi
 
 if [ $1 == "release-notes" ]; then
-    release_notes_file="release_notes.md"
+    release_notes_file="RELEASE_NOTES.md"
     write_changelog > "${release_notes_file}"
 fi
 
