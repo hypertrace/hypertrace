@@ -98,6 +98,9 @@ write_to_tmp_source() {
 }
 
 write_changelog() {
+    echo '#### `Hypertrace deployment` '
+    changelog -m hypertrace hypertrace $hypertrace_version
+    
     attribute_service_old_version=$(get_prior_service_version "attribute-service")
     echo '#### `Attribute service` ' '[('$attribute_service_old_version '..' $attribute_service_version')](https://github.com/hypertrace/attribute-service/releases)'
     changelog -m hypertrace attribute-service $attribute_service_old_version $attribute_service_version

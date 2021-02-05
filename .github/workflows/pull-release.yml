@@ -93,6 +93,12 @@ jobs:
         uses: oprypin/find-latest-tag@v1
         with:
           repository: hypertrace/config-service
+        
+      - name: Get latest charts for hypertrace
+        id: hypertrace
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/hypertrace
 
       - uses: actions/checkout@v2
 
@@ -140,6 +146,7 @@ jobs:
           gateway_service_version: ${{ steps.gateway-service.outputs.tag }}
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
+          hypertrace_version: ${{ steps.hypertrace.outputs.tag }}
 
       - name: update compatibility matrix
         run: |
