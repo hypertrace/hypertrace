@@ -15,6 +15,6 @@ jobs:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK}}
         SLACK_COLOR: '#3278BD'
         SLACK_ICON: https://hypertrace-docs.s3.amazonaws.com/ht.png
-        SLACK_MESSAGE: 'New helm charts for Hypertrace have been released :rocket:'
+        SLACK_MESSAGE: 'New helm charts for Hypertrace have been released. You can find release notes here: https://github.com/hypertrace/hypertrace/blob/main/RELEASE_NOTES.md  :rocket:'
         SLACK_TITLE: Hypertrace has new release
         SLACK_USERNAME: Hypertrace release bot

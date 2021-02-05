@@ -98,36 +98,39 @@ write_to_tmp_source() {
 }
 
 write_changelog() {
+    echo '#### `Hypertrace deployment` '
+    changelog -m hypertrace hypertrace $hypertrace_version
+    
     attribute_service_old_version=$(get_prior_service_version "attribute-service")
-    echo '#### `Attribute service` ' '('$attribute_service_old_version '..' $attribute_service_version')'
+    echo '#### `Attribute service` ' '[('$attribute_service_old_version '..' $attribute_service_version')](https://github.com/hypertrace/attribute-service/releases)'
     changelog -m hypertrace attribute-service $attribute_service_old_version $attribute_service_version
 
     gateway_service_old_version=$(get_prior_service_version "gateway-service")
-    echo '#### `Gateway service` ' '('$gateway_service_old_version '..' $gateway_service_version')'
+    echo '#### `Gateway service` ' '[('$gateway_service_old_version '..' $gateway_service_version')](https://github.com/hypertrace/gateway-service/releases)'
     changelog -m hypertrace gateway-service $gateway_service_old_version $gateway_service_version
 
     query_service_old_version=$(get_prior_service_version "query-service")
-    echo '#### `Query service` ' '('$query_service_old_version '..' $query_service_version')'
+    echo '#### `Query service` ' '[('$query_service_old_version '..' $query_service_version')](https://github.com/hypertrace/query-service/releases)'
     changelog -m hypertrace query-service $query_service_old_version $query_service_version
 
     entity_service_old_version=$(get_prior_service_version "entity-service")
-    echo '#### `Entity service` ' '('$entity_service_old_version '..' $entity_service_version')'
+    echo '#### `Entity service` ' '[('$entity_service_old_version '..' $entity_service_version')](https://github.com/hypertrace/entity-service/releases)'
     changelog -m hypertrace entity-service $entity_service_old_version $entity_service_version
 
     config_service_old_version=$(get_prior_service_version "config-service")
-    echo '#### `Config service` ' '('$config_service_old_version '..' $config_service_version')'
+    echo '#### `Config service` ' '[('$config_service_old_version '..' $config_service_version')](https://github.com/hypertrace/config-service/releases)'
     changelog -m hypertrace config-service $config_service_old_version $config_service_version
 
     hypertrace_graphql_old_version=$(get_prior_service_version "hypertrace-graphql")
-    echo '#### `Hypertrace GraphQL` ' '(' $hypertrace_graphql_old_version '..' $hypertrace_graphql_version')' 
+    echo '#### `Hypertrace GraphQL` ' '[(' $hypertrace_graphql_old_version '..' $hypertrace_graphql_version')](https://github.com/hypertrace/hypertrace-graphql/releases)' 
     changelog -m hypertrace hypertrace-graphql $hypertrace_graphql_old_version $hypertrace_graphql_version
 
     hypertrace_ui_old_version=$(get_prior_service_version "hypertrace-ui")
-    echo '#### `Hypertrace UI` ' '(' $hypertrace_ui_old_version '..' $hypertrace_ui_version')' 
+    echo '#### `Hypertrace UI` ' '[(' $hypertrace_ui_old_version '..' $hypertrace_ui_version')](https://github.com/hypertrace/hypertrace-ui/releases)' 
     changelog -m hypertrace hypertrace-ui $hypertrace_ui_old_version $hypertrace_ui_version
 
     hypertrace_ingester_old_version=$(get_prior_service_version "hypertrace-ingester")
-    echo '#### `Hypertrace inegster` ' '(' $hypertrace_ingester_old_version '..' $hypertrace_ingester_version')' 
+    echo '#### `Hypertrace inegster` ' '[(' $hypertrace_ingester_old_version '..' $hypertrace_ingester_version')](https://github.com/hypertrace/hypertrace-ingester/releases)' 
     changelog -m hypertrace hypertrace-ingester $hypertrace_ingester_old_version $hypertrace_ingester_version
 }
 
