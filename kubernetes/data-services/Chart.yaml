@@ -38,7 +38,7 @@ dependencies:
   - name: mongodb
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.2
-    condition: mongodb.enabled  
+    condition: mongodb.enabled
   - name: postgresql
     repository: "https://charts.bitnami.com/bitnami"
     version: 10.2.6

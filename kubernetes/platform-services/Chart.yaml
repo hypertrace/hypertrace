@@ -52,7 +52,7 @@ dependencies:
     version: 0.1.54
   - name: query-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.5.3
+    version: 0.5.4
   - name: entity-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.5.7
