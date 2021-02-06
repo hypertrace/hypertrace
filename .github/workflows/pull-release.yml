@@ -111,6 +111,11 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      - name: Print outputs
+        run: |
+          echo "Hypertrace-service version ${{ steps.hypertrace-service.outputs.tag }}"
+          echo "Query-service version ${{ steps.query-service.outputs.tag }}"
+
       - name: Install changelog python library
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
@@ -172,7 +177,7 @@ jobs:
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
 
-          
+
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
