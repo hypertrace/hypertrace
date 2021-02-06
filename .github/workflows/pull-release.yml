@@ -172,6 +172,7 @@ jobs:
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
 
+          
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
