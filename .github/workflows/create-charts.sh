@@ -68,23 +68,23 @@ update_platform_services_charts() {
         echo '  - name: gateway-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $gateway_service_version
-        echo '    condition: merge-query-services.enabled'
+        echo '    condition: merge-query-services.disabled'
         echo '  - name: query-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $query_service_version
-        echo '    condition: merge-query-services.enabled'
+        echo '    condition: merge-query-services.disabled'
         echo '  - name: entity-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $entity_service_version
-        echo '    condition: merge-query-services.enabled'
+        echo '    condition: merge-query-services.disabled'
         echo '  - name: attribute-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $attribute_service_version
-        echo '    condition: merge-query-services.enabled'
+        echo '    condition: merge-query-services.disabled'
         echo '  - name: config-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $config_service_version
-        echo '    condition: merge-query-services.enabled'
+        echo '    condition: merge-query-services.disabled'
         echo '  - name: hypertrace-data-config-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $hypertrace_service_version
