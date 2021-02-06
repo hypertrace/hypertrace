@@ -1,5 +1,8 @@
 name: get latest helm charts
 on:
+  push:
+    branches:
+      - main  
   schedule:
     - cron: '00 06 * * 5' #every friday at 11:30 AM IST/ 6 AM UST
   # workflow_dispatch will let us manually trigger the workflow from GitHub actions dashboard.
@@ -101,7 +104,7 @@ jobs:
           repository: hypertrace/hypertrace
       
       - name: Get latest charts for hypertrace-service
-        id: hypertrace
+        id: hypertrace-service
         uses: oprypin/find-latest-tag@v1
         with:
           repository: hypertrace/hypertrace-service
@@ -169,29 +172,29 @@ jobs:
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
 
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.TOKEN }}
-          commit-message: Updates helm charts
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
-          branch: update-helm-charts
-          delete-branch: true
-          title: 'chore: updates helm charts'
-          body: |
-            This PR,
-            - Updates helm charts as per the latest releases of all services. 
-            - **Note: This is auto-generated PR so please test and verify before merging.** 
-          labels: |
-            helm-updates
-            automated pr
-            release
-          assignees: JBAhire
-          reviewers: kotharironak, rish691
-          team-reviewers: |
-            owners
-            maintainers
-          draft: false
+      # - name: Create Pull Request
+      #   id: cpr
+      #   uses: peter-evans/create-pull-request@v3
+      #   with:
+      #     token: ${{ secrets.TOKEN }}
+      #     commit-message: Updates helm charts
+      #     committer: GitHub <noreply@github.com>
+      #     author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+      #     signoff: false
+      #     branch: update-helm-charts
+      #     delete-branch: true
+      #     title: 'chore: updates helm charts'
+      #     body: |
+      #       This PR,
+      #       - Updates helm charts as per the latest releases of all services. 
+      #       - **Note: This is auto-generated PR so please test and verify before merging.** 
+      #     labels: |
+      #       helm-updates
+      #       automated pr
+      #       release
+      #     assignees: JBAhire
+      #     reviewers: kotharironak, rish691
+      #     team-reviewers: |
+      #       owners
+      #       maintainers
+      #     draft: false
