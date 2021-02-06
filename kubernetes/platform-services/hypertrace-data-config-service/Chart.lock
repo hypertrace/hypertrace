@@ -1,6 +1,0 @@
-dependencies:
-- name: config-bootstrapper
-  repository: file://config-bootstrapper
-  version: 0.2.3
-digest: sha256:632e581afaa2aade94e4630a647496834a6c36ec5ea2c4fc509f16c949b40fd5
-generated: "2021-02-03T17:44:51.849073+05:30"

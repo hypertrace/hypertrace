@@ -1,6 +1,0 @@
-apiVersion: v2
-appVersion: 1.0.0
-description: Hypertrace Service Chart
-name: hypertrace-data-query-service
-type: application
-version: 1.0.0

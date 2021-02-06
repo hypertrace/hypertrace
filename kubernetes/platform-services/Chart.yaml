@@ -54,11 +54,11 @@ dependencies:
   #   repository: "https://storage.googleapis.com/hypertrace-helm-charts"
   #   version: 0.5.3
   - name: hypertrace-data-config-service
-    repository: "file://hypertrace-data-config-service"
-    version: 1.0.0
+    repository: "https://storage.googleapis.com/hypertrace-helm-charts"
+    version: 0.1.21
   - name: hypertrace-data-query-service
-    repository: "file://hypertrace-data-query-service"
-    version: 1.0.0
+    repository: "https://storage.googleapis.com/hypertrace-helm-charts"
+    version: 0.1.21
   # - name: entity-service
   #   repository: "https://storage.googleapis.com/hypertrace-helm-charts"
   #   version: 0.5.4
