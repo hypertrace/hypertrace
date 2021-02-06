@@ -65,26 +65,39 @@ update_platform_services_charts() {
         echo '  - name: hypertrace-graphql-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $hypertrace_graphql_version
-        echo '  - name: attribute-service'
-        echo '    repository:' $HELM_GCS_REPO
-        echo '    version:' $attribute_service_version
         echo '  - name: gateway-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $gateway_service_version
+        echo '    condition: merge-query-services.enabled'
         echo '  - name: query-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $query_service_version
+        echo '    condition: merge-query-services.enabled'
         echo '  - name: entity-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $entity_service_version
+        echo '    condition: merge-query-services.enabled'
+        echo '  - name: attribute-service'
+        echo '    repository:' $HELM_GCS_REPO
+        echo '    version:' $attribute_service_version
+        echo '    condition: merge-query-services.enabled'
         echo '  - name: config-service'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $config_service_version
+        echo '    condition: merge-query-services.enabled'
+        echo '  - name: hypertrace-data-config-service'
+        echo '    repository:' $HELM_GCS_REPO
+        echo '    version:' $hypertrace_service_version
+        echo '    condition: merge-query-services.enabled'
+        echo '  - name: hypertrace-data-query-service'
+        echo '    repository:' $HELM_GCS_REPO
+        echo '    version:' $hypertrace_service_version
+        echo '    condition: merge-query-services.enabled' 
         echo '  - name: kafka-topic-creator'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' 0.1.7
         echo '    condition: kafka-topic-creator.enabled'
-} 
+}
 
 write_to_tmp_source() {
         echo 'attribute-service:'$attribute_service_version

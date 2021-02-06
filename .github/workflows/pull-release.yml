@@ -99,6 +99,12 @@ jobs:
         uses: oprypin/find-latest-tag@v1
         with:
           repository: hypertrace/hypertrace
+      
+      - name: Get latest charts for hypertrace-service
+        id: hypertrace
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/hypertrace-service
 
       - uses: actions/checkout@v2
 
@@ -132,6 +138,7 @@ jobs:
           gateway_service_version: ${{ steps.gateway-service.outputs.tag }}
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
+          hypertrace_service_version: ${{ steps.hypertrace-service.outputs.tag }}
 
       - name: update release notes
         run: |

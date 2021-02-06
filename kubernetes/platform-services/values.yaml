@@ -1,3 +1,26 @@
+merge-query-services: 
+  enabled: false
+  disabled: true
+
+# when merge-query-services.enabled, set 
+# entityServiceHost: &entityServiceHost hypertrace-data-config-service
+# entityServicePort: &entityServicePort 9012 
+# attributeServiceHost: &attributeServiceHost hypertrace-data-config-service
+# attributeServicePort: &attributeServicePort 9012
+# configServiceHost: &configServiceHost hypertrace-data-config-service
+# configServicePort: &configServicePort 9012
+# gatewayServiceHost: &gatewayServiceHost hypertrace-data-query-service
+# gatewayServicePort: &gatewayServicePort 9001
+
+entityServiceHost: &entityServiceHost entity-service 
+entityServicePort: &entityServicePort 50061 
+attributeServiceHost: &attributeServiceHost attribute-service
+attributeServicePort: &attributeServicePort 9012
+configServiceHost: &configServiceHost config-service
+configServicePort: &configServicePort 50101
+gatewayServiceHost: &gatewayServiceHost gateway-service
+gatewayServicePort: &gatewayServicePort 9001
+
 hypertrace-oc-collector:
   resources:
     requests:
@@ -114,6 +137,13 @@ raw-spans-grouper:
             - retention.ms=21600000
 
 hypertrace-trace-enricher:
+  traceEnricherConfig:
+    entityServiceHost: *entityServiceHost 
+    entityServicePort: *entityServicePort
+    attributeServiceHost: *attributeServiceHost
+    attributeServicePort: *attributeServicePort
+    configServiceHost: *configServiceHost
+    configServicePort: *configServicePort 
   javaOpts: "-Xms512M -Xmx768M"
   resources:
     requests:
@@ -122,6 +152,7 @@ hypertrace-trace-enricher:
     limits:
       cpu: "1"
       memory: "1Gi"
+
   kafka-topic-creator:
     enabled: true
     kafka:
@@ -175,9 +206,6 @@ hypertrace-view-generator:
             - retention.bytes=1073741824
             - retention.ms=21600000
 
-hypertrace-federated-service:
-  enabled: false
-
 gateway-service:
   resources:
     requests:
@@ -225,11 +253,61 @@ config-service:
     limits:
       cpu: "0.25"
       memory: "256Mi"
+      
+hypertrace-data-query-service:
+  queryServiceConfig:
+    data:
+      attributeClient:
+        host: hypertrace-data-config-service
+        port: 9012
+  gatewayServiceConfig:
+    data:
+      application.conf: |-
+        query.service.config = {
+          host = localhost
+          port = 9001
+        }
+        entity.service.config = {
+          host = hypertrace-data-config-service
+          port = 9012
+        }
+        attributes.service.config = {
+          host = hypertrace-data-config-service
+          port = 9012
+        }
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: "512Mi"
+    limits:
+      cpu: "0.5"
+      memory: "512Mi"
+
+hypertrace-data-config-service:
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: "512Mi"
+    limits:
+      cpu: "0.5"
+      memory: "512Mi"       
 
 hypertrace-graphql-service:
   javaOpts: "-Xms128M -Xmx256M"
   serviceConfig:
     defaultTenantId: "__default"
+    gatewayService:
+      host: *gatewayServiceHost
+      port: *gatewayServicePort
+    attributeService:
+      host: *attributeServiceHost
+      port: *attributeServicePort
+    entityService:
+      host: *entityServiceHost
+      port: *entityServicePort
+    configService:
+      host: *configServiceHost
+      port: *configServicePort
   resources:
     requests:
       cpu: "0.25"
