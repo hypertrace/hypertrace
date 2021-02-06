@@ -1,8 +1,5 @@
 name: get latest helm charts
 on:
-  push:
-    branches:
-      - main  
   schedule:
     - cron: '00 06 * * 5' #every friday at 11:30 AM IST/ 6 AM UST
   # workflow_dispatch will let us manually trigger the workflow from GitHub actions dashboard.
