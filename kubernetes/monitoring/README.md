@@ -66,27 +66,34 @@ Hypertrace Ingestion pipeline is kstream application which provides [built-in me
 that are exposed via `/metrics` endpoint. So, refer above documentation for kstream related metrics. The below table
 contains additional application metrics,
 
-| Name                  | Description                                         |
-| --------------------- | --------------------------------------------------- |
-| arrival\_lag\_seconds | Time taken to reach to specific ingestion component |
+| Name                                            | Description                                               |
+| ----------------------------------------------- | --------------------------------------------------------- |
+| hypertrace\_reported\_spans\_total              | Number of raw spans received                              |
+| hypertrace\_reported\_spans\_processed\_total   | Number of spans successfully normalized to internal spans |
+| hypertrace\_emitted\_traces\_total              | Number of traces emitted                                  |
+| span\_normalization\_time\_seconds              | Time taken in normalizing span                            |
+| hypertrace\_trace\_enrichment\_latency\_seconds | Time taken in enriching trace                             |
+| hypertrace\_enriched\_traces\_total             | Number of traces enriched                                 |
+| arrival\_lag\_seconds                           | Time taken to reach to specific ingestion component       |
+| spans\_per\_trace                               | Number of spans per trace                                 |
 
 
 ### Hypertrace Query Layer
 #### Gateway Service APIs
 Measure the taken for each request at the Gateway Service layer which is an entry point for the GraphQL layer.
 
-| Name                                                                       | Description                                                      |
-| -------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| org\_hypertrace\_core\_serviceframework\_span\_query\_execution            | Time taken in executing spans request                            |
-| org\_hypertrace\_core\_serviceframework\_entities\_query\_execution        | Time taken in executing entities request                         |
-| org\_hypertrace\_core\_serviceframework\_traces\_query\_execution          | Time taken in executing traces request                           |
-| org\_hypertrace\_core\_serviceframework\_explore\_query\_execution         | Time taken in executing explore request                          |
-| org\_hypertrace\_core\_serviceframework\_entities\_query\_build            | Time spent in transformation on entities request                 |
-| org\_hypertrace\_core\_serviceframework\_span\_query\_execution\_count     | Total number of spans request, helps in calculating QPS          |
-| org\_hypertrace\_core\_serviceframework\_entities\_query\_execution\_count | Total number of entities request, helps in calculating QPS       |
-| org\_hypertrace\_core\_serviceframework\_traces\_query\_execution\_count   | Total number of tracess request, helps in calculating QPS        |
-| org\_hypertrace\_core\_serviceframework\_explore\_query\_execution\_count  | Total number of explorer request, helps in calculating QPS       |
-| org\_hypertrace\_core\_serviceframework\_entities\_query\_build\_count     | Total number of entities build request, helps in calculating QPS |
+| Name                                                   | Description                                                      |
+| -------------------------------------------------------| ---------------------------------------------------------------- |
+| hypertrace\_span\_query\_execution\_seconds            | Time taken in executing spans request                            |
+| hypertrace\_entities\_query\_execution\_seconds        | Time taken in executing entities request                         |
+| hypertrace\_traces\_query\_execution\_seconds          | Time taken in executing traces request                           |
+| hypertrace\_explore\_query\_execution\_seconds         | Time taken in executing explore request                          |
+| hypertrace\_entities\_query\_build\_seconds            | Time spent in transformation on entities request                 |
+| hypertrace\_span\_query\_execution\_seconds\_count     | Total number of spans request, helps in calculating QPS          |
+| hypertrace\_entities\_query\_execution\_seconds\_count | Total number of entities request, helps in calculating QPS       |
+| hypertrace\_traces\_query\_execution\_seconds\_count   | Total number of tracess request, helps in calculating QPS        |
+| hypertrace\_explore\_query\_execution\_seconds\_count  | Total number of explorer request, helps in calculating QPS       |
+| hypertrace\_entities\_query\_build\_seconds\_count     | Total number of entities build request, helps in calculating QPS |
 
 #### Pinot Request Handle
 Measure the time taken by executing the query to pinot via different request handle based on different views.
