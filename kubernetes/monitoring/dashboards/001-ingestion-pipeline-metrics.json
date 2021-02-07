@@ -739,7 +739,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "arrival_lag_seconds{namespace=\"hypertrace\", quantile=\"0.99\"}",
+          "expr": "arrival_lag_seconds{quantile=\"0.99\"}",
           "interval": "",
           "legendFormat": "{{ app }}",
           "refId": "A"
@@ -794,12 +794,12 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Hypertrace Ingestion Pipeline Metrics",
   "uid": "9odA-DNGz",
-  "version": 5
+  "version": 7
 }
