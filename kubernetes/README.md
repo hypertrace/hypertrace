@@ -74,3 +74,14 @@ Once your Hypertrace installation is successful you can navigate to`http://local
 
 ## Sending data to Hypertrace
 Now you know things are running, let's get some data into Hypertrace. If your applications already send trace data, you can configure them to send data to Hypertrace using the default ports for Jaeger, OpenCensus or Zipkin. If you are just getting started, try out our [demo app](https://docs.hypertrace.org/sample-app). Once you have data in Hypertrace, you are ready to [explore its advanced features](https://docs.hypertrace.org/platform-ui). 
+
+## Cutting release for helm chart updates locally
+- Genereate PR by running workflow here: https://github.com/hypertrace/hypertrace/actions?query=workflow%3A%22get+latest+helm+charts%22
+- Click on `Run workflow`
+- git checkout `update-helm-charts`
+- Run e2e tests using
+    - `cd kubernetes`
+    - `./hypertrace-e2e-test.sh`
+- This will install Hypertrace, run e2 tests and then uninstall hypertrace. 
+
+`Note:` We have workflow which runs on self hosted-runner which will be enabled after we get our own hosted runner.
