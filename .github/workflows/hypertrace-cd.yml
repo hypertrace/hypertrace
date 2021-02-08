@@ -1,11 +1,13 @@
-name: hypertrace CD
+name: hypertrace release workflow
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - update-helm-charts
+  # The existing workflow of updating helm charts, creates PR with branch - update-helm-chart
+  # Once the PR is ready, below workflow is used to validated HT deployment by running GraphQL
+  # and e2e tests. So, if you want verify the release PR, run the below steps
+  # locally or on your hosted m/c using - https://github.com/nektos/act.
+  # We have planned in future to automate using `pull_request` trigger with hosted runner.
+#  pull_request:
+#    branches:
+#      - update-helm-charts
 
 jobs:
   build:
@@ -14,7 +16,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
         with: 
-          ref: 
+          ref: update-helm-charts
 
       - name: Start minikube
         run: minikube start --driver=none
