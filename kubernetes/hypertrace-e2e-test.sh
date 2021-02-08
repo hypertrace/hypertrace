@@ -47,7 +47,7 @@ npx protractor protractor.conf.js --suite smoke --baseUrl "http://${HTUI_IP}:202
 cd $SCRIPT_DIR
 ./hypertrace.sh uninstall
 
-if [ ${HT_EVN} == "minikube" ]; then
+if [ ${HT_ENV} == "minikube" ]; then
   minikube stop
   minikube delete --all
 fi

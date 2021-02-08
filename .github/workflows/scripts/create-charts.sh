@@ -4,7 +4,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 HELM_GCS_REPO='"https://storage.googleapis.com/hypertrace-helm-charts"'
 
 print_header() {
-    cat ".github/workflows/header.txt"
+    cat ".github/workflows/scripts/header.txt"
     echo
 }
 
@@ -143,7 +143,7 @@ write_changelog() {
     changelog -m hypertrace hypertrace-ui $hypertrace_ui_old_version $hypertrace_ui_version
 
     hypertrace_ingester_old_version=$(get_prior_service_version "hypertrace-ingester")
-    echo '#### `Hypertrace inegster` ' '[(' $hypertrace_ingester_old_version '..' $hypertrace_ingester_version')](https://github.com/hypertrace/hypertrace-ingester/releases)' 
+    echo '#### `Hypertrace ingester` ' '[(' $hypertrace_ingester_old_version '..' $hypertrace_ingester_version')](https://github.com/hypertrace/hypertrace-ingester/releases)' 
     changelog -m hypertrace hypertrace-ingester $hypertrace_ingester_old_version $hypertrace_ingester_version
 }
 

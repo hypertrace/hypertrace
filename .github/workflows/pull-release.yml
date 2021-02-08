@@ -115,8 +115,8 @@ jobs:
 
       - name: Update data services charts
         run: |
-          chmod +x .github/workflows/create-charts.sh
-          ./.github/workflows/create-charts.sh data-services
+          chmod +x .github/workflows/scripts/create-charts.sh
+          ./.github/workflows/scripts/create-charts.sh data-services
         env: 
           kafka_version: ${{ steps.kafka.outputs.tag }}
           pinot_version: ${{ steps.pinot.outputs.tag }}
@@ -126,8 +126,8 @@ jobs:
       
       - name: Update platform services charts
         run: |
-          chmod +x .github/workflows/create-charts.sh
-          ./.github/workflows/create-charts.sh platform-services
+          chmod +x .github/workflows/scripts/create-charts.sh
+          ./.github/workflows/scripts/create-charts.sh platform-services
         env: 
           hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
           hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
@@ -142,7 +142,7 @@ jobs:
 
       - name: update release notes
         run: |
-          ./.github/workflows/create-charts.sh release-notes
+          ./.github/workflows/scripts/create-charts.sh release-notes
         env: 
           hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
           hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
@@ -157,7 +157,7 @@ jobs:
 
       - name: update compatibility matrix
         run: |
-          ./.github/workflows/create-charts.sh compatibility-matrix 
+          ./.github/workflows/scripts/create-charts.sh compatibility-matrix 
         env:
           hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
           hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
