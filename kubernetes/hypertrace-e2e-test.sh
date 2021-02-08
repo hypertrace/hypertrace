@@ -4,7 +4,13 @@
 set -eEu -o functrace
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-if [ ${HT_EVN} != "minikube" ]; then
+HYPERTRACE_CONFIG=${SCRIPT_DIR}/config/hypertrace.properties
+if [ ! -f "${HYPERTRACE_CONFIG}" ]; then
+    echo "Configuration file not found: '${HYPERTRACE_CONFIG}'"
+fi
+source ${HYPERTRACE_CONFIG}
+
+if [ ${HT_ENV} == "minikube" ]; then
   minikube start --driver=none
 fi
 
@@ -33,7 +39,7 @@ npx protractor protractor.conf.js --suite smoke --baseUrl "http://${HTUI_IP}:202
 cd $SCRIPT_DIR
 ./hypertrace.sh uninstall
 
-if [ ${HT_EVN} != "minikube" ]; then
+if [ ${HT_EVN} == "minikube" ]; then
   minikube stop
   minikube delete --all
 fi
