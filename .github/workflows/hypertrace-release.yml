@@ -86,6 +86,3 @@ jobs:
       - name: Clean up
         if: ${{ always() }}
         run: rm -r -f hypertrace
-
-
-
