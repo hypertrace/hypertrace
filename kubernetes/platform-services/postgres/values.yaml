@@ -17,3 +17,17 @@ config-service:
       host: postgres
       port: 5432
       url: ""
+
+hypertrace-data-config-service:
+  entityServiceConfig:
+    dataStoreType: "postgres"
+  attributeServiceConfig:
+    dataStoreType: "postgres"    
+  configServiceConfig:
+    dataStoreType: "postgres"
+    postgres:
+      host: postgres
+      port: 5432
+      url: ""
+  config-bootstrapper:
+    dataStoreType: "postgres"
