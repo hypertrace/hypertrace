@@ -25,15 +25,23 @@ kubectl get services -n hypertrace
 cd $SCRIPT_DIR/../.github/graphql-e2e-tests/
 ./ingest-traces.sh
 
-export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace | tr -s " " | cut -d' ' -f4 | grep -v "EXTERNAL-IP")
+else
+  export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+fi
+
 ./gradlew run
 
 cd $SCRIPT_DIR/../.github/ui-e2e-tests/
 
 npm install 
 npm audit fix
-CHROMEDRIVER_RELEASE="$(google-chrome --product-version)" && npm run install-web-driver -- --versions.chrome=${CHROMEDRIVER_RELEASE}
-export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  CHROMEDRIVER_RELEASE=“$(/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version| sed ‘s/^Google Chrome //’)” && npm run install-web-driver -- --versions.chrome=${CHROMEDRIVER_RELEASE}
+else
+  CHROMEDRIVER_RELEASE="$(google-chrome --product-version)" && npm run install-web-driver -- --versions.chrome=${CHROMEDRIVER_RELEASE}
+fi
 npx protractor protractor.conf.js --suite smoke --baseUrl "http://${HTUI_IP}:2020"
 
 cd $SCRIPT_DIR

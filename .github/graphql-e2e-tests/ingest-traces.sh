@@ -2,8 +2,8 @@
 
 COLLECTOR_IP="$(kubectl get service hypertrace-oc-collector -n hypertrace | tr -s " " | cut -d' ' -f4 | grep -v "EXTERNAL-IP")"
 
-if [[ "$COLLECTOR_IP" == "localhost" ]]; then
-    COLLECTOR_IP="host.docker.internal"
+if [[ "$OSTYPE" == "darwin"* && "$COLLECTOR_IP" == "localhost" ]]; then
+    COLLECTOR_IP="docker.for.mac.localhost"
 fi
 
 docker run -v $(pwd)/src/main/resources/traces/trace-1.json:/usr/src/jaeger2zipkin/trace-1.json jbahire/jaeger2zipkin trace-1.json http://$COLLECTOR_IP:9411/api/v2/spans

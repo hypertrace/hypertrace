@@ -19,7 +19,7 @@ attributeServicePort: &attributeServicePort 9012
 configServiceHost: &configServiceHost config-service
 configServicePort: &configServicePort 50101
 gatewayServiceHost: &gatewayServiceHost gateway-service
-gatewayServicePort: &gatewayServicePort 9001
+gatewayServicePort: &gatewayServicePort 50071
 
 hypertrace-oc-collector:
   resources:

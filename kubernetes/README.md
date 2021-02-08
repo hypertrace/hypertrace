@@ -83,5 +83,8 @@ Now you know things are running, let's get some data into Hypertrace. If your ap
     - `cd kubernetes`
     - `./hypertrace-e2e-test.sh`
 - This will install Hypertrace, run e2 tests and then uninstall hypertrace. 
+- In case if you run the above script with minikube, update `./config/hypertrace.properties` file 
+  HE_ENV and HT_KUBE_CONTEXT with `minikube`
 
-`Note:` We have workflow which runs on self hosted-runner which will be enabled after we get our own hosted runner.
+`Note:` We have workflow (`./github/workflows/hypertrace-release.yml`) which runs on self hosted-runner 
+that will be enabled in future.
