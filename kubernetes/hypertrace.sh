@@ -154,4 +154,3 @@ case "$subcommand" in
     usage
     ;;
 esac
-
