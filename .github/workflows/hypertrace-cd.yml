@@ -1,0 +1,89 @@
+name: hypertrace CD
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - update-helm-charts
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with: 
+          ref: 
+
+      - name: Start minikube
+        run: minikube start --driver=none
+      - name: Install Hypertrace
+        working-directory: kubernetes
+        run: |
+          kubectl create ns hypertrace
+          ./hypertrace.sh install --clean
+
+      - name: Cluster Info
+        if: ${{ failure() }}
+        run: |
+          df -h
+          minikube logs
+          minikube status
+        
+      - name: Show Hypertrace deployment data
+        run: |
+          kubectl get pods -n hypertrace
+          kubectl get services -n hypertrace
+
+      - name: Set up Minikube tunnel
+        run: |
+          minikube tunnel > /tmp/minikube-tunnel/a.log &
+
+      - name: Waits for some stability
+        run: |
+          sleep 40 # you can decrease it but never increase it
+          kubectl get services -n hypertrace
+
+      - name: Ingest traces
+        working-directory: ./.github/graphql-e2e-tests/
+        run: | 
+          ./ingest-traces.sh
+
+      - name: Waits for some stability
+        run: |
+          sleep 40 # you can decrease it but never increase it
+          kubectl get services -n hypertrace
+
+      - name: run GraphQL tests
+        working-directory: ./.github/graphql-e2e-tests/
+        run: |
+          export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          ./gradlew run
+
+      - name: run UI tests
+        working-directory: ./.github/ui-e2e-tests/
+        run: |
+          npm install 
+          npm audit fix
+          CHROMEDRIVER_RELEASE="$(google-chrome --product-version)" && npm run install-web-driver -- --versions.chrome=${CHROMEDRIVER_RELEASE}
+          export HTUI_IP=$(kubectl get service hypertrace-ui -n hypertrace -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          npx protractor protractor.conf.js --suite smoke --baseUrl "http://${HTUI_IP}:2020"
+
+      - name: Uninstall Hypertrace
+        if: ${{ always() }}
+        working-directory: kubernetes
+        run: ./hypertrace.sh uninstall
+
+      - name: Clean up minikube
+        if: ${{ always() }}
+        run: | 
+          minikube stop
+          minikube delete --all
+
+      - name: Clean up
+        if: ${{ always() }}
+        run: rm -r -f hypertrace
+
+
+
