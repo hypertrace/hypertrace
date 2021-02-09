@@ -1,12 +1,12 @@
 {
-  "name": "@traceable/e2e",
+  "name": "@hypertrace/e2e",
   "version": "0.0.0",
-  "description": "E2E Tests for Traceable UI App",
+  "description": "E2E Tests for hypertrace UI App",
   "author": "",
   "license": "MIT",
   "scripts": {
     "tsc": "tsc",
-    "install-web-driver": "webdriver-manager clean && webdriver-manager update",
+    "install-web-driver": "webdriver-manager clean && webdriver-manager update --gecko false",
     "test": "protractor protractor.conf.js --suite smoke"
   },
   "dependencies": {
