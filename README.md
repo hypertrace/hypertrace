@@ -1,4 +1,3 @@
-[![hypertrace](https://circleci.com/gh/hypertrace/hypertrace/tree/main.svg?style=svg)](https://circleci.com/gh/hypertrace/hypertrace)
 ![e2e test](https://github.com/hypertrace/hypertrace/workflows/e2e%20test/badge.svg)
 
 # Hypertrace
