@@ -1,8 +1,22 @@
+# there are 2 modes in which query services can run `merged` and `individually`
+# merge-query-services.enabled = true and merge-query-services.disabled = false
+# will run hypertrace-data-config and hypertrace-data-query service (merged)
+# instead of entity, config, attribute, query & gateway service
+# to go back to running services `individually` toggle the values 
+# Property                       `merged`                        `individually`
+# entityServiceHost     hypertrace-data-config-service            entity-service
+# entityServicePort           9012                                   50061
+# attributeServiceHost  hypertrace-data-config-service            attribute-service
+# attributeServicePort        9012                                   9012
+# configServiceHost     hypertrace-data-config-service            config-service
+# configServicePort           9012                                   50101
+# gatewayServiceHost    hypertrace-data-query-service             gateway-service
+# gatewayServicePort          9001                                   50071
 merge-query-services: 
   enabled: true
   disabled: false
 
-# when merge-query-services.enabled, set 
+# config for `merged` 
 entityServiceHost: &entityServiceHost hypertrace-data-config-service
 entityServicePort: &entityServicePort 9012 
 attributeServiceHost: &attributeServiceHost hypertrace-data-config-service
@@ -11,15 +25,6 @@ configServiceHost: &configServiceHost hypertrace-data-config-service
 configServicePort: &configServicePort 9012
 gatewayServiceHost: &gatewayServiceHost hypertrace-data-query-service
 gatewayServicePort: &gatewayServicePort 9001
-
-# entityServiceHost: &entityServiceHost entity-service 
-# entityServicePort: &entityServicePort 50061 
-# attributeServiceHost: &attributeServiceHost attribute-service
-# attributeServicePort: &attributeServicePort 9012
-# configServiceHost: &configServiceHost config-service
-# configServicePort: &configServicePort 50101
-# gatewayServiceHost: &gatewayServiceHost gateway-service
-# gatewayServicePort: &gatewayServicePort 50071
 
 hypertrace-oc-collector:
   resources:
