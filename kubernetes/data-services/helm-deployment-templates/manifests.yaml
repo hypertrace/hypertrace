@@ -1,0 +1,2090 @@
+---
+# Source: hypertrace-services/charts/kafka/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kafka
+  labels:
+    app: kafka
+    chart: kafka-0.1.8
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+---
+# Source: hypertrace-services/charts/mongodb/templates/serviceaccount.yml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongo
+  labels:
+    app: mongodb
+    chart: mongodb-0.1.2
+    release: "hypertrace-data-services"
+    heritage: "Helm"
+secrets:
+  - name: mongo
+---
+# Source: hypertrace-services/charts/pinot/templates/broker/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pinot-broker
+  namespace: "default"
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: broker
+    release: hypertrace-data-services
+    heritage: Helm
+---
+# Source: hypertrace-services/charts/pinot/templates/controller/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pinot-controller
+  namespace: "default"
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: controller
+    release: hypertrace-data-services
+    heritage: Helm
+---
+# Source: hypertrace-services/charts/pinot/templates/minion/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pinot-minion
+  namespace: "default"
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: minion
+    release: hypertrace-data-services
+    heritage: Helm
+---
+# Source: hypertrace-services/charts/pinot/templates/server/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pinot-server
+  namespace: "default"
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: server
+    release: hypertrace-data-services
+    heritage: Helm
+---
+# Source: hypertrace-services/charts/zookeeper/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: zookeeper
+  namespace: "default"
+  labels:
+    app: zookeeper
+    chart: zookeeper-0.1.2
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+---
+# Source: hypertrace-services/charts/kafka/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-configmap
+  labels:
+    app: kafka
+    chart: kafka-0.1.8
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+data:
+  server.properties: |+
+    # Licensed to the Apache Software Foundation (ASF) under one or more
+    # contributor license agreements.  See the NOTICE file distributed with
+    # this work for additional information regarding copyright ownership.
+    # The ASF licenses this file to You under the Apache License, Version 2.0
+    # (the "License"); you may not use this file except in compliance with
+    # the License.  You may obtain a copy of the License at
+    #
+    #    http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    # see kafka.server.KafkaConfig for additional details and defaults
+
+    ############################# Server Basics #############################
+
+    # The id of the broker. This must be set to a unique integer for each broker.
+    # To be set by startup script.
+    #broker.id=0
+
+    # Rack of the broker. This will be used in rack aware replication assignment for fault tolerance.
+    # TBD
+    #broker.rack=
+
+    # Enable auto creation of topic on the server
+    auto.create.topics.enable=false
+
+    # Switch to enable topic deletion or not.
+    delete.topic.enable=true
+
+    # Specify the final compression type for a given topic
+    compression.type=producer
+
+    # The largest record batch size allowed by Kafka.
+    # This can be set per topic with the topic level max.message.bytes config.
+
+    # default replication factors for automatically created topics
+    default.replication.factor=1
+
+    # min.insync.replicas specifies the minimum number of replicas that must acknowledge a write for the write to be considered successful.
+    min.insync.replicas=1
+
+    ############################# Socket Server Settings #############################
+
+    # The address the socket server listens on. It will get the value returned from
+    # java.net.InetAddress.getCanonicalHostName() if not configured.
+    #   FORMAT:
+    #     listeners = listener_name://host_name:port
+    #   EXAMPLE:
+    #     listeners = PLAINTEXT://your.host.name:9092
+    # To be set by startup script.
+    #listeners=PLAINTEXT://:9092
+
+    # Hostname and port the broker will advertise to producers and consumers. If not set,
+    # it uses the value for "listeners" if configured.  Otherwise, it will use the value
+    # returned from java.net.InetAddress.getCanonicalHostName().
+    # To be set by startup script.
+    #advertised.listeners=PLAINTEXT://your.host.name:9092
+
+    # Maps listener names to security protocols, the default is for them to be the same. See the config documentation for more details
+    listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL,EXTERNAL:PLAINTEXT
+
+    # The number of threads that the server uses for receiving requests from the network and sending responses to the network
+    num.network.threads=3
+
+    # The number of threads that the server uses for processing requests, which may include disk I/O
+    num.io.threads=8
+
+    # The send buffer (SO_SNDBUF) used by the socket server
+    socket.send.buffer.bytes=102400
+
+    # The receive buffer (SO_RCVBUF) used by the socket server
+    socket.receive.buffer.bytes=102400
+
+    # The maximum size of a request that the socket server will accept (protection against OOM)
+    socket.request.max.bytes=104857600
+
+    # Lister for inter broker communication
+    inter.broker.listener.name=PLAINTEXT
+
+    ############################# Log Basics #############################
+
+    # A comma separated list of directories under which to store log files
+    log.dirs=/var/lib/kafka/data/topics
+
+    # The default number of log partitions per topic. More partitions allow greater
+    # parallelism for consumption, but this will also result in more files across
+    # the brokers.
+    num.partitions=12
+
+    # The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
+    # This value is recommended to be increased for installations with data dirs located in RAID array.
+    num.recovery.threads.per.data.dir=4
+
+    ############################# Internal Topic Settings  #############################
+    # The replication factor for the group metadata internal topics "__consumer_offsets" and "__transaction_state"
+    # For anything other than development testing, a value greater than 1 is recommended for to ensure availability such as 3.
+    offsets.topic.replication.factor=1
+    transaction.state.log.replication.factor=1
+    transaction.state.log.min.isr=3
+
+    # After a consumer group loses all its consumers (i.e. becomes empty) its offsets will be kept for this retention period before getting discarded.
+    offsets.retention.minutes=10080
+
+    ############################# Log Flush Policy #############################
+
+    # Messages are immediately written to the filesystem but by default we only fsync() to sync
+    # the OS cache lazily. The following configurations control the flush of data to disk.
+    # There are a few important trade-offs here:
+    #    1. Durability: Unflushed data may be lost if you are not using replication.
+    #    2. Latency: Very large flush intervals may lead to latency spikes when the flush does occur as there will be a lot of data to flush.
+    #    3. Throughput: The flush is generally the most expensive operation, and a small flush interval may lead to excessive seeks.
+    # The settings below allow one to configure the flush policy to flush data after a period of time or
+    # every N messages (or both). This can be done globally and overridden on a per-topic basis.
+
+    # The number of messages to accept before forcing a flush of data to disk
+
+    # The maximum amount of time a message can sit in a log before we force a flush
+
+    ############################# Log Retention Policy #############################
+
+    # The following configurations control the disposal of log segments. The policy can
+    # be set to delete segments after a period of time, or after a given size has accumulated.
+    # A segment will be deleted whenever *either* of these criteria are met. Deletion always happens
+    # from the end of the log.
+
+    # The minimum age of a log file to be eligible for deletion due to age
+    log.retention.hours=24
+
+    # A size-based retention policy for logs. Segments are pruned from the log unless the remaining
+    # segments drop below log.retention.bytes. Functions independently of log.retention.hours.
+    log.retention.bytes=1073741824
+
+    # The maximum time before a new log segment is rolled out (in milliseconds).
+
+    # The maximum size of a log segment file. When this size is reached a new log segment will be created.
+    log.segment.bytes=1073741824
+
+    # The interval at which log segments are checked to see if they can be deleted according
+    # to the retention policies
+    log.retention.check.interval.ms=300000
+
+    ############################# Zookeeper #############################
+
+    # Zookeeper connection string (see zookeeper docs for details).
+    # This is a comma separated host:port pairs, each corresponding to a zk
+    # server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002".
+    # You can also append an optional chroot string to the urls to specify the
+    # root directory for all kafka znodes.
+    zookeeper.connect=zookeeper.default.svc.cluster.local:2181
+
+    # Timeout in ms for connecting to zookeeper
+    zookeeper.connection.timeout.ms=30000
+
+    # Zookeeper session timeout
+    zookeeper.session.timeout.ms=30000
+
+    ############################# Group Coordinator Settings #############################
+
+    # The following configuration specifies the time, in milliseconds, that the GroupCoordinator will delay the initial consumer rebalance.
+    # The rebalance will be further delayed by the value of group.initial.rebalance.delay.ms as new members join the group, up to a maximum of max.poll.interval.ms.
+    # The default value for this is 3 seconds.
+    # We override this to 0 here as it makes for a better out-of-the-box experience for development and testing.
+    # However, in production environments the default value of 3 seconds is more suitable as this will help to avoid unnecessary, and potentially expensive, rebalances during application startup.
+    group.initial.rebalance.delay.ms=3000
+
+    ############################# Replication #############################
+
+    # Number of fetcher threads used to replicate messages from a source broker.
+    # Increasing this value can increase the degree of I/O parallelism in the follower broker.
+    num.replica.fetchers=1
+
+  log4j.properties: |+
+    # Licensed to the Apache Software Foundation (ASF) under one or more
+    # contributor license agreements.  See the NOTICE file distributed with
+    # this work for additional information regarding copyright ownership.
+    # The ASF licenses this file to You under the Apache License, Version 2.0
+    # (the "License"); you may not use this file except in compliance with
+    # the License.  You may obtain a copy of the License at
+    #
+    #    http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    # Unspecified loggers and loggers with additivity=true output to server.log and stdout
+    # Note that INFO only applies to unspecified loggers, the log level of the child logger is used otherwise
+    log4j.rootLogger=INFO, stdout, kafkaAppender
+
+    log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+    log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+    log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+    log4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender
+    log4j.appender.kafkaAppender.DatePattern='.'yyyy-MM-dd-HH
+    log4j.appender.kafkaAppender.File=${kafka.logs.dir}/server.log
+    log4j.appender.kafkaAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.kafkaAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+    log4j.appender.stateChangeAppender=org.apache.log4j.DailyRollingFileAppender
+    log4j.appender.stateChangeAppender.DatePattern='.'yyyy-MM-dd-HH
+    log4j.appender.stateChangeAppender.File=${kafka.logs.dir}/state-change.log
+    log4j.appender.stateChangeAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.stateChangeAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+    log4j.appender.requestAppender=org.apache.log4j.DailyRollingFileAppender
+    log4j.appender.requestAppender.DatePattern='.'yyyy-MM-dd-HH
+    log4j.appender.requestAppender.File=${kafka.logs.dir}/kafka-request.log
+    log4j.appender.requestAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.requestAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+    log4j.appender.cleanerAppender=org.apache.log4j.DailyRollingFileAppender
+    log4j.appender.cleanerAppender.DatePattern='.'yyyy-MM-dd-HH
+    log4j.appender.cleanerAppender.File=${kafka.logs.dir}/log-cleaner.log
+    log4j.appender.cleanerAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.cleanerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+    log4j.appender.controllerAppender=org.apache.log4j.DailyRollingFileAppender
+    log4j.appender.controllerAppender.DatePattern='.'yyyy-MM-dd-HH
+    log4j.appender.controllerAppender.File=${kafka.logs.dir}/controller.log
+    log4j.appender.controllerAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.controllerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+    log4j.appender.authorizerAppender=org.apache.log4j.DailyRollingFileAppender
+    log4j.appender.authorizerAppender.DatePattern='.'yyyy-MM-dd-HH
+    log4j.appender.authorizerAppender.File=${kafka.logs.dir}/kafka-authorizer.log
+    log4j.appender.authorizerAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.authorizerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
+
+    # Change the two lines below to adjust ZK client logging
+    log4j.logger.org.I0Itec.zkclient.ZkClient=INFO
+    log4j.logger.org.apache.zookeeper=INFO
+
+    # Change the two lines below to adjust the general broker logging level (output to server.log and stdout)
+    log4j.logger.kafka=INFO
+    log4j.logger.org.apache.kafka=INFO
+
+    # Change to DEBUG or TRACE to enable request logging
+    log4j.logger.kafka.request.logger=WARN, requestAppender
+    log4j.additivity.kafka.request.logger=false
+
+    # Uncomment the lines below and change log4j.logger.kafka.network.RequestChannel$ to TRACE for additional output
+    # related to the handling of requests
+    #log4j.logger.kafka.network.Processor=TRACE, requestAppender
+    #log4j.logger.kafka.server.KafkaApis=TRACE, requestAppender
+    #log4j.additivity.kafka.server.KafkaApis=false
+    log4j.logger.kafka.network.RequestChannel$=WARN, requestAppender
+    log4j.additivity.kafka.network.RequestChannel$=false
+
+    log4j.logger.kafka.controller=TRACE, controllerAppender
+    log4j.additivity.kafka.controller=false
+
+    log4j.logger.kafka.log.LogCleaner=INFO, cleanerAppender
+    log4j.additivity.kafka.log.LogCleaner=false
+
+    log4j.logger.state.change.logger=TRACE, stateChangeAppender
+    log4j.additivity.state.change.logger=false
+
+    # Access denials are logged at INFO level, change to DEBUG to also log allowed accesses
+    log4j.logger.kafka.authorizer.logger=INFO, authorizerAppender
+    log4j.additivity.kafka.authorizer.logger=false
+---
+# Source: hypertrace-services/charts/kafka/templates/script-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-script-configmap
+  labels:
+    app: kafka
+    chart: kafka-0.1.8
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+data:
+  run.sh: |+
+    #!/bin/sh -x
+
+    LISTENERS_BROKER_PORT="9092"
+    LISTENERS_EXTERNAL_ENABLED="false"
+    LISTENERS_EXTERNAL_PORT="9094"
+    LISTENERS_EXTERNAL_PROTOCOL="EXTERNAL"
+    LISTENERS_EXTERNAL_HOST_NAME_PREFIX=""
+    LISTENERS_EXTERNAL_DOMAIN_NAME=""
+    LISTENERS_EXTERNAL_ADVERTISED_HOST_NAME=""
+    LISTENERS_EXTERNAL_FIRST_NODE_PORT="31090"
+    LISTENERS_EXTERNAL_SERVICE_TYPE="NodePort"
+
+    BROKER_ID=${POD_NAME##*-}
+    FQDN=$(hostname -f)
+
+    LISTENERS="PLAINTEXT://${FQDN}:${LISTENERS_BROKER_PORT}"
+    ADVERTISED_LISTENERS="PLAINTEXT://${FQDN}:${LISTENERS_BROKER_PORT}"
+
+    if [ "${LISTENERS_EXTERNAL_ENABLED}" = "true" ]; then
+      if [ "${LISTENERS_EXTERNAL_SERVICE_TYPE}" = "LoadBalancer" ]; then
+        if [ -n "${LISTENERS_EXTERNAL_HOST_NAME_PREFIX}" -a -n "${LISTENERS_EXTERNAL_DOMAIN_NAME}" ]; then
+          EXTERNAL_HOST_NAME="${LISTENERS_EXTERNAL_HOST_NAME_PREFIX}-${BROKER_ID}.${LISTENERS_EXTERNAL_DOMAIN_NAME}"
+        else
+          EXTERNAL_HOST_NAME="${FQDN}"
+        fi
+        EXTERNAL_PORT="${LISTENERS_EXTERNAL_PORT}"
+      else
+        if [ -n "${LISTENERS_EXTERNAL_ADVERTISED_HOST_NAME}" ]; then
+          EXTERNAL_HOST_NAME="${LISTENERS_EXTERNAL_ADVERTISED_HOST_NAME}"
+        else
+          EXTERNAL_HOST_NAME="${HOST_IP}"
+        fi
+        EXTERNAL_PORT=$(($LISTENERS_EXTERNAL_FIRST_NODE_PORT+$BROKER_ID))
+      fi
+      LISTENERS="${LISTENERS},${LISTENERS_EXTERNAL_PROTOCOL}://${FQDN}:${LISTENERS_EXTERNAL_PORT}"
+      ADVERTISED_LISTENERS="${ADVERTISED_LISTENERS},${LISTENERS_EXTERNAL_PROTOCOL}://${EXTERNAL_HOST_NAME}:${EXTERNAL_PORT}"
+    fi
+
+    echo "overriding broker.id with $BROKER_ID"
+    echo "overriding listeners with $LISTENERS"
+    echo "overriding advertised.listeners with $ADVERTISED_LISTENERS"
+
+    exec "$KAFKA_HOME"/bin/kafka-server-start.sh "$KAFKA_HOME"/config/server.properties \
+            --override broker.id=$BROKER_ID \
+            --override listeners=$LISTENERS \
+            --override advertised.listeners=$ADVERTISED_LISTENERS
+---
+# Source: hypertrace-services/charts/mongodb/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: mongodb
+    chart: mongodb-0.1.2
+    heritage: Helm
+    release: hypertrace-data-services
+  name: mongo
+data:
+  mongodb.conf: |
+    # where and how to store data.
+    storage:
+      dbPath: /data/db
+      journal:
+        enabled: true
+    # where to write logging data.
+    systemLog:
+      #destination: file
+      quiet: false
+      logAppend: true
+      logRotate: reopen
+      #path: /var/log/mongodb/mongodb.log
+      verbosity: 0
+    # network interfaces
+    net:
+      port: 27017
+      unixDomainSocket:
+        enabled: true
+        pathPrefix: /tmp
+      ipv6: false
+      bindIpAll: true
+    # replica set options
+    # process management options
+    processManagement:
+      fork: false
+      pidFilePath: /tmp/mongodb.pid
+    # set parameter options
+    setParameter:
+      enableLocalhostAuthBypass: true
+    # security options
+    security:
+      authorization: disabled
+---
+# Source: hypertrace-services/charts/pinot/templates/broker/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-broker-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: broker
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-broker.conf: |-
+    pinot.broker.client.queryPort=8099
+    pinot.broker.routing.table.builder.class=random
+    pinot.preferHostnameInDefaultInstanceId=true
+    pinot.set.instance.id.to.hostname=true
+    pinot.broker.timeoutMs=60000
+---
+# Source: hypertrace-services/charts/pinot/templates/broker/jmx-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-broker-jmx-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: broker
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  prometheus-pinot-broker.yml: |-
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:7022/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    rules:
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+).authorization\"><>(\\w+)"
+        name: "pinot_broker_authorization_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.documentsScanned\"><>(\\w+)"
+        name: "pinot_broker_documentsScanned_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.entriesScannedInFilter\"><>(\\w+)"
+        name: "pinot_broker_entriesScannedInFilter_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.entriesScannedPostFilter\"><>(\\w+)"
+        name: "pinot_broker_entriesScannedPostFilter_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.freshnessLagMs\"><>(\\w+)"
+        name: "pinot_broker_freshnessLagMs_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.queries\"><>(\\w+)"
+        name: "pinot_broker_queries_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.queryExecution\"><>(\\w+)"
+        name: "pinot_broker_queryExecution_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.queryRouting\"><>(\\w+)"
+        name: "pinot_broker_queryRouting_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.reduce\"><>(\\w+)"
+        name: "pinot_broker_reduce_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.requestCompilation\"><>(\\w+)"
+        name: "pinot_broker_requestCompilation_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.scatterGather\"><>(\\w+)"
+        name: "pinot_broker_scatterGather_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)\\.totalServerResponseSize\"><>(\\w+)"
+        name: "pinot_broker_totalServerResponseSize_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)_(\\w+).groupBySize\"><>(\\w+)"
+        name: "pinot_broker_groupBySize_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)_(\\w+).noServingHostForSegment\"><>(\\w+)"
+        name: "pinot_broker_noServingHostForSegment_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.healthcheck(\\w+)\"><>(\\w+)"
+        name: "pinot_broker_healthcheck_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.helix.(\\w+)\"><>(\\w+)"
+        name: "pinot_broker_helix_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.helixZookeeper(\\w+)\"><>(\\w+)"
+        name: "pinot_broker_helix_zookeeper_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.nettyConnection(\\w+)\"><>(\\w+)"
+        name: "pinot_broker_nettyConnection_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.clusterChangeCheck\"\"><>(\\w+)"
+        name: "pinot_broker_clusterChangeCheck_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.proactiveClusterChangeCheck\"><>(\\w+)"
+        name: "pinot_broker_proactiveClusterChangeCheck_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.(\\w+)Exceptions\"><>(\\w+)"
+        name: "pinot_broker_exceptions_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"BrokerMetrics\", name=\"pinot.broker.routingTableUpdateTime\"><>(\\w+)"
+        name: "pinot_broker_routingTableUpdateTime_$1"
+---
+# Source: hypertrace-services/charts/pinot/templates/broker/log-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-broker-log-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: broker
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-broker-log4j2.xml: |-
+    <Configuration>
+      <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+          <PatternLayout>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss.SSS} %p [%c{1}] [%t] %m%n</pattern>
+          </PatternLayout>
+        </Console>
+      </Appenders>
+      <Loggers>
+        <Root level="info" additivity="false">
+          <!-- Display most logs on the console -->
+          <AppenderRef ref="console"/>
+        </Root>
+        <AsyncLogger name="org.reflections" level="error" additivity="false"/>
+      </Loggers>
+    </Configuration>
+---
+# Source: hypertrace-services/charts/pinot/templates/controller/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-controller-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: controller
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-controller.conf: |-
+    controller.helix.cluster.name=hypertrace-views
+    controller.port=9000
+    controller.zk.str=zookeeper.default.svc.cluster.local:2181/pinot
+    pinot.set.instance.id.to.hostname=true
+    controller.data.dir=/var/pinot/controller/data
+    controller.deleted.segments.retentionInDays=2
+---
+# Source: hypertrace-services/charts/pinot/templates/controller/jmx-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-controller-jmx-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: controller
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  prometheus-pinot-controller.yml: |-
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:7022/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    rules:
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllercontroller(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerhelix\\.(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_helix_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerhelixZookeeperReconnects\"><>(\\w+)"
+        name: "pinot_controller_helix_ZookeeperReconnects_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controlleridealstateZnodeSize.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_idealstateZnodeSize_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllernumberOfReplicas.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_numberOfReplicas_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerpercentOfReplicas.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_percentOfReplicas_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerpercentSegmentsAvailable.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_percentSegmentsAvailable_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllersegmentCount.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_segmentCount_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllersegmentsInErrorState.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_segmentsInErrorState_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllernumberSegmentUploadTimeoutExceeded\"><>(\\w+)"
+        name: "pinot_controller_numberSegmentUploadTimeoutExceeded_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllernumberTimesScheduleTasksCalled\"><>(\\w+)"
+        name: "pinot_controller_numberTimesScheduleTasksCalled_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerperiodicTaskNumTablesProcessed.(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_periodicTaskNumTablesProcessed_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerpinotControllerLeader\"><>(\\w+)"
+        name: "pinot_controller_pinotControllerLeader_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerpinotControllerPartitionLeader.(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_partitionLeader_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ControllerMetrics\", name=\"pinot.controllerrealtimeTableCount\"><>(\\w+)"
+        name: "pinot_controller_realtimeTableCount_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ValidationMetrics\", name=\"pinot.controller.(\\w+)\\.(\\w+)\"><>(\\w+)"
+        name: "pinot_controller_validateion_$2_$3"
+        labels:
+          table: "$1"
+---
+# Source: hypertrace-services/charts/pinot/templates/controller/log-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-controller-log-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: controller
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-controller-log4j2.xml: |-
+    <Configuration>
+      <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+          <PatternLayout>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss.SSS} %p [%c{1}] [%t] %m%n</pattern>
+          </PatternLayout>
+        </Console>
+
+      </Appenders>
+      <Loggers>
+        <Root level="info" additivity="false">
+          <!-- Display most logs on the console -->
+          <AppenderRef ref="console"/>
+        </Root>
+        <AsyncLogger name="org.reflections" level="error" additivity="false"/>
+      </Loggers>
+    </Configuration>
+---
+# Source: hypertrace-services/charts/pinot/templates/minion/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-minion-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: minion
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-minion.conf: |-
+    pinot.minion.port=9514
+---
+# Source: hypertrace-services/charts/pinot/templates/minion/jmx-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-minion-jmx-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: minion
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  prometheus-pinot-minion.yml: |-
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:7022/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+---
+# Source: hypertrace-services/charts/pinot/templates/minion/log-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-minion-log-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: minion
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-minion-log4j2.xml: |-
+    <Configuration>
+      <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+          <PatternLayout>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss.SSS} %p [%c{1}] [%t] %m%n</pattern>
+          </PatternLayout>
+        </Console>
+      </Appenders>
+      <Loggers>
+        <Root level="info" additivity="false">
+          <!-- Display most logs on the console -->
+          <AppenderRef ref="console"/>
+        </Root>
+        <AsyncLogger name="org.reflections" level="error" additivity="false"/>
+      </Loggers>
+    </Configuration>
+---
+# Source: hypertrace-services/charts/pinot/templates/server/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-server-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: server
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-server.conf: |-
+    pinot.server.netty.port=8098
+    pinot.server.adminapi.port=8097
+    pinot.server.instance.dataDir=/var/pinot/server/data/index
+    pinot.server.instance.segmentTarDir=/var/pinot/server/data/segment
+    pinot.set.instance.id.to.hostname=true
+    pinot.server.instance.realtime.alloc.offheap=true
+    pinot.server.query.executor.timeout=60000
+---
+# Source: hypertrace-services/charts/pinot/templates/server/jmx-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-server-jmx-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: server
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  prometheus-pinot-server.yml: |-
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:7022/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    rules:
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.documentCount.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_server_documentCount_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.segmentCount.(\\w+)_(\\w+)\"><>(\\w+)"
+        name: "pinot_server_segmentCount_$3"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.(\\w+)_(\\w+)\\.(\\w+)\"><>(\\w+)"
+        name: "pinot_server_$3_$4"
+        labels:
+          table: "$1"
+          tableType: "$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.(\\w+)_(\\w+)\\-(.+)\\-(\\w+).realtimeRowsConsumed\"><>(\\w+)"
+        name: "pinot_server_realtimeRowsConsumed_$5"
+        labels:
+          table: "$1"
+          tableType: "$2"
+          topic: "$3"
+          partition: "$4"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.helix.connected\"><>(\\w+)"
+        name: "pinot_server_helix_connected_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.helixZookeeperReconnects\"><>(\\w+)"
+        name: "pinot_server_helix_zookeeperReconnects_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.highestKafkaOffsetConsumed.(\\w+)_(\\w+)\\-(.+)\\-(\\w+)\"><>(\\w+)"
+        name: "pinot_server_highestKafkaOffsetConsumed_$5"
+        labels:
+          table: "$1"
+          tableType: "$2"
+          topic: "$3"
+          partition: "$4"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.highestStreamOffsetConsumed.(\\w+)_(\\w+)\\-(.+)\\-(\\w+)\"><>(\\w+)"
+        name: "pinot_server_highestStreamOffsetConsumed_$5"
+        labels:
+          table: "$1"
+          tableType: "$2"
+          topic: "$3"
+          partition: "$4"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.lastRealtimeSegment(\\w+)Seconds.(\\w+)_(\\w+)\\-(.+)\\-(\\w+)\"><>(\\w+)"
+        name: "pinot_server_lastRealtimeSegment$1Seconds_$6"
+        labels:
+          table: "$2"
+          tableType: "$3"
+          topic: "$4"
+          partition: "$5"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.llcControllerResponse(\\w+)\"><>(\\w+)"
+        name: "pinot_server_llcControllerResponse_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.llcPartitionConsuming.(\\w+)_(\\w+)\\-(.+)\\-(\\w+)\"><>(\\w+)"
+        name: "pinot_server_llcPartitionConsuming_$5"
+        labels:
+          table: "$1"
+          tableType: "$2"
+          topic: "$3"
+          partition: "$4"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.llcSimultaneousSegmentBuilds\"><>(\\w+)"
+        name: "pinot_server_llcSimultaneousSegmentBuilds_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.memory.(\\w+)\"><>(\\w+)"
+        name: "pinot_server_memory_$1_$2"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.queries\"><>(\\w+)"
+        name: "pinot_server_queries_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.realtimeConsumptionExceptions\"><>(\\w+)"
+        name: "pinot_server_realtime_consumptionExceptions_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.realtimeOffheapMemoryUsed.(\\w+)\"><>(\\w+)"
+        name: "pinot_server_realtime_offheapMemoryUsed_$2"
+        labels:
+          table: "$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.realtimeOffsetCommits\"><>(\\w+)"
+        name: "pinot_server_realtime_offsetCommits_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.realtimeRowsConsumed\"><>(\\w+)"
+        name: "pinot_server_realtime_rowsConsumed_$1"
+      - pattern: "\"org.apache.pinot.common.metrics\"<type=\"ServerMetrics\", name=\"pinot.server.(\\w+)Exceptions\"><>(\\w+)"
+        name: "pinot_server_realtime_exceptions_$1_$2"
+      - pattern: "\"org.apache.pinot.transport.netty.NettyTCPServer_(\\w+)_\"<type=\"\", name=\"(\\w+)\"><>(\\w+)"
+        name: "pinot_server_netty_tcp_$2_$3"
+        labels:
+          id: "$1"
+---
+# Source: hypertrace-services/charts/pinot/templates/server/log-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pinot-server-log-config
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: server
+    release: hypertrace-data-services
+    heritage: Helm
+data:
+  pinot-server-log4j2.xml: |-
+    <Configuration>
+      <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+          <PatternLayout>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss.SSS} %p [%c{1}] [%t] %m%n</pattern>
+          </PatternLayout>
+        </Console>
+      </Appenders>
+      <Loggers>
+        <Root level="info" additivity="false">
+          <!-- Display most logs on the console -->
+          <AppenderRef ref="console"/>
+        </Root>
+        <AsyncLogger name="org.reflections" level="error" additivity="false"/>
+      </Loggers>
+    </Configuration>
+---
+# Source: hypertrace-services/charts/zookeeper/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zookeeper-configmap
+  labels:
+    app: zookeeper
+    chart: zookeeper-0.1.2
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+data:
+  zoo.cfg: |+
+    clientPort=2181
+    dataDir=/var/lib/zookeeper/data
+    dataLogDir=/var/lib/zookeeper/data/log
+    tickTime=2000
+    maxClientCnxns=60
+    minSessionTimeout=4000
+    maxSessionTimeout=40000
+    autopurge.snapRetainCount=3
+    autopurge.purgeInterval=12
+    initLimit=10
+    syncLimit=5
+    reconfigEnabled=false
+    4lw.commands.whitelist=srvr, mntr, conf, ruok
+    server.1=zookeeper-0.zookeeper-headless.default.svc.cluster.local:2888:3888
+  log4j.properties: |+
+    zookeeper.root.logger=CONSOLE
+    zookeeper.console.threshold=INFO
+    log4j.rootLogger=${zookeeper.root.logger}
+    log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+    log4j.appender.CONSOLE.Threshold=${zookeeper.console.threshold}
+    log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+    log4j.appender.CONSOLE.layout.ConversionPattern=%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
+---
+# Source: hypertrace-services/charts/zookeeper/templates/script-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zookeeper-script-configmap
+  labels:
+    app: zookeeper
+    chart: zookeeper-0.1.2
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+data:
+  run.sh: |
+    #!/bin/sh
+    ZOOKEEPER_ID=${POD_NAME##*-}
+    ZOOKEEPER_ID=$((ZOOKEEPER_ID+1))
+    echo $ZOOKEEPER_ID > $ZOOKEEPER_DATA_DIR/myid
+    mkdir -p $ZOOKEEPER_HOME/logs
+    export ZOO_LOG_DIR=$ZOOKEEPER_HOME/logs
+    exec $ZOOKEEPER_HOME/bin/zkServer.sh start-foreground
+
+  ok: |
+    #!/bin/sh
+    zkServer.sh status
+
+  ready: |
+    #!/bin/sh
+    echo ruok | nc 127.0.0.1 ${1:-2181}
+---
+# Source: hypertrace-services/templates/storageclass.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: hypertrace
+provisioner: docker.io/hostpath
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+---
+# Source: hypertrace-services/charts/kafka/templates/headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-broker
+  annotations:
+    {}
+  labels:
+    app: kafka
+    chart: kafka-0.1.8
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  clusterIP: None
+  ports:
+    - name: broker
+      port: 9092
+      targetPort: broker
+      protocol: TCP
+  selector:
+    app: kafka
+    release: hypertrace-data-services
+---
+# Source: hypertrace-services/charts/kafka/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: bootstrap
+  annotations:
+    {}
+  labels:
+    app: kafka
+    chart: kafka-0.1.8
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  type: ClusterIP
+  ports:
+    - name: broker
+      port: 9092
+      targetPort: broker
+      protocol: TCP
+  selector:
+    app: kafka
+    release: hypertrace-data-services
+---
+# Source: hypertrace-services/charts/mongodb/templates/standalone/svc-standalone.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: mongodb
+    chart: mongodb-0.1.2
+    release: "hypertrace-data-services"
+    heritage: "Helm"
+spec:
+  type: ClusterIP
+  ports:
+    - name: mongo
+      port: 27017
+      targetPort: mongo
+  selector:
+    app: mongodb
+    release: "hypertrace-data-services"
+---
+# Source: hypertrace-services/charts/pinot/templates/broker/service-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-broker
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: broker
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  clusterIP: None
+  ports:
+    - port: 8099
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: broker
+---
+# Source: hypertrace-services/charts/pinot/templates/broker/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-broker-svc
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: broker
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: request
+      port: 8099
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: broker
+---
+# Source: hypertrace-services/charts/pinot/templates/controller/service-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-controller
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: controller
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  clusterIP: None
+  ports:
+    - name: rest
+      port: 9000
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: controller
+---
+# Source: hypertrace-services/charts/pinot/templates/controller/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-controller-svc
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: controller
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: rest
+      port: 9000
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: controller
+---
+# Source: hypertrace-services/charts/pinot/templates/minion/service-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-minion
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: minion
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  clusterIP: None
+  ports:
+    - port: 9514
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: minion
+---
+# Source: hypertrace-services/charts/pinot/templates/minion/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-minion-svc
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: minion
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: request
+      port: 9514
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: minion
+---
+# Source: hypertrace-services/charts/pinot/templates/server/service-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-server
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: server
+    release: hypertrace-data-services
+    heritage: Helm
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: request
+      port: 8098
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: server
+---
+# Source: hypertrace-services/charts/pinot/templates/server/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinot-server-svc
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: server
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: request
+      port: 8098
+  selector:
+    app: pinot
+    release: hypertrace-data-services
+    component: server
+---
+# Source: hypertrace-services/charts/schema-registry/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: schema-registry-service
+  annotations:
+    {}
+  labels:
+    app: schema-registry
+    chart: schema-registry-0.1.5
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8081
+      targetPort: http
+  selector:
+    app: schema-registry
+---
+# Source: hypertrace-services/charts/zookeeper/templates/headless-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper-headless
+  namespace: "default"
+  annotations:
+    {}
+  labels:
+    app: zookeeper
+    chart: zookeeper-0.1.2
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  clusterIP: None
+  ports:
+    - name: follower
+      port: 2888
+      targetPort: follower
+    - name: election
+      port: 3888
+      targetPort: election
+  selector:
+    app: zookeeper
+    release: hypertrace-data-services
+---
+# Source: hypertrace-services/charts/zookeeper/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+  namespace: "default"
+  annotations:
+    {}
+  labels:
+    app: zookeeper
+    chart: zookeeper-0.1.2
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  type: ClusterIP
+  ports:
+    - name: client
+      port: 2181
+      targetPort: client
+  selector:
+    app: zookeeper
+    release: hypertrace-data-services
+---
+# Source: hypertrace-services/charts/schema-registry/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schema-registry
+  labels:
+    app: schema-registry
+    chart: schema-registry-0.1.5
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: schema-registry
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: schema-registry
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: schema-registry
+          image: "hypertrace/schema-registry:0.1.5"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8081
+          livenessProbe:
+            failureThreshold: 9
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 9
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 256Mi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+          env:
+            - name: SCHEMA_REGISTRY_HOST_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SCHEMA_REGISTRY_LISTENERS
+              value: http://0.0.0.0:8081
+            - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
+              value: PLAINTEXT://bootstrap.default.svc.cluster.local:9092
+            - name: SCHEMA_REGISTRY_KAFKASTORE_GROUP_ID
+              value: hypertrace-data-services
+            - name: SCHEMA_REGISTRY_MASTER_ELIGIBILITY
+              value: "true"
+            - name: SCHEMA_REGISTRY_HEAP_OPTS
+              value: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+            - name: SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL
+              value: "full_transitive"
+      terminationGracePeriodSeconds: 30
+---
+# Source: hypertrace-services/charts/kafka/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka
+  labels:
+    app: kafka
+    chart: kafka-0.1.8
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  serviceName: kafka-broker
+  selector:
+    matchLabels:
+      app: kafka
+      release: hypertrace-data-services
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: kafka
+        release: hypertrace-data-services
+    spec:
+      serviceAccountName: kafka
+      containers:
+        - name: kafka
+          image: "hypertrace/kafka:0.1.8"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: "broker"
+              containerPort: 9092
+            - name: "jmx"
+              containerPort: 5555
+          command: ["/opt/kafka/bin/run.sh"]
+          volumeMounts:
+            - name: kafka-config
+              mountPath: /opt/kafka/config/server.properties
+              subPath: server.properties
+            - name: kafka-config
+              mountPath: /opt/kafka/config/log4j.properties
+              subPath: log4j.properties
+            - name: kafka-script-config
+              mountPath: /opt/kafka/bin/run.sh
+              subPath: run.sh
+            - name: data
+              mountPath: /var/lib/kafka/data
+          readinessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            tcpSocket:
+              port: 9092
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 512Mi
+            requests:
+              cpu: "0.2"
+              memory: 512Mi
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: KAFKA_HOME
+              value: /opt/kafka
+            - name: KAFKA_HEAP_OPTS
+              value: "-Xms128M -Xmx384M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: kafka-config
+          configMap:
+            name: kafka-configmap
+        - name: kafka-script-config
+          configMap:
+            name: kafka-script-configmap
+            defaultMode: 0555
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: hypertrace
+        resources:
+          requests:
+            storage: 4Gi
+---
+# Source: hypertrace-services/charts/mongodb/templates/standalone/statefulset-standalone.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  labels:
+    app: mongodb
+    chart: mongodb-0.1.2
+    release: "hypertrace-data-services"
+    heritage: "Helm"
+spec:
+  serviceName: mongo
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: mongodb
+      release: "hypertrace-data-services"
+  template:
+    metadata:
+      labels:
+        app: mongodb
+        release: "hypertrace-data-services"
+        chart: mongodb-0.1.2
+    spec:
+      containers:
+        - name: mongo
+          image: "mongo:4.4.0"
+          imagePullPolicy: "IfNotPresent"
+          args:
+            - "--config"
+            - "/etc/mongodb/mongodb.conf"
+          env:
+          ports:
+            - name: mongo
+              containerPort: 27017
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db
+              subPath: 
+            - name: config
+              mountPath: /etc/mongodb
+          resources:
+            {}
+      serviceAccountName: mongo
+      volumes:
+        - name: config
+          configMap:
+            name: mongo
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-persistent-storage
+      spec:
+        accessModes:
+        - "ReadWriteOnce"
+        storageClassName: hypertrace
+        resources:
+          requests:
+            storage: "2Gi"
+---
+# Source: hypertrace-services/charts/pinot/templates/broker/statefulset.yml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pinot-broker
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: broker
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: pinot
+      release: hypertrace-data-services
+      component: broker
+  serviceName: pinot-broker
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: pinot
+        release: hypertrace-data-services
+        component: broker
+      annotations:
+        {}
+    spec:
+      containers:
+        - name: pinot-broker
+          image: hypertrace/pinot:0.2.8
+          imagePullPolicy: IfNotPresent
+          args: [
+            "StartBroker",
+            "-clusterName", "hypertrace-views",
+            "-zkAddress", "zookeeper.default.svc.cluster.local:2181/pinot",
+            "-configFileName", "/var/pinot/broker/config/pinot-broker.conf"
+          ]
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError -Dlog4j2.configurationFile=/opt/pinot/conf/pinot-broker-log4j2.xml -Dplugins.dir=/opt/pinot/plugins "
+          ports:
+            - name: request
+              containerPort: 8099
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /var/pinot/broker/config
+            - name: log-config
+              mountPath: /opt/pinot/conf/pinot-broker-log4j2.xml
+              subPath: "pinot-broker-log4j2.xml"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8099
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8099
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+      restartPolicy: Always
+      serviceAccountName: pinot-broker
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: config
+          configMap:
+            name: pinot-broker-config
+        - name: jmx-config
+          configMap:
+            name: pinot-broker-jmx-config
+        - name: log-config
+          configMap:
+            name: pinot-broker-log-config
+---
+# Source: hypertrace-services/charts/pinot/templates/controller/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pinot-controller
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: controller
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: pinot
+      release: hypertrace-data-services
+      component: controller
+  serviceName: pinot-controller
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: pinot
+        release: hypertrace-data-services
+        component: controller
+      annotations:
+        {}
+    spec:
+      initContainers:
+        - name: create-zk-root-path
+          image: "hypertrace/kafka:0.1.1"
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash", "-cx"]
+          args:
+            - |
+              # zookeper-shell used doesn't have proper mechanism to configure retries.
+              # Retrying within helm as a workaround
+              exitCode=1
+              i=0
+              while [ $i -le 10 ]; do
+                bin/zookeeper-shell.sh ZooKeeper -server "zookeeper.default.svc.cluster.local:2181" create "/pinot" ""
+                if [ $? -eq 0 ]; then
+                  exitCode=0
+                  break
+                fi
+                sleep 5
+                i=`expr $i + 1`
+              done
+              exit $exitCode
+      containers:
+        - name: pinot-controller
+          image: hypertrace/pinot:0.2.8
+          imagePullPolicy: IfNotPresent
+          args: [ "StartController", "-configFileName", "/var/pinot/controller/config/pinot-controller.conf" ]
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError -Dlog4j2.configurationFile=/opt/pinot/conf/pinot-controller-log4j2.xml -Dplugins.dir=/opt/pinot/plugins "
+          ports:
+            - name: rest
+              containerPort: 9000
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /var/pinot/controller/config
+            - name: pinot-controller-storage
+              mountPath: "/var/pinot/controller/data"
+            - name: log-config
+              mountPath: /opt/pinot/conf/pinot-controller-log4j2.xml
+              subPath: "pinot-controller-log4j2.xml"
+          livenessProbe:
+            tcpSocket:
+              port: 9000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+          readinessProbe:
+            httpGet:
+              path: /pinot-controller/admin
+              port: 9000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+      restartPolicy: Always
+      serviceAccountName: pinot-controller
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: config
+          configMap:
+            name: pinot-controller-config
+        - name: jmx-config
+          configMap:
+            name: pinot-controller-jmx-config
+        - name: log-config
+          configMap:
+            name: pinot-controller-log-config
+  volumeClaimTemplates:
+    - metadata:
+        name: pinot-controller-storage
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        storageClassName: hypertrace
+        resources:
+          requests:
+            storage: "4Gi"
+---
+# Source: hypertrace-services/charts/pinot/templates/minion/statefulset.yml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pinot-minion
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: minion
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: pinot
+      release: hypertrace-data-services
+      component: minion
+  serviceName: pinot-minion
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: pinot
+        release: hypertrace-data-services
+        component: minion
+      annotations:
+        {}
+    spec:
+      containers:
+        - name: pinot-minion
+          image: hypertrace/pinot:0.2.8
+          imagePullPolicy: IfNotPresent
+          args: [
+            "StartMinion",
+            "-clusterName", "hypertrace-views",
+            "-zkAddress", "zookeeper.default.svc.cluster.local:2181/pinot",
+            "-configFileName", "/var/pinot/minion/config/pinot-minion.conf"
+          ]
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms128M -Xmx320M -Dlog4j2.configurationFile=/opt/pinot/conf/pinot-minion-log4j2.xml -Dplugins.dir=/opt/pinot/plugins "
+          ports:
+            - name: request
+              containerPort: 9514
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /var/pinot/minion/config
+            - name: log-config
+              mountPath: /opt/pinot/conf/pinot-minion-log4j2.xml
+              subPath: "pinot-minion-log4j2.xml"
+#          livenessProbe:
+#            httpGet:
+#              path: /health
+#              port: 9514
+#            initialDelaySeconds: 60
+#            periodSeconds: 10
+#            timeoutSeconds: 1
+#            failureThreshold: 3
+#          readinessProbe:
+#            httpGet:
+#              path: /health
+#              port: 9514
+#            initialDelaySeconds: 60
+#            periodSeconds: 10
+#            timeoutSeconds: 1
+#            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "0.1"
+              memory: 400Mi
+      restartPolicy: Always
+      serviceAccountName: pinot-minion
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: config
+          configMap:
+            name: pinot-minion-config
+        - name: jmx-config
+          configMap:
+            name: pinot-minion-jmx-config
+        - name: log-config
+          configMap:
+            name: pinot-minion-log-config
+---
+# Source: hypertrace-services/charts/pinot/templates/server/statefulset.yml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pinot-server
+  labels:
+    app: pinot
+    chart: pinot-0.2.8
+    component: server
+    release: hypertrace-data-services
+    heritage: Helm
+spec:
+  selector:
+    matchLabels:
+      app: pinot
+      release: hypertrace-data-services
+      component: server
+  serviceName: pinot-server
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: pinot
+        release: hypertrace-data-services
+        component: server
+      annotations: 
+        {}
+    spec:
+      containers:
+        - name: pinot-server
+          image: hypertrace/pinot:0.2.8
+          imagePullPolicy: IfNotPresent
+          args: [
+            "StartServer",
+            "-clusterName", "hypertrace-views",
+            "-zkAddress", "zookeeper.default.svc.cluster.local:2181/pinot",
+            "-configFileName", "/var/pinot/server/config/pinot-server.conf"
+          ]
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms128M -Xmx192M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError -Dlog4j2.configurationFile=/opt/pinot/conf/pinot-server-log4j2.xml -Dplugins.dir=/opt/pinot/plugins  "
+          ports:
+            - name: request
+              containerPort: 8098
+              protocol: TCP
+            - name: admin
+              containerPort: 8097
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /var/pinot/server/config
+            - name: pinot-server-storage
+              mountPath: "/var/pinot/server/data"
+            - name: log-config
+              mountPath: /opt/pinot/conf/pinot-server-log4j2.xml
+              subPath: "pinot-server-log4j2.xml"
+          livenessProbe:
+            tcpSocket:
+              port: 8098
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8097
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+          resources: 
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: "0.2"
+              memory: 256Mi
+      restartPolicy: Always
+      serviceAccountName: pinot-server
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: config
+          configMap:
+            name: pinot-server-config
+        - name: jmx-config
+          configMap:
+            name: pinot-server-jmx-config
+        - name: log-config
+          configMap:
+            name: pinot-server-log-config
+  volumeClaimTemplates:
+    - metadata:
+        name: pinot-server-storage
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        storageClassName: hypertrace
+        resources:
+          requests:
+            storage: 4Gi
+---
+# Source: hypertrace-services/charts/zookeeper/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zookeeper
+  namespace: "default"
+  labels:
+    app: zookeeper
+    chart: zookeeper-0.1.2
+    heritage: "Helm"
+    release: "hypertrace-data-services"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  serviceName: zookeeper-headless
+  selector:
+    matchLabels:
+      app: zookeeper
+      release: hypertrace-data-services
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+        release: hypertrace-data-services
+    spec:
+      serviceAccountName: zookeeper
+      containers:
+        - name: zookeeper
+          image: "hypertrace/zookeeper:0.1.2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: client
+              containerPort: 2181
+            - name: follower
+              containerPort: 2888
+            - name: election
+              containerPort: 3888
+          command: ["/scripts/run.sh"]
+          livenessProbe:
+            exec:
+              command: ["/scripts/ok"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+            successThreshold: 1
+          readinessProbe:
+            exec:
+              command: ["/scripts/ready"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 8
+            successThreshold: 1
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 256Mi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: JVMFLAGS
+              value: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=64M -XX:+ExitOnOutOfMemoryError"
+            - name: ZOOKEEPER_HOME
+              value: /opt/zookeeper
+            - name: ZOOKEEPER_DATA_DIR
+              value: /var/lib/zookeeper/data
+            - name: ZOOKEEPER_DATA_LOG_DIR
+              value: /var/lib/zookeeper/data/log
+          volumeMounts:
+            - name: zookeeper-config
+              mountPath: /opt/zookeeper/conf/zoo.cfg
+              subPath: zoo.cfg
+            - name: zookeeper-config
+              mountPath: /opt/zookeeper/conf/log4j.properties
+              subPath: log4j.properties
+            - name: zookeeper-script-config
+              mountPath: /scripts
+            - name: zk-data
+              mountPath: /var/lib/zookeeper/data
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: zookeeper-config
+          configMap:
+            name: zookeeper-configmap
+        - name: zookeeper-script-config
+          configMap:
+            name: zookeeper-script-configmap
+            defaultMode: 0555
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+  volumeClaimTemplates:
+    - metadata:
+        name: zk-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: hypertrace
+        resources:
+          requests:
+            storage: 1Gi

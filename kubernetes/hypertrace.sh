@@ -49,6 +49,16 @@ function usage() {
     exit 1
 }
 
+function cleanup(){
+    echo "[INFO] cleaning up any helm temporary working directory"
+    rm -rf ${HYPERTRACE_HOME}/data-services/charts
+    rm -rf ${HYPERTRACE_HOME}/data-services/tmpcharts
+    rm -rf ${HYPERTRACE_HOME}/data-services/Chart.lock
+    rm -rf ${HYPERTRACE_HOME}/platform-services/charts
+    rm -rf ${HYPERTRACE_HOME}/platform-services/tmpcharts
+    rm -rf ${HYPERTRACE_HOME}/platform-services/Chart.lock
+}
+
 HYPERTRACE_HOME="`dirname \"$0\"`"
 HYPERTRACE_HOME="`( cd \"${HYPERTRACE_HOME}\" && pwd )`"  # absolutized and normalized
 
@@ -92,6 +102,26 @@ fi
 subcommand=$1; shift
 
 case "$subcommand" in
+  dry-run)
+    EXIT_CODE=0;
+    cleanup
+    echo "[INFO] creating helm deployment template for hypertrace data services."
+    helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
+    if [ $HT_DATA_STORE == "postgres" ]; then
+      helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/data-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
+    else
+      helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
+    fi
+    echo "[INFO] creating helm deployment template for hypertrace platform services."
+    helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
+    if [ $HT_DATA_STORE == "postgres" ]; then
+      helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
+    else
+      helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
+    fi
+    echo "[INFO] Hypertrace deployment templates created successfully."
+    ;;
+
   install)
     EXIT_CODE=0;
 
@@ -104,16 +134,7 @@ case "$subcommand" in
       kubectl create ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS}
     fi
 
-    
-
-    echo "[INFO] cleaning up any helm temporary working directory"
-    rm -rf ${HYPERTRACE_HOME}/data-services/charts
-    rm -rf ${HYPERTRACE_HOME}/data-services/tmpcharts
-    rm -rf ${HYPERTRACE_HOME}/data-services/Chart.lock
-    rm -rf ${HYPERTRACE_HOME}/platform-services/charts
-    rm -rf ${HYPERTRACE_HOME}/platform-services/tmpcharts
-    rm -rf ${HYPERTRACE_HOME}/platform-services/Chart.lock
-
+    cleanup
     echo "[INFO] installing hypertrace data services. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
     helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
     if [ $HT_DATA_STORE == "postgres" ]; then
@@ -139,6 +160,7 @@ case "$subcommand" in
         case $yn in
             Yes )
               clean
+              cleanup
               kubectl delete ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS}
               echo "[INFO] Uninstall successful."
               break;;
