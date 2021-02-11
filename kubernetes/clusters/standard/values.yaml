@@ -194,3 +194,21 @@ hypertrace-ui:
     limits:
       cpu: "0.5"
       memory: "512Mi"
+
+hypertrace-data-config-service:
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: "512Mi"
+    limits:
+      cpu: "0.5"
+      memory: "512Mi" 
+
+hypertrace-data-query-service:
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi" 
