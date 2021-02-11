@@ -36,6 +36,9 @@ In case of any issue, install hypertrace in debug mode to get more logs and trac
 - Set `HT_ENABLE_DEBUG` to `true` in `./config/hypertrace.properties`
 - Debug `bash -x ./hypertrace.sh install`
 
+### Create deployment template
+- Run `./hypertrace.sh dry-run`
+
 ### Deployments
 Please follow docs below to get instructions specific to deployment environment.
 - [Docker Desktop](https://docs.hypertrace.org/deployments/docker/)
