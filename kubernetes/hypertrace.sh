@@ -126,9 +126,9 @@ case "$subcommand" in
       helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
       tar -xvf ${HYPERTRACE_HOME}/data-services/charts/"$servicename"* -C ${HYPERTRACE_HOME}/data-services/charts/
       if [ $HT_DATA_STORE == "postgres" ]; then
-        helm template ${HYPERTRACE_HOME}/data-services/charts/$servicename -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/data-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/services/$servicename-manifests.yaml
+        helm template ${HYPERTRACE_HOME}/data-services/charts/$servicename -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/data-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/service-manifests/$servicename-manifests.yaml
       else
-        helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services/charts/$servicename -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/services/$servicename-manifests.yaml
+        helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services/charts/$servicename -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/service-manifests/$servicename-manifests.yaml
       fi
       cleanup
 
@@ -145,9 +145,9 @@ case "$subcommand" in
         else
           tar -xvf ${HYPERTRACE_HOME}/platform-services/charts/$servicename* -C ${HYPERTRACE_HOME}/platform-services/charts/ 
           if [ $HT_DATA_STORE == "postgres" ]; then
-            helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/charts/$servicename -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/services/$servicename-manifests.yaml
+            helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/charts/$servicename -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/service-manifests/$servicename-manifests.yaml
           else
-            helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/charts/$servicename -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/services/$servicename-manifests.yaml
+            helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/charts/$servicename -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/service-manifests/$servicename-manifests.yaml
           fi
         fi
         cleanup
