@@ -40,12 +40,12 @@ error_report() {
 trap 'error_report ${LINENO} ${BASH_COMMAND}' ERR
 
 function usage() {
-    echo "usage: $script {install|uninstall|dry-run} [option]"
+    echo "usage: $script {install|uninstall|generate-manifests} [option]"
     echo " "
     echo "available options for install:"
     echo " "
     echo "--clean             removes previous deployments of Hypertrace and do clean install"
-    echo "available options for dry-run:"
+    echo "available options for generate-manifests:"
     echo " "
     echo "servicename          enter name of the service for which you want to generate manifests"
     echo " "
