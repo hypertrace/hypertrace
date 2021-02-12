@@ -134,7 +134,7 @@ case "$subcommand" in
     cleanup
     cleanup_manifests
     create_manifest_directories
-    if [[ "$servicename" != "" && $( echo "${servicename}" |  egrep -c "^(kafka|zookeeper|pinot|schema-registry|mongo|postgres)$" ) -ne 0 ]]; then
+    if [[ "$servicename" != "" && $( echo "${servicename}" |  egrep -c "^(kafka|zookeeper|pinot|schema-registry|mongo|postgres)$" || :;) -ne 0 ]]; then
       mkdir ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/service-manifests/
       echo "[INFO] creating helm deployment template for" $servicename
       helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
