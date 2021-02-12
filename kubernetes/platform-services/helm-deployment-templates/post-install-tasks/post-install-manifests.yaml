@@ -1,0 +1,131 @@
+# Source: hypertrace-services/charts/attribute-service/charts/config-bootstrapper/templates/job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: attribute-config-bootstrapper
+  labels:
+    release: hypertrace-platform-services
+    app: config-bootstrapper
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+spec:
+  # Cancel job if it has not finished after 10 minutes
+  activeDeadlineSeconds: 600
+  # Keep the job's pod around for 15 minutes. This will be better once we implement pod crashes and errors
+  # monitoring.
+  ttlSecondsAfterFinished: 900
+  template:
+    metadata:
+      labels:
+        release: hypertrace-platform-services
+        app: config-bootstrapper
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+        - name: job-config
+          configMap:
+            name: attribute-config-bootstrapper-config
+        - name: log4j-config
+          configMap:
+            name: attribute-config-bootstrapper-log-appender-config
+      initContainers:
+        - name: attribute-service-ready
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c"]
+          args: ["until nc -zv attribute-service 9012; \
+                  do echo 'waiting for attribute-service 9012'; \
+                  sleep 5; done"]
+      containers:
+        - name: config-bootstrapper
+          image: "hypertrace/config-bootstrapper:0.2.3"
+          imagePullPolicy: IfNotPresent
+          args: [ "-c", "/etc/config-bootstrapper/application.conf", "-C", "/app/resources/configs/config-bootstrapper/attribute-service", "--upgrade" ]
+          env:
+            - name: SERVICE_NAME
+              value: "config-bootstrapper"
+            - name: LOG4J_CONFIGURATION_FILE
+              value: "/var/config-bootstrapper/log/log4j2.properties"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Xms128M -Xmx128M"
+          volumeMounts:
+            - name: job-config
+              mountPath: /etc/config-bootstrapper/application.conf
+              subPath: application.conf
+            - name: log4j-config
+              mountPath: /var/config-bootstrapper/log
+          resources:
+            limits:
+              cpu: "0.2"
+              memory: 256Mi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+
+  backoffLimit: 100
+---
+# Source: hypertrace-services/charts/entity-service/charts/config-bootstrapper/templates/job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: entity-config-bootstrapper
+  labels:
+    release: hypertrace-platform-services
+    app: config-bootstrapper
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+spec:
+  # Cancel job if it has not finished after 10 minutes
+  activeDeadlineSeconds: 600
+  # Keep the job's pod around for 15 minutes. This will be better once we implement pod crashes and errors
+  # monitoring.
+  ttlSecondsAfterFinished: 900
+  template:
+    metadata:
+      labels:
+        release: hypertrace-platform-services
+        app: config-bootstrapper
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+        - name: job-config
+          configMap:
+            name: entity-config-bootstrapper-config
+        - name: log4j-config
+          configMap:
+            name: entity-config-bootstrapper-log-appender-config
+      initContainers:
+        - name: entity-service-ready
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c"]
+          args: ["until nc -zv entity-service 50061; \
+                  do echo 'waiting for entity-service 50061'; \
+                  sleep 5; done"]
+      containers:
+        - name: config-bootstrapper
+          image: "hypertrace/config-bootstrapper:0.2.4"
+          imagePullPolicy: IfNotPresent
+          args: [ "-c", "/etc/config-bootstrapper/application.conf", "-C", "/app/resources/configs/config-bootstrapper/entity-service", "--upgrade" ]
+          env:
+            - name: SERVICE_NAME
+              value: "config-bootstrapper"
+            - name: LOG4J_CONFIGURATION_FILE
+              value: "/var/config-bootstrapper/log/log4j2.properties"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Xms128M -Xmx128M"
+          volumeMounts:
+            - name: job-config
+              mountPath: /etc/config-bootstrapper/application.conf
+              subPath: application.conf
+            - name: log4j-config
+              mountPath: /var/config-bootstrapper/log
+          resources:
+            limits:
+              cpu: "0.2"
+              memory: 256Mi
+            requests:
+              cpu: "0.1"
+              memory: 256Mi
+
+  backoffLimit: 100

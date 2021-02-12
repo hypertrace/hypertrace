@@ -40,11 +40,18 @@ error_report() {
 trap 'error_report ${LINENO} ${BASH_COMMAND}' ERR
 
 function usage() {
-    echo "usage: $script {install|uninstall} [option]"
+    echo "usage: $script {install|uninstall|dry-run} [option]"
     echo " "
-    echo "available options:"
+    echo "available options for install:"
     echo " "
     echo "--clean             removes previous deployments of Hypertrace and do clean install"
+    echo "available options for dry-run:"
+    echo " "
+    echo "servicename          enter name of the service for which you want to generate manifests"
+    echo " "
+    echo "pre-install-tasks    generates manifests for services with pre-install helm hook"
+    echo " "
+    echo "post-install-tasks    generates manifests for services with post-install helm hook"
 
     exit 1
 }
@@ -57,6 +64,14 @@ function cleanup(){
     rm -rf ${HYPERTRACE_HOME}/platform-services/charts
     rm -rf ${HYPERTRACE_HOME}/platform-services/tmpcharts
     rm -rf ${HYPERTRACE_HOME}/platform-services/Chart.lock
+}
+
+function create_helm_install_manifests(){
+  if [ $HT_DATA_STORE == "postgres" ]; then
+    helm install --dry-run hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/ -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/install-manifests.yaml
+  else
+    helm install --dry-run hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/ -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/install-manifests.yaml
+  fi
 }
 
 HYPERTRACE_HOME="`dirname \"$0\"`"
@@ -86,18 +101,19 @@ if [[ "$HT_ENABLE_DEBUG" == "true" ]]; then
   KUBE_FLAGS="$KUBE_FLAGS --v=4"
 fi
 
+servicename=""
+
 if [ "$#" -gt 1 ]; then
   if [[ $2 == "--clean" ]]; then
       clean
-    else
-      usage
-  fi
+  else
+      servicename=$2
+    fi
 elif [ "$#" -ne 1 ]; then
     echo "[ERROR] Illegal number of parameters"
     echo "-------------------------------------"
     usage
 fi
-
 
 subcommand=$1; shift
 
@@ -105,21 +121,55 @@ case "$subcommand" in
   dry-run)
     EXIT_CODE=0;
     cleanup
-    echo "[INFO] creating helm deployment template for hypertrace data services."
-    helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
-    if [ $HT_DATA_STORE == "postgres" ]; then
-      helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/data-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
-    else
-      helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
+    if [[ "$servicename" != "" && $( echo "${servicename}" | egrep -c "^(kafka|zookeeper|pinot|schema-registry|mongo|postgres)$" ) -ne 0 ]]; then
+      echo "[INFO] creating helm deployment template for" $servicename
+      helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
+      tar -xvf ${HYPERTRACE_HOME}/data-services/charts/"$servicename"* -C ${HYPERTRACE_HOME}/data-services/charts/
+      if [ $HT_DATA_STORE == "postgres" ]; then
+        helm template ${HYPERTRACE_HOME}/data-services/charts/$servicename -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/data-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/services/$servicename-manifests.yaml
+      else
+        helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services/charts/$servicename -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/services/$servicename-manifests.yaml
+      fi
+      cleanup
+
+    elif [[ "$servicename" != "" ]]; then
+      helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
+        if [[ "$servicename" == "pre-install-tasks" ]]; then
+          create_helm_install_manifests
+          echo "[INFO] creating helm deployment template for pre-install tasks"
+          python pre_post_install_task_generator.py pre ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/install-manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml
+        elif [[ "$servicename" == "post-install-tasks" ]]; then
+          create_helm_install_manifests
+          echo "[INFO] creating helm deployment template for post-install tasks"
+          python pre_post_install_task_generator.py post ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/install-manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml
+        else
+          tar -xvf ${HYPERTRACE_HOME}/platform-services/charts/$servicename* -C ${HYPERTRACE_HOME}/platform-services/charts/ 
+          if [ $HT_DATA_STORE == "postgres" ]; then
+            helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/charts/$servicename -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/services/$servicename-manifests.yaml
+          else
+            helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services/charts/$servicename -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/services/$servicename-manifests.yaml
+          fi
+        fi
+        cleanup
+
+    elif [[ "$servicename" == "" ]]; then
+      echo "[INFO] creating helm deployment template for hypertrace data services."
+      helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
+      if [ $HT_DATA_STORE == "postgres" ]; then
+        helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/data-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
+      else
+        helm template hypertrace-data-services ${HYPERTRACE_HOME}/data-services -f ${HYPERTRACE_HOME}/data-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
+      fi
+      echo "[INFO] creating helm deployment template for hypertrace platform services."
+      helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
+      if [ $HT_DATA_STORE == "postgres" ]; then
+        helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
+      else
+        helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
+      fi
+      cleanup
     fi
-    echo "[INFO] creating helm deployment template for hypertrace platform services."
-    helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
-    if [ $HT_DATA_STORE == "postgres" ]; then
-      helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/platform-services/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
-    else
-      helm template hypertrace-platform-services ${HYPERTRACE_HOME}/platform-services -f ${HYPERTRACE_HOME}/platform-services/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml --set htEnv=${HT_ENV} > ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
-    fi
-    echo "[INFO] Hypertrace deployment templates created successfully."
+      echo "[INFO] Hypertrace deployment templates created successfully."
     ;;
 
   install)
