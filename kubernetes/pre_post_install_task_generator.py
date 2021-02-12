@@ -13,7 +13,6 @@ def create_post_hook_manifests(source_file, target_file):
     with open (source_file) as manifest_file:
         content = manifest_file.read()
     post_attribute_hooks = re.search(r"#\s(Source)(.*)(?:attribute-service)(.*)(?:config-bootstrapper)(.+)((?:\n.+)+)\n+.+\n.+", content).group()
-    print(post_attribute_hooks)
     post_entity_hooks = re.search(r"#\s(Source)(.*)(?:entity-service)(.*)(?:config-bootstrapper)(.+)((?:\n.+)+)\n+.+", content).group()
     with open(target_file, "w") as post_hooks:
         post_hooks.write(post_attribute_hooks)
