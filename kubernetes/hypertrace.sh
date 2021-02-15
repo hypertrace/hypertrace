@@ -166,7 +166,7 @@ case "$subcommand" in
       helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
       tar -xvf ${HYPERTRACE_HOME}/platform-services/charts/"$OPTION_ARG"* -C ${HYPERTRACE_HOME}/platform-services/charts/
       create_helm_manifests_for_services platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/service-manifests/$OPTION_ARG-manifests.yaml
-      echo "[INFO]" $OPTION_ARG " manifests are generated at: " ${HYPERTRACE_HOME}"/data-services/helm-deployment-templates/service-manifests/"$OPTION_ARG"-manifests.yaml"
+      echo "[INFO]" $OPTION_ARG " manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/service-manifests/"$OPTION_ARG"-manifests.yaml"
       cleanup
     fi
 
@@ -183,7 +183,7 @@ case "$subcommand" in
       create_helm_install_manifests
       echo "[INFO] creating helm deployment template for post-install tasks"
       python pre_post_install_task_generator.py post ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/install-manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml
-      echo "[INFO] post-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/pre-install-tasks/post-install-manifests.yaml"
+      echo "[INFO] post-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml"
     fi
 
     if [[ "$OPTION" == "" ]]; then
