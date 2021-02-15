@@ -183,7 +183,7 @@ case "$subcommand" in
       create_helm_install_manifests
       echo "[INFO] creating helm deployment template for post-install tasks"
       python pre_post_install_task_generator.py post ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/install-manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml
-      echo "[INFO] post-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml"
+      echo "[INFO] post-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/pre-install-tasks/post-install-manifests.yaml"
     fi
 
     if [[ "$OPTION" == "" ]]; then
