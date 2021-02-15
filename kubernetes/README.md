@@ -1,6 +1,7 @@
-## [Deploying Hypertrace with Kubernetes](https://docs.hypertrace.org/getting-started/)
+# [Deploying Hypertrace with Kubernetes](https://docs.hypertrace.org/getting-started/)
 Hypertrace installation script uses Helm Charts to deploy Hypertrace on Kubernetes. If you are already using a tracing system, you can start today. Hypertrace accepts all major data formats: Jaeger, OpenTracing, Zipkin, you name it. Once you complete Installation you can see traces from your already instrumented application in Hypertrace. 
 
+## Using helm
 ### Requirements
 - `Docker Desktop` or `Kubernetes` (version 1.5 and above).
 - Minimum resources: (3 CPUs, 4GB Memory).
@@ -37,16 +38,6 @@ In case of any issue, install hypertrace in debug mode to get more logs and trac
 - Set `HT_ENABLE_DEBUG` to `true` in `./config/hypertrace.properties`
 - Debug `bash -x ./hypertrace.sh install`
 
-### Create deployment template
-- Run `./hypertrace.sh generate-manifests`
-
-| command                                    | description                                                                                                                                                                                     |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ./hypertrace.sh generate-manifests                    | Will create helm template manifests for all services and will store them in `helm-deployment-templates` directory for both `data-services` and `platform-services`                        |
-| ./hypertrace.sh generate-manifests --service service-name       | Wll create helm template manifests for particular service and will store them in `helm-deployment-templates/service-manifests` directory for both `data-services` and `platform-services` |
-| ./hypertrace.sh generate-manifests --deps pre-install-tasks  | Wll create helm template manifests for services with pre-install helm hook and will store them in `helm-deployment-templates/pre-install-tasks` directory for `platform-services`             |
-| ./hypertrace.sh generate-manifests --deps post-install-tasks | Wll create helm template manifests for services with post-install helm hook and will store them in `helm-deployment-templates/post-install-tasks` directory for `platform-services`           |
-
 ### Deployments
 Please follow docs below to get instructions specific to deployment environment.
 - [Docker Desktop](https://docs.hypertrace.org/deployments/docker/)
@@ -72,7 +63,35 @@ Please follow docs below to get instructions specific to deployment environment.
 ### Uninstall
 - Run `./hypertrace.sh uninstall`
 
-### Troubleshooting
+## Using Kuberntetes manifests
+If you are not using helm in your production environment and want to install with kubernetes manifests, we got you covered. 
+
+You can generate manifests using following following commands:
+
+### Create deployment manigests
+- Run `./hypertrace.sh generate-manifests`
+
+| command                                    | description                                                                                                                                                                                     |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ./hypertrace.sh generate-manifests                    | Will create helm template manifests for all services and will store them in `helm-deployment-templates` directory for both `data-services` and `platform-services`                        |
+| ./hypertrace.sh generate-manifests --service service-name       | Wll create helm template manifests for particular service and will store them in `helm-deployment-templates/service-manifests` directory for both `data-services` and `platform-services` |
+| ./hypertrace.sh generate-manifests --deps pre-install-tasks  | Wll create helm template manifests for services with pre-install helm hook and will store them in `helm-deployment-templates/pre-install-tasks` directory for `platform-services`             |
+| ./hypertrace.sh generate-manifests --deps post-install-tasks | Wll create helm template manifests for services with post-install helm hook and will store them in `helm-deployment-templates/post-install-tasks` directory for `platform-services`           |
+
+### Install
+- `git clone https://github.com/hypertrace/hypertrace.git`
+- `cd hypertrace/kubernetes`
+- Update the config properties under `./config/hypertrace.properties` as needed. The default config will work for a `dev` deployment on Docker for Desktop.
+- Run `./hypertrace.sh generate-manifests` which will generate manifests for both data-services and platform services
+- Create Hypertrace namespace using `kubectl create namespace hypertrace`
+- Install data services using `kubectl apply -f data-services/helm-deployment-templates/ -n hypertrace --validate=false`
+- Generate pre-install manifests using `./hypertrace.sh generate-manifests --deps pre-install-tasks` 
+- Install pre-install manifests using `kubectl apply -f platform-services/helm-deployment-templates/pre-install-tasks/ -n hypertrace`
+- Now install platform-service manifests using `kubectl apply -f platform-services/helm-deployment-templates/ -n hypertrace --validate=false` 
+
+You can check if all pods are up and running using `kubectl get pods -n hypertrace`
+
+## Troubleshooting
 If you are facing some issue with installation, you can look [here](https://docs.hypertrace.org/troubleshooting/installation/) for troubleshooting tips. 
 
 ## Verifying Hypertrace UI
