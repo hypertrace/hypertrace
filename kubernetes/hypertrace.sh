@@ -194,7 +194,7 @@ case "$subcommand" in
       echo "[INFO] creating helm deployment template for hypertrace platform services."
       create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
       echo "[INFO] platform services manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/manifests.yaml"
-      clenaup
+      cleanup
     fi
       echo "[INFO] Hypertrace deployment templates created successfully."
     ;;
