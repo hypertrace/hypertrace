@@ -1,0 +1,283 @@
+
+---
+# Source: hypertrace-services/charts/hypertrace-view-generator/templates/view-creation/view-creator-job-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: view-creator-job-config
+  labels:
+    release: hypertrace-platform-services
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+data:
+  application.conf: "pinot.retentionTimeValue = 5\npinot.retentionTimeUnit = DAYS\n
+    \     "
+---
+
+
+# Source: hypertrace-services/charts/hypertrace-view-generator/charts/kafka-topic-creator/templates/kafka-topic-creation-hook.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: view-generation-kafka-topics-creator
+  labels:
+    release: hypertrace-platform-services
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  # Cancel job if it has not finished after 3 minutes
+  activeDeadlineSeconds: 180
+  # Keep the job's pod around for 15 minutes. This will be better once we implement pod crashes and errors
+  # monitoring.
+  ttlSecondsAfterFinished: 900
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: backend-entity-view-events
+          image: solsson/kafka:2.1.0@sha256:ac3f06d87d45c7be727863f31e79fbfdcb9c610b51ba9cf03c75a95d602f15e1
+          command:
+            - "/bin/bash"
+            - "-cex"
+            - |
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "backend-entity-view-events" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "backend-entity-view-events"
+        - name: raw-trace-view-events
+          image: solsson/kafka:2.1.0@sha256:ac3f06d87d45c7be727863f31e79fbfdcb9c610b51ba9cf03c75a95d602f15e1
+          command:
+            - "/bin/bash"
+            - "-cex"
+            - |
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "raw-trace-view-events" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "raw-trace-view-events"
+        - name: raw-service-view-events
+          image: solsson/kafka:2.1.0@sha256:ac3f06d87d45c7be727863f31e79fbfdcb9c610b51ba9cf03c75a95d602f15e1
+          command:
+            - "/bin/bash"
+            - "-cex"
+            - |
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "raw-service-view-events" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "raw-service-view-events"
+        - name: service-call-view-events
+          image: solsson/kafka:2.1.0@sha256:ac3f06d87d45c7be727863f31e79fbfdcb9c610b51ba9cf03c75a95d602f15e1
+          command:
+            - "/bin/bash"
+            - "-cex"
+            - |
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "service-call-view-events" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "service-call-view-events"
+        - name: span-event-view
+          image: solsson/kafka:2.1.0@sha256:ac3f06d87d45c7be727863f31e79fbfdcb9c610b51ba9cf03c75a95d602f15e1
+          command:
+            - "/bin/bash"
+            - "-cex"
+            - |
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "span-event-view" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "span-event-view"
+  backoffLimit: 100
+---
+# Source: hypertrace-services/charts/hypertrace-view-generator/templates/view-creation/view-creator-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: all-views-creation-job
+  labels:
+    release: hypertrace-platform-services
+  annotations:
+    "helm.sh/hook-weight": "10"
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  # Cancel job if it has not finished after 10 minutes
+  activeDeadlineSeconds: 600
+  # Keep the job's pod around for 15 minutes. This will be better once we implement pod crashes and errors
+  # monitoring.
+  ttlSecondsAfterFinished: 900
+  template:
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+        - name: view-creator-job-config
+          configMap:
+            name: view-creator-job-config
+      containers:
+        - name: all-views-creation-job
+          image: "hypertrace/hypertrace-view-creator:0.5.5"
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 1
+              memory: 384Mi
+            requests:
+              cpu: 0.1
+              memory: 384Mi
+          env:
+            - name: SERVICE_NAME
+              value: "all-views"
+            - name: CLUSTER_NAME
+              value: "staging"
+            - name: BOOTSTRAP_CONFIG_URI
+              value: "file:///app/resources/configs"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+          volumeMounts:
+            - name: view-creator-job-config
+              mountPath: /app/resources/configs/common/staging/application.conf
+              subPath: application.conf
+  backoffLimit: 100
+---
+# Source: hypertrace-services/charts/kafka-topic-creator/templates/kafka-topic-creation-hook.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hypertrace-kafka-topics-creator
+  labels:
+    release: hypertrace-platform-services
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  # Cancel job if it has not finished after 3 minutes
+  activeDeadlineSeconds: 180
+  # Keep the job's pod around for 15 minutes. This will be better once we implement pod crashes and errors
+  # monitoring.
+  ttlSecondsAfterFinished: 900
+  template:
+    metadata:
+      labels:
+        app: hypertrace-kafka-topics-creator
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: topic-creator
+          image: hypertrace/kafka:0.1.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/bash"
+            - "-cex"
+            - |
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "jaeger-spans" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "jaeger-spans"
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "raw-spans-from-jaeger-spans" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "raw-spans-from-jaeger-spans"
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "structured-traces-from-raw-spans" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "structured-traces-from-raw-spans"
+              /opt/kafka/bin/kafka-topics.sh --create \
+              --if-not-exists \
+              --zookeeper "zookeeper:2181" \
+              --topic "enriched-structured-traces" \
+              --config "retention.bytes=1073741824" \
+              --config "retention.ms=10800000" \
+              --replication-factor "1" \
+              --partitions "2"
+              /opt/kafka/bin/kafka-configs.sh --alter \
+              --zookeeper "zookeeper:2181" \
+              --add-config \
+              "retention.bytes=1073741824","retention.ms=10800000" \
+              --entity-type topics \
+              --entity-name "enriched-structured-traces"
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 256Mi
+            requests:
+              cpu: "0.2"
+              memory: 256Mi
+          env:
+            - name: KAFKA_HEAP_OPTS
+              value: -Xms128M -Xmx128M
+  backoffLimit: 100
