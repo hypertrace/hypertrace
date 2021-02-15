@@ -1,97 +1,120 @@
-![e2e test](https://github.com/hypertrace/hypertrace/workflows/e2e%20test/badge.svg)
+# [Deploying Hypertrace with Kubernetes](https://docs.hypertrace.org/getting-started/)
+Hypertrace installation script uses Helm Charts to deploy Hypertrace on Kubernetes. If you are already using a tracing system, you can start today. Hypertrace accepts all major data formats: Jaeger, OpenTracing, Zipkin, you name it. Once you complete Installation you can see traces from your already instrumented application in Hypertrace. 
 
-# Hypertrace
-
-Hypertrace is a cloud-native distributed tracing based Observability platform
-that gives visibility into your dev and production distributed systems.
-
-Hypertrace was originally developed by Traceable as a highly scalable
-distributed tracing platform and it is used by Traceable’s cloud-native
-application security platform. Realizing that Hypertrace was a powerful
-standalone tracing and observability platform, Traceable created this open source
-project for the software development community to use in their applications.
-
----
-
-## Quick-start
-
-If you want to see Hypertrace in action, you can quickly start Hypertrace.
-
-### Requirements:
-- [docker-engine](https://docs.docker.com/engine/install/) (17.12.0+)
-- [docker-compose](https://docs.docker.com/compose/install/) (1.21.0 +)
-- **We recommend you change the [Docker Desktop default settings](https://hypertrace-docs.s3.amazonaws.com/docker-desktop.png) from `2 GB` of memory to `4 GB` of memory, and set CPUs to at least 4 CPUs.** 
-`Note`: When reporting problems, please include the output of `docker stats --no-stream`.
+## Using helm
+### Requirements
+- `Docker Desktop` or `Kubernetes` (version 1.5 and above).
+- Minimum resources: (3 CPUs, 4GB Memory).
+- `Helm` (version 3.2.x and above)
+- Bash
+- Python (3.x and above)
 
 
-```bash
-git clone https://github.com/hypertrace/hypertrace.git
-cd hypertrace/docker
-docker-compose pull
-docker-compose up --force-recreate
-```
+### How it works
+Deploys Hypertrace platform in `docker-desktop` or any Kubernetes context, under the namespace `hypertrace`.
 
-This will start all services required for Hypertrace. Once you see the service `Hypertrace-UI` start, you can visit the UI at http://localhost:2020.
+### Ports
 
-If your application is already instrumented to send traces to Zipkin or Jaeger, it will work with Hypertrace.
+Here are the default Hypertrace ports: 
 
-If not, you can try Hypertrace with our sample application by running
+| Port  | Service                 |
+|-------|-------------------------|
+| 2020  | Used by Hypertrace UI   |
+| 14267 | Jaeger thrift collector |
+| 14268 | Jaeger HTTP collector   |
+| 9411  | Zipkin collector        |
 
-```bash
-docker-compose -f docker-compose-zipkin-example.yml up
-```
+In case of any port collisions, users can modify the following properties in helm file (`platform-services/values.yaml`).
+- `ingress.hosts[].paths[].port` -  To change UI port 
+- `hypertrace-oc-collector.service.ports[].targetPort` - To change collector ports
 
-the sample app will run at http://localhost:8081. You should request the URL a few times to generate some sample trace requests!
+### Install
+- `git clone https://github.com/hypertrace/hypertrace.git`
+- `cd hypertrace/kubernetes`
+- Update the config properties under `./config/hypertrace.properties` as needed. The default config will work for a `dev` deployment on Docker for Desktop.
+- Run `./hypertrace.sh install`
 
-## Deploy in production with Kubernetes
+In case of any issue, install hypertrace in debug mode to get more logs and traces to identify the rootcause.
+- Set `HT_ENABLE_DEBUG` to `true` in `./config/hypertrace.properties`
+- Debug `bash -x ./hypertrace.sh install`
 
-We support helm charts to simplify deploying Hypertrace in Kubernetes environment, maybe on your on-premise server or cloud instance! 
+### Deployments
+Please follow docs below to get instructions specific to deployment environment.
+- [Docker Desktop](https://docs.hypertrace.org/deployments/docker/)
+- [Minikube](https://docs.hypertrace.org/deployments/minikube/)
+- [Microk8s](https://docs.hypertrace.org/deployments/microk8s/)
+- [AWS](https://docs.hypertrace.org/deployments/aws/)
+- [GCP](https://docs.hypertrace.org/deployments/gcp/)
+- [Azure](https://docs.hypertrace.org/deployments/Azure/)
 
-Please refer to the [deployments section](https://docs.hypertrace.org/deployments/) in our documentation which lists the steps to deploy Hypertrace on different Kubernetes flavors across different operating systems and cloud providers. You can find the Helm Charts and installation scripts with more details [here](https://github.com/hypertrace/hypertrace/tree/main/kubernetes).
+### Configuration
 
-`Note:` We have created `hypertrace-ingester` and `hypertrace-service` to simplify local deployment and quick-start with Hypertrace. As of now, we don't support them for production because of some limitations and some unreliabiliy with scaling. So, we will encourage you to deploy individual components for staging as well as production deployments. 
+| Key                  | Description                                                                                                   | Allowed values       |
+|----------------------|---------------------------------------------------------------------------------------------------------------|----------------------|
+| `HT_PROFILE`         | Profile is size of your deployment. (Memory, No. of CPU's, etc.).                                             | dev, mini, standard |
+| `HT_ENV`             | Platform you are deploying Hypertrace on.                                                                     | aws, gcp, docker-desktop, minikube, microk8s      |
+| `HT_KUBE_CONTEXT`    | Kubernetes context to deploy Hypertrace.                                                                      | specific to platform |
+| `HT_DATA_STORE`      | Data store to be used with Hypertrace deployment.                                                             | mongo, postgres      |
+| `HT_KUBE_NAMESPACE`  | Kubernetes namespace to deploy Hypertrace.                                                                    | hypertrace           |
+| `HT_ENABLE_DEBUG`    | In case of any issue, install Hypertrace in debug mode to get more logs and traces to identify the rootcause. | true, false          |
+| `HT_INSTALL_TIMEOUT` | Helm install wait timeout.                                                                                    | in minutes           |
 
-## Community
 
-[Join the Hypertrace Workspace](https://www.hypertrace.org/get-started) on Slack to connect with other users, contributors and people behind Hypertrace.
+### Uninstall
+- Run `./hypertrace.sh uninstall`
 
-## Documentation
+## Using Kuberntetes manifests
+If you are not using helm in your production environment and want to install with kubernetes manifests, we got you covered. 
 
-Check out [Hypertrace documentation](https://docs.hypertrace.org) to learn more about Hypetrace features, it's architecture and other insights!
+You can generate manifests using following following commands:
 
-## Docker images
+### Create deployment manigests
+- Run `./hypertrace.sh generate-manifests`
 
-Released versions of Docker images for various Hypertrace components are available on [dockerhub](https://hub.docker.com/u/hypertrace).
+| command                                    | description                                                                                                                                                                                     |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ./hypertrace.sh generate-manifests                    | Will create helm template manifests for all services and will store them in `helm-deployment-templates` directory for both `data-services` and `platform-services`                        |
+| ./hypertrace.sh generate-manifests --service service-name       | Wll create helm template manifests for particular service and will store them in `helm-deployment-templates/service-manifests` directory for both `data-services` and `platform-services` |
+| ./hypertrace.sh generate-manifests --deps pre-install-tasks  | Wll create helm template manifests for services with pre-install helm hook and will store them in `helm-deployment-templates/pre-install-tasks` directory for `platform-services`             |
+| ./hypertrace.sh generate-manifests --deps post-install-tasks | Wll create helm template manifests for services with post-install helm hook and will store them in `helm-deployment-templates/post-install-tasks` directory for `platform-services`           |
 
-## Related Repositories
+### Install
+- `git clone https://github.com/hypertrace/hypertrace.git`
+- `cd hypertrace/kubernetes`
+- Update the config properties under `./config/hypertrace.properties` as needed. The default config will work for a `dev` deployment on Docker for Desktop.
+- Run `./hypertrace.sh generate-manifests` which will generate manifests for both data-services and platform services
+- Create Hypertrace namespace using `kubectl create namespace hypertrace`
+- Install data services using `kubectl apply -f data-services/helm-deployment-templates/ -n hypertrace --validate=false`
+- Generate pre-install manifests using `./hypertrace.sh generate-manifests --deps pre-install-tasks` 
+- Install pre-install manifests using `kubectl apply -f platform-services/helm-deployment-templates/pre-install-tasks/ -n hypertrace`
+- Now install platform-service manifests using `kubectl apply -f platform-services/helm-deployment-templates/ -n hypertrace --validate=false` 
 
-### Data Ingestion Pipeline
+You can check if all pods are up and running using `kubectl get pods -n hypertrace`
 
-* [Hypertrace Ingester](https://github.com/hypertrace/hypertrace-ingester)
+## Troubleshooting
+If you are facing some issue with installation, you can look [here](https://docs.hypertrace.org/troubleshooting/installation/) for troubleshooting tips. 
 
-### Query Layer Services
+## Verifying Hypertrace UI
 
-* [GraphQL](https://github.com/hypertrace/hypertrace-graphql)
-* [Gateway Service](https://github.com/hypertrace/gateway-service)
-* [Query Service](https://github.com/hypertrace/query-service)
-* [Entity Service](https://github.com/hypertrace/entity-service)
-* [Attribute Service](https://github.com/hypertrace/attribute-service)
-* [Config Service](https://github.com/hypertrace/config-service)
+Once your Hypertrace installation is successful you can navigate to`http://localhost:2020` or IP address for hypertrace-ui service to access the Hypertarce UI. It looks something like this!
 
-### UI
+| ![space-1.jpg](https://s3.amazonaws.com/hypertrace-docs/dashboard-1.png) | 
+|:--:| 
+| *Hypertrace Dashboard* |
 
-* [Hypertrace UI](https://github.com/hypertrace/hypertrace-ui)
-* [Hyperdash](https://github.com/hypertrace/hyperdash)
-* [Hyperdash Angular](https://github.com/hypertrace/hyperdash-angular)
+## Sending data to Hypertrace
+Now you know things are running, let's get some data into Hypertrace. If your applications already send trace data, you can configure them to send data to Hypertrace using the default ports for Jaeger, OpenCensus or Zipkin. If you are just getting started, try out our [demo app](https://docs.hypertrace.org/sample-app). Once you have data in Hypertrace, you are ready to [explore its advanced features](https://docs.hypertrace.org/platform-ui). 
 
-### Data Service Deployment
+## Cutting release for helm chart updates locally
+- Genereate PR by running workflow here: https://github.com/hypertrace/hypertrace/actions?query=workflow%3A%22get+latest+helm+charts%22
+- Click on `Run workflow`
+- git checkout `update-helm-charts`
+- Run e2e tests using
+    - `cd kubernetes`
+    - `./hypertrace-e2e-test.sh`
+- This will install Hypertrace, run e2 tests and then uninstall hypertrace. 
+- In case if you run the above script with minikube, update `./config/hypertrace.properties` file 
+  HE_ENV and HT_KUBE_CONTEXT with `minikube`
 
-* [Kafka helm chart](https://github.com/hypertrace/kafka)
-* [Pinot helm chart](https://github.com/hypertrace/pinot)
-* [MongoDB helm chart](https://github.com/hypertrace/mongodb)
-* [PostgreSQL helm chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
-
-## License
-
-Hypertrace follows the open core model where "Hypertrace core" (or simply Core) is made available under the Apache 2.0 license, which has distributed trace ingestion and exploration features. The Services, Endpoints, Backends and Service Graph features of Hypertrace Community Edition are made available under the
-[Traceable Community license](LICENSE).
+`Note:` We have workflow (`./github/workflows/hypertrace-release.yml`) which runs on self hosted-runner 
+that will be enabled in future.
