@@ -121,7 +121,6 @@ elif [ "$#" -ne 1 ]; then
 fi
 
 function create_helm_manifests_for_services(){
-  helm dependency update ${HYPERTRACE_HOME}/$1 ${HELM_FLAGS}
   if [ $HT_DATA_STORE == "postgres" ]; then
       helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
   else
@@ -148,6 +147,7 @@ case "$subcommand" in
     if [[ "$OPTION" == "--service" && $( echo "${OPTION_ARG}" |  egrep -c "^(kafka|zookeeper|pinot|schema-registry|mongo|postgres)$" || :;) -ne 0 ]]; then
       mkdir ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/service-manifests/ 
       echo "[INFO] creating helm deployment template for" $OPTION_ARG
+      helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
       tar -xvf ${HYPERTRACE_HOME}/data-services/charts/"$OPTION_ARG"* -C ${HYPERTRACE_HOME}/data-services/charts/
       create_helm_manifests_for_services data-services ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/service-manifests/$OPTION_ARG-manifests.yaml
       echo "[INFO]" $OPTION_ARG " manifests are generated at: " ${HYPERTRACE_HOME}"/data-services/helm-deployment-templates/service-manifests/"$OPTION_ARG"-manifests.yaml"
@@ -155,6 +155,7 @@ case "$subcommand" in
     elif [[ "$OPTION" == "--service" && $( echo "${OPTION_ARG}" |  egrep -c "^(kafka|zookeeper|pinot|schema-registry|mongo|postgres)$" || :;) -eq 0 ]]; then
       mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/service-manifests/
       echo "[INFO] creating helm deployment template for" $OPTION_ARG
+      helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
       tar -xvf ${HYPERTRACE_HOME}/platform-services/charts/"$OPTION_ARG"* -C ${HYPERTRACE_HOME}/platform-services/charts/
       create_helm_manifests_for_services platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/service-manifests/$OPTION_ARG-manifests.yaml
       echo "[INFO]" $OPTION_ARG " manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/service-manifests/"$OPTION_ARG"-manifests.yaml"
