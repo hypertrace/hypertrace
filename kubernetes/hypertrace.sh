@@ -123,18 +123,18 @@ fi
 function create_helm_manifests_for_services(){
   helm dependency update ${HYPERTRACE_HOME}/$1 ${HELM_FLAGS}
   if [ $HT_DATA_STORE == "postgres" ]; then
-      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml > $2
+      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
   else
-      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml > $2
+      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
   fi
 }
 
 function create_helm_templates(){
   helm dependency update ${HYPERTRACE_HOME}/$1 ${HELM_FLAGS}
   if [ $HT_DATA_STORE == "postgres" ]; then
-    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml > $2
+    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
   else
-    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml > $2
+    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
   fi
 }
 subcommand=$1; shift
