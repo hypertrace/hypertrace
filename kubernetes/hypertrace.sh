@@ -169,7 +169,6 @@ case "$subcommand" in
       python pre_post_install_task_generator.py pre ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml
       echo "[INFO] pre-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml"
     elif [[ "$OPTION" == "--deps" && "$OPTION_ARG" == "post-install-tasks" ]]; then
-      helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
       mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/
       create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
       echo "[INFO] creating helm deployment template for post-install tasks"
