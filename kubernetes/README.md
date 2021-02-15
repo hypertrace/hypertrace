@@ -43,9 +43,9 @@ In case of any issue, install hypertrace in debug mode to get more logs and trac
 | command                                    | description                                                                                                                                                                                     |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ./hypertrace.sh generate-manifests                    | Will create helm template manifests for all services and will store them in `helm-deployment-templates` directory for both `data-services` and `platform-services`                        |
-| ./hypertrace.sh generate-manifests service-name       | Wll create helm template manifests for particular service and will store them in `helm-deployment-templates/service-manifests` directory for both `data-services` and `platform-services` |
-| ./hypertrace.sh generate-manifests pre-install-tasks  | Wll create helm template manifests for services with pre-install helm hook and will store them in `helm-deployment-templates/pre-install-tasks` directory for `platform-services`             |
-| ./hypertrace.sh generate-manifests post-install-tasks | Wll create helm template manifests for services with post-install helm hook and will store them in `helm-deployment-templates/post-install-tasks` directory for `platform-services`           |
+| ./hypertrace.sh generate-manifests --service service-name       | Wll create helm template manifests for particular service and will store them in `helm-deployment-templates/service-manifests` directory for both `data-services` and `platform-services` |
+| ./hypertrace.sh generate-manifests --deps pre-install-tasks  | Wll create helm template manifests for services with pre-install helm hook and will store them in `helm-deployment-templates/pre-install-tasks` directory for `platform-services`             |
+| ./hypertrace.sh generate-manifests --deps post-install-tasks | Wll create helm template manifests for services with post-install helm hook and will store them in `helm-deployment-templates/post-install-tasks` directory for `platform-services`           |
 
 ### Deployments
 Please follow docs below to get instructions specific to deployment environment.
