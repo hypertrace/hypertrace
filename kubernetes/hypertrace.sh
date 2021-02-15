@@ -40,13 +40,41 @@ error_report() {
 trap 'error_report ${LINENO} ${BASH_COMMAND}' ERR
 
 function usage() {
-    echo "usage: $script {install|uninstall} [option]"
+    echo "usage: $script {install|uninstall|generate-manifests} [option]"
     echo " "
-    echo "available options:"
+    echo "available options for install:"
     echo " "
     echo "--clean             removes previous deployments of Hypertrace and do clean install"
+    echo "available options for generate-manifests:"
+    echo " "
+    echo "servicename          enter name of the service for which you want to generate manifests"
+    echo " "
+    echo "pre-install-tasks    generates manifests for services with pre-install helm hook"
+    echo " "
+    echo "post-install-tasks    generates manifests for services with post-install helm hook"
 
     exit 1
+}
+
+function cleanup(){
+    echo "[INFO] cleaning up any helm temporary working directory"
+    rm -rf ${HYPERTRACE_HOME}/data-services/charts
+    rm -rf ${HYPERTRACE_HOME}/data-services/tmpcharts
+    rm -rf ${HYPERTRACE_HOME}/data-services/Chart.lock
+    rm -rf ${HYPERTRACE_HOME}/platform-services/charts
+    rm -rf ${HYPERTRACE_HOME}/platform-services/tmpcharts
+    rm -rf ${HYPERTRACE_HOME}/platform-services/Chart.lock
+}
+
+function cleanup_manifests(){
+  echo "[INFO] removing old manifest files"
+  rm -rf ${HYPERTRACE_HOME}/data-services/helm-deployment-templates
+  rm -rf ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates
+}
+
+function create_manifest_directories(){
+    mkdir ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/
+    mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/
 }
 
 HYPERTRACE_HOME="`dirname \"$0\"`"
@@ -76,22 +104,92 @@ if [[ "$HT_ENABLE_DEBUG" == "true" ]]; then
   KUBE_FLAGS="$KUBE_FLAGS --v=4"
 fi
 
+OPTION=""
+OPTION_ARG=""
+
 if [ "$#" -gt 1 ]; then
   if [[ $2 == "--clean" ]]; then
       clean
-    else
-      usage
-  fi
+  else
+      OPTION=$2
+      OPTION_ARG=$3
+    fi
 elif [ "$#" -ne 1 ]; then
     echo "[ERROR] Illegal number of parameters"
     echo "-------------------------------------"
     usage
 fi
 
+function create_helm_manifests_for_services(){
+  if [ $HT_DATA_STORE == "postgres" ]; then
+      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+  else
+      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+  fi
+}
 
+function create_helm_templates(){
+  helm dependency update ${HYPERTRACE_HOME}/$1 ${HELM_FLAGS}
+  if [ $HT_DATA_STORE == "postgres" ]; then
+    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+  else
+    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+  fi
+}
 subcommand=$1; shift
 
 case "$subcommand" in
+  generate-manifests)
+    EXIT_CODE=0;
+    cleanup
+    cleanup_manifests
+    create_manifest_directories
+    if [[ "$OPTION" == "--service" && $( echo "${OPTION_ARG}" |  egrep -c "^(kafka|zookeeper|pinot|schema-registry|mongo|postgres)$" || :;) -ne 0 ]]; then
+      mkdir ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/service-manifests/ 
+      echo "[INFO] creating helm deployment template for" $OPTION_ARG
+      helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
+      tar -xvf ${HYPERTRACE_HOME}/data-services/charts/"$OPTION_ARG"* -C ${HYPERTRACE_HOME}/data-services/charts/
+      create_helm_manifests_for_services data-services ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/service-manifests/$OPTION_ARG-manifests.yaml
+      echo "[INFO]" $OPTION_ARG " manifests are generated at: " ${HYPERTRACE_HOME}"/data-services/helm-deployment-templates/service-manifests/"$OPTION_ARG"-manifests.yaml"
+      cleanup
+    elif [[ "$OPTION" == "--service" && $( echo "${OPTION_ARG}" |  egrep -c "^(kafka|zookeeper|pinot|schema-registry|mongo|postgres)$" || :;) -eq 0 ]]; then
+      mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/service-manifests/
+      echo "[INFO] creating helm deployment template for" $OPTION_ARG
+      helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
+      tar -xvf ${HYPERTRACE_HOME}/platform-services/charts/"$OPTION_ARG"* -C ${HYPERTRACE_HOME}/platform-services/charts/
+      create_helm_manifests_for_services platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/service-manifests/$OPTION_ARG-manifests.yaml
+      echo "[INFO]" $OPTION_ARG " manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/service-manifests/"$OPTION_ARG"-manifests.yaml"
+      cleanup
+    fi
+
+    if [[ "$OPTION" == "--deps" && "$OPTION_ARG" == "pre-install-tasks" ]]; then
+      mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/pre-install-tasks/
+      create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
+      echo "[INFO] creating helm deployment template for pre-install tasks"
+      python pre_post_install_task_generator.py pre ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml
+      echo "[INFO] pre-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml"
+    elif [[ "$OPTION" == "--deps" && "$OPTION_ARG" == "post-install-tasks" ]]; then
+      helm dependency update ${HYPERTRACE_HOME}/platform-services ${HELM_FLAGS}
+      mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/
+      create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
+      echo "[INFO] creating helm deployment template for post-install tasks"
+      python pre_post_install_task_generator.py post ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml
+      echo "[INFO] post-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml"
+    fi
+
+    if [[ "$OPTION" == "" ]]; then
+      echo "[INFO] creating helm deployment template for hypertrace data services."
+      create_helm_templates data-services ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
+      echo "[INFO] data services manifests are generated at: " ${HYPERTRACE_HOME}"/data-services/helm-deployment-templates/manifests.yaml"
+      echo "[INFO] creating helm deployment template for hypertrace platform services."
+      echo "[INFO] creating helm deployment template for hypertrace platform services."
+      create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
+      echo "[INFO] platform services manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/manifests.yaml"
+      cleanup
+    fi
+      echo "[INFO] Hypertrace deployment templates created successfully."
+    ;;
+      
   install)
     EXIT_CODE=0;
 
@@ -104,16 +202,7 @@ case "$subcommand" in
       kubectl create ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS}
     fi
 
-    
-
-    echo "[INFO] cleaning up any helm temporary working directory"
-    rm -rf ${HYPERTRACE_HOME}/data-services/charts
-    rm -rf ${HYPERTRACE_HOME}/data-services/tmpcharts
-    rm -rf ${HYPERTRACE_HOME}/data-services/Chart.lock
-    rm -rf ${HYPERTRACE_HOME}/platform-services/charts
-    rm -rf ${HYPERTRACE_HOME}/platform-services/tmpcharts
-    rm -rf ${HYPERTRACE_HOME}/platform-services/Chart.lock
-
+    cleanup
     echo "[INFO] installing hypertrace data services. namespace: ${HT_KUBE_NAMESPACE}, context: ${HT_KUBE_CONTEXT}"
     helm dependency update ${HYPERTRACE_HOME}/data-services ${HELM_FLAGS}
     if [ $HT_DATA_STORE == "postgres" ]; then
@@ -139,6 +228,7 @@ case "$subcommand" in
         case $yn in
             Yes )
               clean
+              cleanup
               kubectl delete ns ${HT_KUBE_NAMESPACE} ${KUBE_FLAGS}
               echo "[INFO] Uninstall successful."
               break;;

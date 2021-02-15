@@ -6,6 +6,7 @@ Hypertrace installation script uses Helm Charts to deploy Hypertrace on Kubernet
 - Minimum resources: (3 CPUs, 4GB Memory).
 - `Helm` (version 3.2.x and above)
 - Bash
+- Python (3.x and above)
 
 
 ### How it works
@@ -35,6 +36,16 @@ In case of any port collisions, users can modify the following properties in hel
 In case of any issue, install hypertrace in debug mode to get more logs and traces to identify the rootcause.
 - Set `HT_ENABLE_DEBUG` to `true` in `./config/hypertrace.properties`
 - Debug `bash -x ./hypertrace.sh install`
+
+### Create deployment template
+- Run `./hypertrace.sh generate-manifests`
+
+| command                                    | description                                                                                                                                                                                     |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ./hypertrace.sh generate-manifests                    | Will create helm template manifests for all services and will store them in `helm-deployment-templates` directory for both `data-services` and `platform-services`                        |
+| ./hypertrace.sh generate-manifests --service service-name       | Wll create helm template manifests for particular service and will store them in `helm-deployment-templates/service-manifests` directory for both `data-services` and `platform-services` |
+| ./hypertrace.sh generate-manifests --deps pre-install-tasks  | Wll create helm template manifests for services with pre-install helm hook and will store them in `helm-deployment-templates/pre-install-tasks` directory for `platform-services`             |
+| ./hypertrace.sh generate-manifests --deps post-install-tasks | Wll create helm template manifests for services with post-install helm hook and will store them in `helm-deployment-templates/post-install-tasks` directory for `platform-services`           |
 
 ### Deployments
 Please follow docs below to get instructions specific to deployment environment.
