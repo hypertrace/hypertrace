@@ -85,8 +85,7 @@ You can generate manifests using following following commands:
 - Run `./hypertrace.sh generate-manifests` which will generate manifests for both data-services and platform services
 - Create Hypertrace namespace using `kubectl create namespace hypertrace`
 - Install data services using `kubectl apply -f data-services/helm-deployment-templates/ -n hypertrace --validate=false`
-- Generate pre-install manifests using `./hypertrace.sh generate-manifests --deps pre-install-tasks` 
-- Install pre-install manifests using `kubectl apply -f platform-services/helm-deployment-templates/pre-install-tasks/ -n hypertrace`
+- Once all data-service pods are up go to next step. 
 - Now install platform-service manifests using `kubectl apply -f platform-services/helm-deployment-templates/ -n hypertrace --validate=false` 
 
 You can check if all pods are up and running using `kubectl get pods -n hypertrace`
