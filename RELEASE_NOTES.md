@@ -1,44 +1,18 @@
 #### `Hypertrace deployment` 
-- fix: updated manifest creation regex to work with merged services and updated docs [#197](https://github.com/hypertrace/hypertrace/pull/197)
-- feat: adds option to create deployment template in helm installation script [#192](https://github.com/hypertrace/hypertrace/pull/192)
-- feat: enable running query services in `merged` mode [#190](https://github.com/hypertrace/hypertrace/pull/190)
-- fix: cleanup package.json for ui e2e tests [#191](https://github.com/hypertrace/hypertrace/pull/191)
-- Updates helm charts [#188](https://github.com/hypertrace/hypertrace/pull/188)
-- fixes: adds e2e test script to enhance local testing & workflow for self-hosted runner [#189](https://github.com/hypertrace/hypertrace/pull/189)
-- feat: add macro services for query layer [#185](https://github.com/hypertrace/hypertrace/pull/185)
-- Updated dashboards and readme with new metrics [#187](https://github.com/hypertrace/hypertrace/pull/187)
-- chore: updating release notes format and slack bot [#184](https://github.com/hypertrace/hypertrace/pull/184)
-#### `Attribute service`  [(0.9.3 .. 0.9.10)](https://github.com/hypertrace/attribute-service/releases)
-- chore: bump doc-store version to include postgres impl of exits, not-exits and neq [#73](https://github.com/hypertrace/attribute-service/pull/73)
-- fix: uses checksum action from github-actions repository [#70](https://github.com/hypertrace/attribute-service/pull/70)
-- docs: updates architecture diagram and test instructions in README [#72](https://github.com/hypertrace/attribute-service/pull/72)
-- chore: bump doc-store version to include SQLi fix [#71](https://github.com/hypertrace/attribute-service/pull/71)
-- Automates release note generation [#68](https://github.com/hypertrace/attribute-service/pull/68)
-- cleanup workflow and fixes codecov for integration test [#67](https://github.com/hypertrace/attribute-service/pull/67)
-- uses new custom actions for GHA workflows [#66](https://github.com/hypertrace/attribute-service/pull/66)
-- updates service framework version to address security concern [#63](https://github.com/hypertrace/attribute-service/pull/63)
+
+#### `Attribute service`  [(0.9.10 .. 0.9.10)](https://github.com/hypertrace/attribute-service/releases)
+
 #### `Gateway service`  [(0.1.55 .. 0.1.55)](https://github.com/hypertrace/gateway-service/releases)
 
 #### `Query service`  [(0.5.4 .. 0.5.4)](https://github.com/hypertrace/query-service/releases)
 
-#### `Entity service`  [(0.5.7 .. 0.5.10)](https://github.com/hypertrace/entity-service/releases)
-- chore: bump doc-store version to include postgres impl of exits, non-exists and NEQ [#85](https://github.com/hypertrace/entity-service/pull/85)
-- refactor: allow extra identifying attributes on entity upsert [#84](https://github.com/hypertrace/entity-service/pull/84)
-- fix:addresses not_in filter query for array type field - attributes.lables [#83](https://github.com/hypertrace/entity-service/pull/83)
-- docs: updates architecture diagram and test instructions in README [#82](https://github.com/hypertrace/entity-service/pull/82)
-- chore: bump version of netty codec and proxy libs to fix the vulnerability reported by snyk [#81](https://github.com/hypertrace/entity-service/pull/81)
-- chore: bump doc-store version to include SQLi fix [#80](https://github.com/hypertrace/entity-service/pull/80)
-- fix: uses checksum action from github-actions repository [#79](https://github.com/hypertrace/entity-service/pull/79)
-#### `Config service`  [(0.1.1 .. 0.1.2)](https://github.com/hypertrace/config-service/releases)
-- chore: bump doc-store version to include postgres impl of exits, not-exits and neq [#23](https://github.com/hypertrace/config-service/pull/23)
-- docs: updates architecture diagram and added details in README [#22](https://github.com/hypertrace/config-service/pull/22)
-- chore: bump doc-store version to include SQLi fix [#21](https://github.com/hypertrace/config-service/pull/21)
-- fix: uses checksum action from github-actions repository [#20](https://github.com/hypertrace/config-service/pull/20)
-- Upsert overriding with the new config to be upserted [#19](https://github.com/hypertrace/config-service/pull/19)
-- test: update mock generic config service to support default [#18](https://github.com/hypertrace/config-service/pull/18)
+#### `Entity service`  [(0.5.10 .. 0.5.10)](https://github.com/hypertrace/entity-service/releases)
+
+#### `Config service`  [(0.1.2 .. 0.1.2)](https://github.com/hypertrace/config-service/releases)
+
 #### `Hypertrace GraphQL`  [( 0.7.3 .. 0.7.3)](https://github.com/hypertrace/hypertrace-graphql/releases)
 
 #### `Hypertrace UI`  [( 0.69.3 .. 0.69.3)](https://github.com/hypertrace/hypertrace-ui/releases)
 
-#### `Hypertrace ingester`  [( 0.5.5 .. 0.5.6)](https://github.com/hypertrace/hypertrace-ingester/releases)
-- Limit the number of spans in a trace [#128](https://github.com/hypertrace/hypertrace-ingester/pull/128)
+#### `Hypertrace ingester`  [( 0.5.6 .. 0.5.6)](https://github.com/hypertrace/hypertrace-ingester/releases)
+
