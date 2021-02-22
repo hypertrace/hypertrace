@@ -68,7 +68,7 @@ If you are not using helm in your production environment and want to install wit
 
 You can generate manifests using following following commands:
 
-### Create deployment manigests
+### Create deployment manifests
 - Run `./hypertrace.sh generate-manifests`
 
 | command                                    | description                                                                                                                                                                                     |
