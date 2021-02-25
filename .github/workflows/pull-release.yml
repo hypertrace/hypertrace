@@ -41,10 +41,10 @@ jobs:
           repository: hypertrace/mongodb
 
       - name: Get latest charts for oc-collector
-        id: opencensus-service
+        id: hypertrace-collector
         uses: oprypin/find-latest-tag@v1
         with:
-          repository: hypertrace/opencensus-service
+          repository: hypertrace/hypertrace-collector
 
       - name: Get latest charts for ingester
         id: hypertrace-ingester
@@ -129,7 +129,7 @@ jobs:
           chmod +x .github/workflows/scripts/create-charts.sh
           ./.github/workflows/scripts/create-charts.sh platform-services
         env: 
-          hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
+          hypertrace_collector_version : ${{ steps.hypertrace-collector.outputs.tag }}
           hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
           hypertrace_ui_version: ${{ steps.hypertrace-ui.outputs.tag }}
           hypertrace_graphql_version: ${{ steps.hypertrace-graphql.outputs.tag }}
@@ -144,7 +144,7 @@ jobs:
         run: |
           ./.github/workflows/scripts/create-charts.sh release-notes
         env: 
-          hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
+          hypertrace_collector_version : ${{ steps.hypertrace-collector.outputs.tag }}
           hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
           hypertrace_ui_version: ${{ steps.hypertrace-ui.outputs.tag }}
           hypertrace_graphql_version: ${{ steps.hypertrace-graphql.outputs.tag }}
@@ -159,7 +159,7 @@ jobs:
         run: |
           ./.github/workflows/scripts/create-charts.sh compatibility-matrix 
         env:
-          hypertrace_oc_collector_version : ${{ steps.opencensus-service.outputs.tag }}
+          hypertrace_collector_version : ${{ steps.hypertrace-collector.outputs.tag }}
           hypertrace_ingester_version: ${{ steps.hypertrace-ingester.outputs.tag }}
           hypertrace_ui_version: ${{ steps.hypertrace-ui.outputs.tag }}
           hypertrace_graphql_version: ${{ steps.hypertrace-graphql.outputs.tag }}
