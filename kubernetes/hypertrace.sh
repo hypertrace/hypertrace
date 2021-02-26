@@ -122,18 +122,18 @@ fi
 
 function create_helm_manifests_for_services(){
   if [ $HT_DATA_STORE == "postgres" ]; then
-      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n ${HT_KUBE_NAMESPACE} --set htEnv=${HT_ENV} > $2
   else
-      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+      helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1/charts/$OPTION_ARG -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n ${HT_KUBE_NAMESPACE} --set htEnv=${HT_ENV} > $2
   fi
 }
 
 function create_helm_templates(){
   helm dependency update ${HYPERTRACE_HOME}/$1 ${HELM_FLAGS}
   if [ $HT_DATA_STORE == "postgres" ]; then
-    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/$1/postgres/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n ${HT_KUBE_NAMESPACE} --set htEnv=${HT_ENV} > $2
   else
-    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n hypertrace --set htEnv=${HT_ENV} > $2
+    helm install --dry-run hypertrace-$1 ${HYPERTRACE_HOME}/$1 -f ${HYPERTRACE_HOME}/$1/values.yaml -f ${HYPERTRACE_HOME}/clusters/$HT_PROFILE/values.yaml -n ${HT_KUBE_NAMESPACE} --set htEnv=${HT_ENV} > $2
   fi
 }
 subcommand=$1; shift
@@ -166,13 +166,13 @@ case "$subcommand" in
       mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/pre-install-tasks/
       create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
       echo "[INFO] creating helm deployment template for pre-install tasks"
-      python pre_post_install_task_generator.py pre ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml
+      python pre_post_install_task_generator.py pre-install ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml
       echo "[INFO] pre-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/pre-install-tasks/pre-install-manifests.yaml"
     elif [[ "$OPTION" == "--deps" && "$OPTION_ARG" == "post-install-tasks" ]]; then
       mkdir ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/
       create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
       echo "[INFO] creating helm deployment template for post-install tasks"
-      python pre_post_install_task_generator.py post ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml
+      python pre_post_install_task_generator.py post-install ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml
       echo "[INFO] post-install task manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/post-install-tasks/post-install-manifests.yaml"
     fi
 
@@ -180,7 +180,6 @@ case "$subcommand" in
       echo "[INFO] creating helm deployment template for hypertrace data services."
       create_helm_templates data-services ${HYPERTRACE_HOME}/data-services/helm-deployment-templates/manifests.yaml
       echo "[INFO] data services manifests are generated at: " ${HYPERTRACE_HOME}"/data-services/helm-deployment-templates/manifests.yaml"
-      echo "[INFO] creating helm deployment template for hypertrace platform services."
       echo "[INFO] creating helm deployment template for hypertrace platform services."
       create_helm_templates platform-services ${HYPERTRACE_HOME}/platform-services/helm-deployment-templates/manifests.yaml
       echo "[INFO] platform services manifests are generated at: " ${HYPERTRACE_HOME}"/platform-services/helm-deployment-templates/manifests.yaml"
