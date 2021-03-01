@@ -26,69 +26,33 @@ configServicePort: &configServicePort 9012
 gatewayServiceHost: &gatewayServiceHost hypertrace-data-query-service
 gatewayServicePort: &gatewayServicePort 9001
 
-hypertrace-oc-collector:
-  resources:
-    requests:
-      cpu: "0.5"
-      memory: "256Mi"
-    limits:
-      cpu: "1"
-      memory: "256Mi"
-  containerPorts:
-    - name: grpc-opencensus
-      containerPort: 55678
-    - name: http-jaeger
-      containerPort: 14268
-    - name: jaeger-tchannel
-      containerPort: 14267
-    - name: zipkin
-      containerPort: 9411
+hypertrace-collector:
   service:
     type: LoadBalancer
-    ports:
-      - name: grpc-opencensus
-        port: 55678
-        targetPort: 55678
-        protocol: TCP
-      - name: http-jaeger
-        port: 14268
-        targetPort: 14268
-        protocol: TCP
-      - name: jaeger-tchannel
-        port: 14267
-        targetPort: 14267
-        protocol: TCP
-      - name: zipkin
-        port: 9411
-        targetPort: 9411
-        protocol: TCP
+
   configMap:
-    name: hypertrace-oc-collector-conf
     data:
-      log-level: INFO
+      extensions:
+        health_check: {}
       receivers:
-        opencensus:
-          # keepalive settings can help load balancing, see receiver/README.md for more info.
-          keepalive:
-            server-parameters:
-              max-connection-age: 120s
-              max-connection-age-grace: 30s
-        jaeger: {}
-        zipkin: {}
-      exporters:
-        kafka:
-          brokers: ["bootstrap:9092"]
-          topic: "jaeger-spans"
-  kafka-topic-creator:
-    enabled: true
-    kafka:
-      topics:
-        - name: jaeger-spans
-          replicationFactor: 3
-          partitions: 8
-          configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+        otlp:
+          protocols:
+            grpc: 
+              endpoint: "0.0.0.0:4317"
+            http: 
+              endpoint: "0.0.0.0:55681"
+        opencensus: 
+          endpoint: "0.0.0.0:55678"
+        zipkin: 
+          endpoint: "0.0.0.0:9411"
+        jaeger:
+          protocols:
+            grpc: 
+              endpoint: "0.0.0.0:14250"
+            thrift_http: 
+              endpoint: "0.0.0.0:14268"
+      processors:
+        batch: {}
 
 span-normalizer:
   resources:

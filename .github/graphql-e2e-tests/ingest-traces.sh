@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COLLECTOR_IP="$(kubectl get service hypertrace-oc-collector -n hypertrace | tr -s " " | cut -d' ' -f4 | grep -v "EXTERNAL-IP")"
+COLLECTOR_IP="$(kubectl get service hypertrace-collector -n hypertrace | tr -s " " | cut -d' ' -f4 | grep -v "EXTERNAL-IP")"
 
 if [[ "$OSTYPE" == "darwin"* && "$COLLECTOR_IP" == "localhost" ]]; then
     COLLECTOR_IP="docker.for.mac.localhost"

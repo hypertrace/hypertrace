@@ -139,24 +139,6 @@ postgresql:
   replication:
     enabled: false
 
-hypertrace-oc-collector:
-  replicaCount: 1
-  resources:
-    requests:
-      cpu: "0.05"
-      memory: "128Mi"
-    limits:
-      cpu: "0.5"
-      memory: "128Mi"
-  livenessProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 5
-  readinessProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 5
-  kafka-topic-creator:
-    enabled: false
-
 span-normalizer:
   javaOpts: "-Xms128M -Xmx128M -XX:MaxDirectMemorySize=96M -XX:+ExitOnOutOfMemoryError"
   resources:

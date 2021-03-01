@@ -1,0 +1,29 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+  opencensus:
+  zipkin:
+  jaeger:
+    protocols:
+      grpc:
+      thrift_http:
+      
+processors:
+  batch:
+
+exporters:
+  kafka:
+    protocol_version: 2.0.0
+    brokers:
+      - kafka-zookeeper:9092
+    topic: jaeger-spans
+    encoding: jaeger_proto
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp, opencensus, jaeger, zipkin]
+      processors: [batch]
+      exporters: [kafka]

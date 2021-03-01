@@ -44,9 +44,9 @@ update_platform_services_charts() {
         print_header
         echo ""
         echo 'dependencies:'
-        echo '  - name: hypertrace-oc-collector'
+        echo '  - name: hypertrace-collector'
         echo '    repository:' $HELM_GCS_REPO
-        echo '    version:' $hypertrace_oc_collector_version 
+        echo '    version:' $hypertrace_collector_version 
         echo '  - name: span-normalizer'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $hypertrace_ingester_version
