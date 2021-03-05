@@ -29,14 +29,14 @@ services:
   hypertrace-collector:
     image: hypertrace/hypertrace-collector:main
     container_name: hypertrace-collector
-    command: ["--config", "/etc/opt/hypertrace/config.yml"]
-    volumes:
-      - ../configs/hypertrace-collector/config.yml:/etc/opt/hypertrace/config.yml:ro
     ports:
       - 4317:4317 # grpc-otel
       - 55681:55681 # http-otel
       - 14268:14268 # Jaeger http
       - 9411:9411 # Zipkin HTTP
+    environment:
+      - EXPORTER_KAFKA_BROKER=kafka-zookeeper:9092
+      - EXPORTER_KAFKA_TOPIC=jaeger-spans
     networks:
       default:
         # Allows sample apps to connect with platform-specific hostnames
