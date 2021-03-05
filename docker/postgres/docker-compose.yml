@@ -29,7 +29,6 @@ services:
   hypertrace-collector:
     image: hypertrace/hypertrace-collector:main
     container_name: hypertrace-collector
-    command: ["--config", "/etc/opt/hypertrace/config.yml"]
     ports:
       - 4317:4317 # grpc-otel
       - 55681:55681 # http-otel
