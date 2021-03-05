@@ -31,7 +31,7 @@ dependencies:
     version: 0.1.2
   - name: pinot
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.2.8
+    version: 0.2.9
   - name: schema-registry
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.1.5
