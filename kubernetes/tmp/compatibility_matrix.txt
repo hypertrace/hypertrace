@@ -1,8 +1,8 @@
-attribute-service:0.10.2
-gateway-service:0.1.55
-query-service:0.5.5
-entity-service:0.5.12
+attribute-service:0.10.4
+gateway-service:0.1.57
+query-service:0.5.7
+entity-service:0.5.14
 config-service:0.1.3
 hypertrace-graphql:0.7.3
-hypertrace-ui:0.69.4
-hypertrace-ingester:0.5.7
+hypertrace-ui:0.69.5
+hypertrace-ingester:0.6.4
