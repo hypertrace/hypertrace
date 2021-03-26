@@ -28,16 +28,16 @@ dependencies:
     version: 0.1.4
   - name: span-normalizer
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.4
+    version: 0.6.5
   - name: raw-spans-grouper
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.4
+    version: 0.6.5
   - name: hypertrace-trace-enricher
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.4
+    version: 0.6.5
   - name: hypertrace-view-generator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.4
+    version: 0.6.5
   - name: hypertrace-ui
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.69.5
