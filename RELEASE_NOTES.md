@@ -1,5 +1,5 @@
 #### `Hypertrace deployment` 
-
+- Updates helm charts [#230](https://github.com/hypertrace/hypertrace/pull/230)
 #### `Attribute service`  [(0.10.4 .. 0.10.5)](https://github.com/hypertrace/attribute-service/releases)
 - feat: add way of defining an attribute from first class field [#82](https://github.com/hypertrace/attribute-service/pull/82)
 - chore: update dependencies for vulns [#83](https://github.com/hypertrace/attribute-service/pull/83)
@@ -19,8 +19,21 @@
 - chore: update dependencies [#93](https://github.com/hypertrace/entity-service/pull/93)
 #### `Config service`  [(0.1.3 .. 0.1.3)](https://github.com/hypertrace/config-service/releases)
 
-#### `Hypertrace GraphQL`  [( 0.7.3 .. 0.7.3)](https://github.com/hypertrace/hypertrace-graphql/releases)
-
+#### `Hypertrace GraphQL`  [( 0.7.3 .. 0.7.4)](https://github.com/hypertrace/hypertrace-graphql/releases)
+- fix: improve channel registry concurrency [#77](https://github.com/hypertrace/hypertrace-graphql/pull/77)
+- feat: add group limit to explorer api [#76](https://github.com/hypertrace/hypertrace-graphql/pull/76)
+- refactor: expose a way of ordering explorer query by interval [#74](https://github.com/hypertrace/hypertrace-graphql/pull/74)
+- Style and vulns [#75](https://github.com/hypertrace/hypertrace-graphql/pull/75)
+- fix: publish test results other than codecov only on non-forked PR  [#73](https://github.com/hypertrace/hypertrace-graphql/pull/73)
+- feat: add support for joining entities to other schemas [#72](https://github.com/hypertrace/hypertrace-graphql/pull/72)
+- chore: upgrade submodule [#71](https://github.com/hypertrace/hypertrace-graphql/pull/71)
+- docs: updates architecture diagram and test instructions in README [#70](https://github.com/hypertrace/hypertrace-graphql/pull/70)
+- fix: uses checksum action from github-actions repository [#69](https://github.com/hypertrace/hypertrace-graphql/pull/69)
+- chore: update dependencies [#68](https://github.com/hypertrace/hypertrace-graphql/pull/68)
+- chore: adjust time agnostic comment for neighbor entities builder [#67](https://github.com/hypertrace/hypertrace-graphql/pull/67)
+- perf(entities): set fetch total flag, if requested [#66](https://github.com/hypertrace/hypertrace-graphql/pull/66)
+- Automates release note generation [#65](https://github.com/hypertrace/hypertrace-graphql/pull/65)
+- Decouple metric series requests and baseline series requests [#63](https://github.com/hypertrace/hypertrace-graphql/pull/63)
 #### `Hypertrace UI`  [( 0.69.6 .. 0.69.7)](https://github.com/hypertrace/hypertrace-ui/releases)
 - fix: request apiCalleeNameCount only for API_TRACE [#739](https://github.com/hypertrace/hypertrace-ui/pull/739)
 - Table expander checkbox [#738](https://github.com/hypertrace/hypertrace-ui/pull/738)
