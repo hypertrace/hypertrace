@@ -82,6 +82,13 @@ span-normalizer:
           configs:
             - retention.bytes=1073741824
             - retention.ms=21600000
+        - name: raw-logs
+          replicationFactor: 3
+          partitions: 8
+          configs:
+            - retention.bytes=8589934592 # default = -1
+            - retention.ms=43200000 # default = 604800000 (7 days)
+            - max.message.bytes=1048588 # default = 1048588       
 
 raw-spans-grouper:
   resources:
@@ -169,6 +176,12 @@ hypertrace-view-generator:
             - retention.bytes=1073741824
             - retention.ms=21600000
         - name: span-event-view
+          replicationFactor: 3
+          partitions: 8
+          configs:
+            - retention.bytes=1073741824
+            - retention.ms=21600000
+        - name: log-event-view
           replicationFactor: 3
           partitions: 8
           configs:
