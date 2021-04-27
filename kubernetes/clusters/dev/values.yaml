@@ -247,6 +247,12 @@ hypertrace-view-generator:
           configs:
             - retention.bytes=1073741824
             - retention.ms=10800000
+        - name: log-event-view
+          replicationFactor: 1
+          partitions: 2
+          configs:
+            - retention.bytes=1073741824
+            - retention.ms=10800000
 
 gateway-service:
   replicaCount: 1
@@ -338,6 +344,12 @@ kafka-topic-creator:
           - retention.bytes=1073741824
           - retention.ms=10800000
       - name: enriched-structured-traces
+        replicationFactor: 1
+        partitions: 2
+        configs:
+          - retention.bytes=1073741824
+          - retention.ms=10800000
+      - name: raw-logs
         replicationFactor: 1
         partitions: 2
         configs:
