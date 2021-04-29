@@ -4,15 +4,14 @@ import static java.lang.System.lineSeparator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.stream.Collectors;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-
-import java.io.*;
-import java.net.URL;
-import java.time.Instant;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 

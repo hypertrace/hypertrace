@@ -10,15 +10,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ApiTest {
@@ -89,6 +84,18 @@ public class ApiTest {
     assertResponseBasedOnTraceData(response, "50", "spans");
   }
 
+  @Test
+  public void logsQuery_shouldSucceed() throws IOException {
+    Response response = executeGraphQLQuery("e2e-test/logs.graphql");
+    assertResponseBasedOnTraceData(response, "0", "logs");
+  }
+
+  @Test
+  public void spanQueryWithLogs_shouldSucceed() throws IOException {
+    Response response = executeGraphQLQuery("e2e-test/span-with-logs.graphql");
+    assertResponseBasedOnTraceData(response, "0", "logs");
+  }
+
 
   private Response executeGraphQLQuery(String filePath) throws IOException {
     Request request =
@@ -108,19 +115,24 @@ public class ApiTest {
     specificAssertion.accept(responseJson.findValue("data"));
   }
 
-  private void assertResponseBasedOnTraceData(Response response, String actualValue, String typeOfData)
+  private void assertResponseBasedOnTraceData(
+      Response response, String actualValue, String typeOfData)
           throws IOException {
     assertEquals(200, response.code());
     JsonNode responseJson = readResponseJsonIntoTree(response);
     assertNull(responseJson.findValue("errors"));
     assertNotNull(responseJson.findValue("data"));
-    if (typeOfData == "traces") {
+    if ("traces".equals(typeOfData)) {
       String numberOfTraces = responseJson.at("/data/traces/total").asText();
       assertEquals(actualValue, numberOfTraces);
     }
-    else if (typeOfData == "spans"){
+    else if ("spans".equals(typeOfData)){
       String numberOfSpans = responseJson.at("/data/spans/total").asText();
       assertEquals(actualValue, numberOfSpans);
+    }
+    else if ("logs".equals(typeOfData)){
+      String numberOfLogs = responseJson.at("/data/logs/total").asText();
+      assertEquals(actualValue, numberOfLogs);
     }
   }
 
