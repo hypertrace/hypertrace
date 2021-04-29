@@ -1,0 +1,11 @@
+// Follows https://www.conventionalcommits.org/en/v1.0.0/#summary with one change: any commit is treated as a release,
+// patch being the default if major or minor is not detected.
+
+autobump {
+  // match any message starting with a type/scope suffixed with !, or with a line starting with "BREAKING CHANGE:"
+  majorPattern = ~/(?m)(\A[^:]+(?<=!): |^BREAKING CHANGE:)/
+  // match any commit message starting with "feat: " or "feat(any scope): "
+  minorPattern = ~/^feat(\([^)]+\))?: /
+  newPreReleasePattern = null // Not used - no prereleases
+  promoteToReleasePattern = null // Not used - every merge is a release
+}
