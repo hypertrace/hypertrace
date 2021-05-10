@@ -1,29 +1,60 @@
-![e2e test](https://github.com/hypertrace/hypertrace/workflows/e2e%20test/badge.svg)
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![E2E-test][github-actions-shield]][github-actions-url]
+[![Twitter][twitter-shield]][issues-url]
 
-# Hypertrace
+<br />
+<p align="center">
+  <a href="https://github.com/hypertrace/hypertrace">
+    <img src="https://avatars.githubusercontent.com/u/65374698?s=200&v=4" alt="Logo" width="80" height="80">
+  </a>
 
-Hypertrace is a cloud-native distributed tracing based Observability platform
-that gives visibility into your dev and production distributed systems.
+  <h3 align="center">Hypertrace</h3>
+  <p align="center">
+    An open source distributed tracing & observability platform! 
+    <br />
+    <a href="https://docs.hypertrace.org"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://blog.hypertrace.org">Visit our blog</a>
+    ·
+    <a href="https://github.com/hypertrace/hypertrace/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/hypertrace/hypertrace/issues">Request Feature</a>
+  </p>
+</p>
 
-Hypertrace was originally developed by Traceable as a highly scalable
-distributed tracing platform and it is used by Traceable’s cloud-native
-application security platform. Realizing that Hypertrace was a powerful
-standalone tracing and observability platform, Traceable created this open source
-project for the software development community to use in their applications.
 
----
+# About The Project
 
-## Quick-start
+Hypertrace is a cloud-native distributed tracing based Observability platform that gives visibility into your dev and production distributed systems.
+
+Hypertrace converts distributed trace data into relevant insight for everyone. Infrastructure teams can identify which services are causing overload. Service teams can diagnose why a specific user's request failed, or which applications put their service objectives at risk. Deployment teams can know if a new version is causing a problem.
+
+With Hypertrace you can, 
+- Perform Root cause analysis(RCA) whenever something breaks in your system.
+- Watch roll-outs.
+- Determine performance bottlenecks and identify slow operations like slow API calls or DB queries. 
+- Monitor microservice dependencies and Observe your applications. 
+
+| [![Product Name Screen Shot][product-screenshot]](https://hypertrace.org) | 
+|:--:| 
+| *Hypertrace* |
+
+
+# Getting Started
+## Quick-start with docker-compose
 
 If you want to see Hypertrace in action, you can quickly start Hypertrace.
 
-### Requirements:
+### Prerequisites
 - [docker-engine](https://docs.docker.com/engine/install/) (17.12.0+)
 - [docker-compose](https://docs.docker.com/compose/install/) (1.21.0 +)
 - **We recommend you change the [Docker Desktop default settings](https://hypertrace-docs.s3.amazonaws.com/docker-desktop.png) from `2 GB` of memory to `4 GB` of memory, and set CPUs to at least 4 CPUs.** 
-`Note`: When reporting problems, please include the output of `docker stats --no-stream`.
 
-
+### Run with docker-compose
 ```bash
 git clone https://github.com/hypertrace/hypertrace.git
 cd hypertrace/docker
@@ -52,46 +83,40 @@ Please refer to the [deployments section](https://docs.hypertrace.org/deployment
 `Note:` We have created `hypertrace-ingester` and `hypertrace-service` to simplify local deployment and quick-start with Hypertrace. As of now, we don't support them for production because of some limitations and some unreliabiliy with scaling. So, we will encourage you to deploy individual components for staging as well as production deployments. 
 
 ## Community
-
-[Join the Hypertrace Workspace](https://www.hypertrace.org/get-started) on Slack to connect with other users, contributors and people behind Hypertrace.
-
-## Documentation
-
-Check out [Hypertrace documentation](https://docs.hypertrace.org) to learn more about Hypetrace features, it's architecture and other insights!
+- [Join the Hypertrace Workspace](https://join.slack.com/t/hypertrace/shared_invite/zt-oln0psj9-lm1CSkXE1vsWdcw6YKWGDg) on Slack to connect with other users, contributors and people behind Hypertrace.
+- We have **public** [monthly meeting](https://traceable-ai.zoom.us/j/99056798944?pwd=dG1HNzlpeVFjN2JJUFJyUEF1eTU2Zz09) on **last Thursday of the month** at 8:00 AM PST/ 8:30 PM IST/ 11:00 AM ET/ 5:00 PM CET where we try to give our community a holistic overview of new features in Hypertrace and community activities. We would like to hear feedback, discuss feature requests and also help new contributors to get started with contributing to Open Source projects. You can join the zoom meeting [here](https://traceable-ai.zoom.us/j/99056798944?pwd=dG1HNzlpeVFjN2JJUFJyUEF1eTU2Zz09) or use zoom meeting details as below:
+    - Meeting ID: 990 5679 8944
+    - Passcode: 111111
+- If you want to discuss any ideas or have any questions or show us how you are using Hypertrace, you can use [GitHub discsussions](https://github.com/hypertrace/hypertrace/discussions) as well. 
 
 ## Docker images
 
 Released versions of Docker images for various Hypertrace components are available on [dockerhub](https://hub.docker.com/u/hypertrace).
 
-## Related Repositories
+## Roadmap
 
-### Data Ingestion Pipeline
+See the [open issues](https://github.com/hypertrace/hypertrace/issues) for a list of proposed features (and known issues).
 
-* [Hypertrace Ingester](https://github.com/hypertrace/hypertrace-ingester)
+## Contributing
 
-### Query Layer Services
-
-* [GraphQL](https://github.com/hypertrace/hypertrace-graphql)
-* [Gateway Service](https://github.com/hypertrace/gateway-service)
-* [Query Service](https://github.com/hypertrace/query-service)
-* [Entity Service](https://github.com/hypertrace/entity-service)
-* [Attribute Service](https://github.com/hypertrace/attribute-service)
-* [Config Service](https://github.com/hypertrace/config-service)
-
-### UI
-
-* [Hypertrace UI](https://github.com/hypertrace/hypertrace-ui)
-* [Hyperdash](https://github.com/hypertrace/hyperdash)
-* [Hyperdash Angular](https://github.com/hypertrace/hyperdash-angular)
-
-### Data Service Deployment
-
-* [Kafka helm chart](https://github.com/hypertrace/kafka)
-* [Pinot helm chart](https://github.com/hypertrace/pinot)
-* [MongoDB helm chart](https://github.com/hypertrace/mongodb)
-* [PostgreSQL helm chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Check out our [Contribution Guidelines](https://github.com/hypertrace/hypertrace/blob/main/.github/CONTRIBUTING.md) for more details. 
 
 ## License
 
 Hypertrace follows the open core model where "Hypertrace core" (or simply Core) is made available under the Apache 2.0 license, which has distributed trace ingestion and exploration features. The Services, Endpoints, Backends and Service Graph features of Hypertrace Community Edition are made available under the
 [Traceable Community license](LICENSE).
+
+
+[contributors-shield]: https://img.shields.io/github/contributors/hypertrace/hypertrace.svg?style=for-the-badge
+[contributors-url]: https://github.com/hypertrace/hypertrace/graphs/contributors
+[github-actions-shield]: https://img.shields.io/github/workflow/status/hypertrace/hypertrace/e2e%20test?color=orange&label=e2e-test&logo=github&logoColor=orange&style=for-the-badge
+[github-actions-url]: https://github.com/hypertrace/hypertrace/actions/workflows/docker-tests.yml
+[forks-shield]: https://img.shields.io/github/forks/hypertrace/hypertrace.svg?style=for-the-badge
+[forks-url]: https://github.com/hypertrace/hypertrace/network/members
+[stars-shield]: https://img.shields.io/github/stars/hypertrace/hypertrace.svg?style=for-the-badge
+[stars-url]: https://github.com/hypertrace/hypertrace/stargazers
+[issues-shield]: https://img.shields.io/github/issues/hypertrace/hypertrace.svg?style=for-the-badge
+[issues-url]: https://github.com/hypertrace/hypertrace/issues
+[twitter-shield]: https://img.shields.io/badge/-Twitter-black.svg?style=for-the-badge&logo=twitter&colorB=555
+[twitter-url]: https://twitter.com/hypertraceorg
+[product-screenshot]: https://s3.amazonaws.com/hypertrace-docs/dashboard-3.png
