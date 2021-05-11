@@ -35,7 +35,7 @@ Hypertrace converts distributed trace data into relevant insight for everyone. I
 
 With Hypertrace you can, 
 - Perform Root cause analysis(RCA) whenever something breaks in your system.
-- Watch roll-outs.
+- Watch roll-outs and compare key metrics.
 - Determine performance bottlenecks and identify slow operations like slow API calls or DB queries. 
 - Monitor microservice dependencies and Observe your applications. 
 
