@@ -10,7 +10,6 @@ services:
 # This container includes the UI and APIs it needs for storage queries.
   hypertrace:
     image: hypertrace/hypertrace:main
-    container_name: hypertrace
     environment:
       - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
@@ -31,7 +30,6 @@ services:
   # Collects spans in different trace formats like Jaeger, Zipkin, etc
   hypertrace-collector:
     image: hypertrace/hypertrace-collector:main
-    container_name: hypertrace-collector
     ports:
       - 4317:4317 # grpc-otel
       - 55681:55681 # http-otel
@@ -53,7 +51,6 @@ services:
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
     image: hypertrace/hypertrace-ingester
-    container_name: hypertrace-ingester
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
@@ -83,7 +80,6 @@ services:
   # ZooKeeper is required by Kafka and Pinot
   kafka-zookeeper:
     image: hypertrace/kafka-zookeeper:main
-    container_name: kafka-zookeeper
     networks:
       default:
         # prevents apps from having to use the hostname kafka-zookeeper
@@ -93,11 +89,9 @@ services:
   # Stores entities like API, service and backend
   mongo:
     image: hypertrace/mongodb:main
-    container_name: mongo
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main
-    container_name: pinot
     environment:
       - LOG_LEVEL=error
     networks:
