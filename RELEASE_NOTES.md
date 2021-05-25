@@ -1,3 +1,13 @@
+#### `Major Features`
+- Error analysis and slice and dice on errors [Related issue: #209](https://github.com/hypertrace/hypertrace/issues/209)
+<img width="2327" alt="Screenshot 2021-05-25 at 9 35 57 AM" src="https://user-images.githubusercontent.com/26570044/119437876-9e82ed00-bd3c-11eb-8281-08cefa83c158.png">
+
+- Support for `span logs` in the platform [Related issue: #224](https://github.com/hypertrace/hypertrace/issues/224)
+<img width="2327" alt="Screenshot 2021-05-25 at 9 38 02 AM" src="https://user-images.githubusercontent.com/26570044/119438029-e99d0000-bd3c-11eb-9632-f20062724f6b.png">
+
+- Support for downloading trace json from full trace view in platform [Related issue: #108](https://github.com/hypertrace/hypertrace/issues/108)
+<img width="2327" alt="Screenshot 2021-05-25 at 9 40 14 AM" src="https://user-images.githubusercontent.com/26570044/119438169-3a145d80-bd3d-11eb-992c-e55003aeab54.png">
+
 #### `Hypertrace deployment` 
 - refactor: removed container name from docker-compose to avoid conflict [#243](https://github.com/hypertrace/hypertrace/pull/243)
 - docs: updated readme to add more focused content [#242](https://github.com/hypertrace/hypertrace/pull/242)
