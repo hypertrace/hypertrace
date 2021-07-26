@@ -3,7 +3,7 @@
 ## Note: Our stack is dependent on pinot and it is a cpu heavy during startup.
 ## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command.
 ## we are looking at improving this.
-version: "2.4"
+version: '3.9'
 services:
 
 
@@ -76,6 +76,7 @@ services:
       hypertrace:
         # service_started, not service_healthy as pinot and deps can take longer than 60s to start
         condition: service_started
+     
 
 # Third-party data services:
 
@@ -111,3 +112,5 @@ services:
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
+
+        

@@ -1,0 +1,21 @@
+
+version: '3.9'
+services:
+
+  hypertrace-alert-engine:
+    image:  hypertrace/hypertrace-alert-engine
+    container_name: hypertrace-alert-engine
+    environment:
+        - ALERT_RULES_PATH=/app/resources/alert-rules.json
+        - NOTIFICATION_RULES_PATH=/app/resources/notification-rules.json
+        - QUERY_SERVICE_HOST_CONFIG=hypertrace
+        - QUERY_SERVICE_PORT_CONFIG=9001
+        - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace
+        - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
+    volumes:
+        - ../docker/configs/alert-rules.json:/app/resources/alert-rules.json:ro
+        - ../docker/configs/notification-rules.json:/app/resources/notification-rules.json:ro
+    depends_on:
+        hypertrace:
+        # service_started, not service_healthy as pinot and deps can take longer than 60s to start
+            condition: service_healthy  
