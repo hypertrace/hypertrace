@@ -29,6 +29,8 @@ If you are facing any issues with docker-compose setup, we have listed down comm
 
 Run ```docker-compose -f docker-compose.yml  -f docker-compose.alerting.yml up```
 
+Update alerting rule definition in alert-rules.json, notification-rules.json
+
 ### Ports
 
 Here are the default Hypertrace ports:
