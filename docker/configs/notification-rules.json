@@ -1,0 +1,13 @@
+[
+    {
+      "channelName": "channel-1",
+      "channelId": "channel-id-1",
+      "channelConfig": [
+        {
+          "channelConfigType": "WEBHOOK",
+          "url": "<add slack url here>",
+          "webhookFormat": "WEBHOOK_FORMAT_SLACK"
+        }
+      ]
+    }
+  ]
