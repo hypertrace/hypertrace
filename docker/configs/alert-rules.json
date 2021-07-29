@@ -1,9 +1,9 @@
 [
     {
       "id": "notification_rule_1",
-      "ruleName": "high_avg_latency",
+      "ruleName": "high_num_calls",
       "description": "Alert for high avg latency of payment service",
-      "eventConditionId": "event_condition_1",
+      "eventConditionId": "Customer app, high num calls",
       "eventConditionType": "MetricAnomalyEventCondition",
       "channelId": "channel-id-1",
       "eventCondition" :  {
@@ -32,7 +32,7 @@
         "violationCondition": [{
           "staticThresholdCondition": {
             "operator": "STATIC_THRESHOLD_OPERATOR_GT",
-            "value": 0.0,
+            "value": 3.0,
             "minimumViolationDuration": "PT5M",
             "severity": "SEVERITY_CRITICAL"
           }

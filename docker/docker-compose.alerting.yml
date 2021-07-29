@@ -7,7 +7,7 @@ services:
     container_name: hypertrace-alert-engine
     environment:
         - ALERT_RULES_PATH=/app/resources/alert-rules.json
-        - NOTIFICATION_RULES_PATH=/app/resources/notification-rules.json
+        - NOTIFICATION_CHANNELS_PATH=/app/resources/notification-rules.json
         - QUERY_SERVICE_HOST_CONFIG=hypertrace
         - QUERY_SERVICE_PORT_CONFIG=9001
         - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace
