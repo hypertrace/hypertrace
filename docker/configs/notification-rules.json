@@ -5,9 +5,9 @@
       "channelConfig": [
         {
           "channelConfigType": "WEBHOOK",
-          "url": "<add slack url here>",
+          "url": "<>",
           "webhookFormat": "WEBHOOK_FORMAT_SLACK"
         }
       ]
     }
-  ]
+]
