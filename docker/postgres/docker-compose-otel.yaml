@@ -3,52 +3,6 @@
 version: "2.4"
 services:
 
-# This container includes the UI and APIs it needs for storage queries.
-  hypertrace:
-    image: hypertrace/hypertrace:main
-    environment:
-      - DATA_STORE_TYPE=postgres
-      - POSTGRES_HOST=postgres
-      - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
-    ports:
-      - 5005:5005
-      - 2020:2020
-      - 9001:9001
-    healthcheck:
-      start_period: 20s
-    depends_on:
-      postgres:
-        condition: service_started
-      kafka-zookeeper:
-        condition: service_healthy
-      pinot:
-        condition: service_started
-
-  # Ingestion pipeline
-
-  # Collects spans in different trace formats like Jaeger, Zipkin, etc
-  hypertrace-collector:
-    image: hypertrace/hypertrace-collector:main
-    ports:
-      - 4317:4317 # grpc-otel
-      - 55681:55681 # http-otel
-      - 14268:14268 # Jaeger http
-      - 9411:9411 # Zipkin HTTP
-    environment:
-      - EXPORTER_KAFKA_BROKER=kafka-zookeeper:9092
-      - EXPORTER_KAFKA_TOPIC=jaeger-spans
-    networks:
-      default:
-        # Allows sample apps to connect with platform-specific hostnames
-        aliases:
-          - jaeger
-          - jaeger-collector
-          - zipkin
-    depends_on:
-      kafka-zookeeper:
-        condition: service_healthy
-
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
     image: traceableai-docker.jfrog.io/hypertrace/hypertrace-ingester:test
@@ -89,13 +43,6 @@ services:
           - zookeeper
     ports:
       - 9092:9092
-  # Stores entities like API, service and backend
-  postgres:
-    image: postgres:13.1
-    container_name: postgres
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
 
   # Stores spans and traces and provides aggregation functions
   pinot:
@@ -160,3 +107,16 @@ services:
       - jaeger-all-in-one
       - zipkin-all-in-one
       - kafka-zookeeper
+
+  # Jaeger
+  jaeger-all-in-one:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14268"
+      - "14250"
+
+  zipkin-all-in-one:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
