@@ -3,7 +3,7 @@ version: '2.4'
 services:
 
   hypertrace-alert-engine:
-    image:  hypertrace/hypertrace-alert-engine
+    image:  hypertrace/hypertrace-alert-engine:1.0.7
     container_name: hypertrace-alert-engine
     environment:
         - ALERT_RULES_PATH=/app/resources/alert-rules.json
