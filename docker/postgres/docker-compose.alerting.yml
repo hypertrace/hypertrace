@@ -13,8 +13,8 @@ services:
         - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace
         - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
     volumes:
-        - ../docker/configs/alert-rules.json:/app/resources/alert-rules.json:ro
-        - ../docker/configs/notification-rules.json:/app/resources/notification-rules.json:ro
+        - ../../docker/configs/alert-rules.json:/app/resources/alert-rules.json:ro
+        - ../../docker/configs/notification-rules.json:/app/resources/notification-rules.json:ro
     depends_on:
         hypertrace:
         # service_started, not service_healthy as pinot and deps can take longer than 60s to start
