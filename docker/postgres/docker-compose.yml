@@ -71,29 +71,6 @@ services:
         # service_started, not service_healthy as pinot and deps can take longer than 60s to start
         condition: service_started
 
-  hypertrace-alert-engine:
-    image: hypertrace/hypertrace-alert-engine:1.0.7
-    container_name: hypertrace-alert-engine
-    # comment below two lines if you want to run alert-engine after modifying appropriate
-    # alert-rules.json and notification-rules.json files
-    entrypoint: [ "/bin/sh" ]
-    command: [ "-c",
-        "echo Pl. comment out entrypoint and command to run alert engine
-                after configuring alert-rules.json and notification-rules.json" ]
-    environment:
-      - ALERT_RULES_PATH=/app/resources/alert-rules.json
-      - NOTIFICATION_CHANNELS_PATH=/app/resources/notification-rules.json
-      - QUERY_SERVICE_HOST_CONFIG=hypertrace
-      - QUERY_SERVICE_PORT_CONFIG=9001
-      - ATTRIBUTE_SERVICE_HOST_CONFIG=hypertrace
-      - ATTRIBUTE_SERVICE_PORT_CONFIG=9001
-    volumes:
-      - ../../docker/configs/alert-rules.json:/app/resources/alert-rules.json:ro
-      - ../../docker/configs/notification-rules.json:/app/resources/notification-rules.json:ro
-    depends_on:
-      hypertrace:
-        # service_started, not service_healthy as pinot and deps can take longer than 60s to start
-        condition: service_healthy
   # Third-party data services:
 
   # Kafka is used for streaming functionality.
