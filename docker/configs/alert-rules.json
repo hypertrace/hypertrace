@@ -1,0 +1,42 @@
+[
+    {
+      "id": "notification_rule_1",
+      "ruleName": "high_num_calls",
+      "description": "Alert for high avg latency of payment service",
+      "eventConditionId": "Customer app, high num calls",
+      "eventConditionType": "MetricAnomalyEventCondition",
+      "channelId": "channel-id-1",
+      "eventCondition" :  {
+        "metricSelection": {
+          "metricAttribute": {
+            "key": "numCalls",
+            "scope": "SERVICE"
+          },
+          "metricAggregationFunction": "METRIC_AGGREGATION_FUNCTION_TYPE_SUM",
+          "metricAggregationInterval": "PT15S",
+          "filter": {
+            "leafFilter": {
+              "lhsExpression": {
+                "attribute": {
+                  "key": "name",
+                  "scope": "SERVICE"
+                }
+              },
+              "valueOperator": "VALUE_OPERATOR_EQ",
+              "rhsExpression": {
+                "stringValue": "customer"
+              }
+            }
+          }
+        },
+        "violationCondition": [{
+          "staticThresholdCondition": {
+            "operator": "STATIC_THRESHOLD_OPERATOR_GT",
+            "value": 3.0,
+            "minimumViolationDuration": "PT5M",
+            "severity": "SEVERITY_CRITICAL"
+          }
+        }]
+      }
+    }
+  ]

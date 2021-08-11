@@ -25,6 +25,12 @@ This will start all services required for Hypertrace. Once you see the service h
 
 If you are facing any issues with docker-compose setup, we have listed down common issues and resolutions [here](https://docs.hypertrace.org/troubleshooting/docker-compose/).
 
+#### To start alerting related serivces 
+
+Run ```docker-compose -f docker-compose.yml  -f docker-compose.alerting.yml up```
+
+Update alerting rule definition in alert-rules.json, notification-rules.json
+
 ### Ports
 
 Here are the default Hypertrace ports:

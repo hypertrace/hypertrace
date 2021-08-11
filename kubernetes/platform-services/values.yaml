@@ -25,6 +25,8 @@ configServiceHost: &configServiceHost hypertrace-data-config-service
 configServicePort: &configServicePort 9012
 gatewayServiceHost: &gatewayServiceHost hypertrace-data-query-service
 gatewayServicePort: &gatewayServicePort 9001
+queryServiceHost: &queryServiceHost hypertrace-data-query-service
+queryServicePort: &queryServicePort 9001
 
 hypertrace-collector:
   service:
@@ -313,3 +315,74 @@ hypertrace-ui:
 
 kafka-topic-creator:
   enabled: false
+
+hypertrace-alert-engine: 
+  hypertraceAlertEngineConfig:
+    queryService:
+      host: *queryServiceHost
+      port: *queryServicePort
+    attributeService:
+      host: *attributeServiceHost
+      port: *attributeServicePort
+  notificationChannelsConfig:
+    channels:
+      [
+        {
+          "channelName": "channel-1",
+          "channelId": "channel-id-1",
+          "channelConfig": [
+            {
+              "channelConfigType": "WEBHOOK",
+              "url": "<override slack url>",
+              "webhookFormat": "WEBHOOK_FORMAT_SLACK"
+            }
+          ]
+        }
+      ] 
+  alertRulesConfig:
+    rules:
+      [
+        {
+          "id": "notification_rule_1",
+          "ruleName": "high_avg_latency",
+          "description": "Alert for high avg latency of payment service",
+          "eventConditionId": "event_condition_1",
+          "eventConditionType": "MetricAnomalyEventCondition",
+          "channelId": "channel-id-1",
+          "eventCondition": {
+            "metricSelection": {
+              "metricAttribute": {
+                "key": "duration",
+                "scope": "SERVICE"
+              },
+              "metricAggregationFunction": "METRIC_AGGREGATION_FUNCTION_TYPE_AVG",
+              "metricAggregationInterval": "PT15S",
+              "filter": {
+                "leafFilter": {
+                  "lhsExpression": {
+                    "attribute": {
+                      "key": "name",
+                      "scope": "SERVICE"
+                    }
+                  },
+                  "valueOperator": "VALUE_OPERATOR_EQ",
+                  "rhsExpression": {
+                    "stringValue": "customer"
+                  }
+                }
+              }
+            },
+            "violationCondition": [ {
+              "staticThresholdCondition": {
+                "operator": "STATIC_THRESHOLD_OPERATOR_GT",
+                "value": 5.0,
+                "minimumViolationDuration": "PT5M",
+                "severity": "SEVERITY_CRITICAL"
+              }
+            } ]
+          }
+        }
+      ]         
+  
+alerting:
+  enabled: false  
