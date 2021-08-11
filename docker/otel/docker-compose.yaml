@@ -3,6 +3,19 @@
 version: "2.4"
 services:
 
+  # sample metric app which reports metrics
+  simple-metric-app:
+    image: traceableai-docker.jfrog.io/hypertrace/simple-metric-app:latest
+    environment:
+      - OTEL_COLLECTOR_HOST=otel-collector
+      - OTEL_COLLECTOR_PORT=4317
+    depends_on:
+      kafka-zookeeper:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
     image: traceableai-docker.jfrog.io/hypertrace/hypertrace-ingester:test
