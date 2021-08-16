@@ -3,51 +3,18 @@
 version: "2.4"
 services:
 
-# This container includes the UI and APIs it needs for storage queries.
-  hypertrace:
-    image: hypertrace/hypertrace:main
+  # sample metric app which reports metrics
+  simple-metric-app:
+    image: traceableai-docker.jfrog.io/hypertrace/simple-metric-app:latest
     environment:
-      - DATA_STORE_TYPE=postgres
-      - POSTGRES_HOST=postgres
-      - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
-      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
-    ports:
-      - 5005:5005
-      - 2020:2020
-      - 9001:9001
-    healthcheck:
-      start_period: 20s
-    depends_on:
-      postgres:
-        condition: service_started
-      kafka-zookeeper:
-        condition: service_healthy
-      pinot:
-        condition: service_started
-
-  # Ingestion pipeline
-
-  # Collects spans in different trace formats like Jaeger, Zipkin, etc
-  hypertrace-collector:
-    image: hypertrace/hypertrace-collector:main
-    ports:
-      - 4317:4317 # grpc-otel
-      - 55681:55681 # http-otel
-      - 14268:14268 # Jaeger http
-      - 9411:9411 # Zipkin HTTP
-    environment:
-      - EXPORTER_KAFKA_BROKER=kafka-zookeeper:9092
-      - EXPORTER_KAFKA_TOPIC=jaeger-spans
-    networks:
-      default:
-        # Allows sample apps to connect with platform-specific hostnames
-        aliases:
-          - jaeger
-          - jaeger-collector
-          - zipkin
+      - OTEL_COLLECTOR_HOST=otel-collector
+      - OTEL_COLLECTOR_PORT=4317
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
+      otel-collector:
+        condition: service_started
+
 
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
@@ -89,13 +56,6 @@ services:
           - zookeeper
     ports:
       - 9092:9092
-  # Stores entities like API, service and backend
-  postgres:
-    image: postgres:13.1
-    container_name: postgres
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
 
   # Stores spans and traces and provides aggregation functions
   pinot:
@@ -124,26 +84,8 @@ services:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
-  # Agent
-  otel-agent:
-    image: otel/opentelemetry-collector-dev:latest
-    command: [ "--config=/etc/otel-agent-config.yaml" ]
-    volumes:
-      - ./otel-agent-config.yaml:/etc/otel-agent-config.yaml
-    ports:
-      - "8887:8888"   # Prometheus metrics exposed by the agent
-      - "14250"       # Jaeger grpc receiver
-      - "14268:14268" # Jaeger http thrift receiver
-      - "55678"       # OpenCensus receiver
-      - "4317:4317"   # OTLP gRPC receiver
-      - "9411"        # Zipkin receiver
-      - "1777:1777"   # pprof extension
-      - "55679:55679" # zpages extension
-      - "13133"       # health_check
-    depends_on:
-      - otel-collector
 
-  # Collector
+  # Collector (using latest version)
   otel-collector:
     image: otel/opentelemetry-collector-dev:latest
     command: [ "--config=/etc/otel-collector-config.yaml" ]
@@ -154,9 +96,7 @@ services:
       - "8888:8888"   # Prometheus metrics exposed by the collector
       - "8889:8889"   # Prometheus exporter metrics
       - "13133:13133" # health_check extension
-      - "4317"        # OTLP gRPC receiver
+      - "4317:4317"   # OTLP gRPC receiver
       - "55670:55679" # zpages extension
     depends_on:
-      - jaeger-all-in-one
-      - zipkin-all-in-one
       - kafka-zookeeper
