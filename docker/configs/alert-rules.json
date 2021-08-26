@@ -29,11 +29,11 @@
             }
           }
         },
+        "ruleDuration": "PT1M",
         "violationCondition": [{
           "staticThresholdCondition": {
             "operator": "STATIC_THRESHOLD_OPERATOR_GT",
             "value": 3.0,
-            "minimumViolationDuration": "PT5M",
             "severity": "SEVERITY_CRITICAL"
           }
         }]
