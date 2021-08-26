@@ -18,7 +18,7 @@ services:
     healthcheck:
       start_period: 20s
     depends_on:
-      mongo:
+      document-store:
         condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
@@ -88,8 +88,9 @@ services:
           - kafka
           - zookeeper
   # Stores entities like API, service and backend
-  mongo:
+  document-store:
     image: hypertrace/mongodb:main
+
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main
