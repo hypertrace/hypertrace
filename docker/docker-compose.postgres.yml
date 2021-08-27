@@ -21,7 +21,6 @@ services:
 
   document-store:
     image: postgres:13.1
-    container_name: postgres
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
