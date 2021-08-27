@@ -8,8 +8,8 @@
 # docker-compose -f docker/docker-compose.yml -f docker/docker-compose-zipkin-example.yml up -d
 # sh ./circleci/tests.sh
 
-TRACES_SERVER_HOST=${1:-127.0.0.1}
-FRONTEND_SERVICE_HOST=${2:-127.0.0.1}
+TRACES_SERVER_HOST=${2:-127.0.0.1}
+FRONTEND_SERVICE_HOST=${3:-127.0.0.1}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 echo "Executing test SCRIPT_DIR: $SCRIPT_DIR ARGUMENT: $1"
 echo ""
