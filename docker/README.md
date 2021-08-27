@@ -28,8 +28,8 @@ If you are facing any issues with docker-compose setup, we have listed down comm
 ### Hypertrace with postgres
 Hypertrace uses two different types of store currently
 
-document store (for entities) 
-Olap store (for timeseries data)
+- Document store (for entities) 
+- OLAP store (for timeseries data)
 By default, we run docker-compose with mongo as a document store. Recently, we have also added support for postgres as an alternative to mongo. To run hypertrace with postgres override the document-store service
 
 Run ```docker-compose -f docker-compose.yml -f docker-compose.postgres.yml up```
@@ -38,7 +38,7 @@ References
 https://github.com/hypertrace/hypertrace/issues/114
 https://github.com/hypertrace/hypertrace/issues/124
 
-#### To start alerting related serivce
+#### To start alerting related services
 
 Run ```docker-compose -f docker-compose.yml  -f docker-compose.alerting.yml up```
 or ```docker-compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.alerting.yml up``` (for postgres as document-store)
