@@ -11,7 +11,7 @@ services:
   hypertrace:
     image: hypertrace/hypertrace:main
     environment:
-      - MONGO_HOST=mongo
+      - MONGO_HOST=document-store
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
     ports:
       - 2020:2020

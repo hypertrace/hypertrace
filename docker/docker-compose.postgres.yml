@@ -5,7 +5,7 @@ services:
     image: hypertrace/hypertrace:main
     environment:
       - DATA_STORE_TYPE=postgres
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=document-store
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
     ports:
       - 2020:2020
