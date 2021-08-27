@@ -21,7 +21,7 @@ RETRY_COUNT=0
 while : ; do
   if [[ "$RETRY_COUNT" == "$NUMBER_OF_RETRIES" ]]; then
     echo "Failed to connect to $TRACES_SERVER_HOST:2020 after $NUMBER_OF_RETRIES retries."
-    sh $SCRIPT_DIR/inspect.sh 
+    sh $SCRIPT_DIR/inspect.sh $1 
     exit 1
   fi
 
@@ -47,7 +47,7 @@ TRACES=""
 while : ; do
   if [[ "$RETRY_COUNT" == "$NUMBER_OF_RETRIES" ]]; then
     echo "Failed to retrieve traces from $TRACES_SERVER_HOST:2020 after $NUMBER_OF_RETRIES retries."
-    sh $SCRIPT_DIR/inspect.sh 
+    sh $SCRIPT_DIR/inspect.sh $1
     exit 1
   fi
 
@@ -74,7 +74,7 @@ while : ; do
   if [[ "$ERROR" != "null" ]]; then
     echo ""
     echo "Error while retrieving traces: $ERROR.";
-    sh $SCRIPT_DIR/inspect.sh 
+    sh $SCRIPT_DIR/inspect.sh $1
     exit 1;
   fi
 
