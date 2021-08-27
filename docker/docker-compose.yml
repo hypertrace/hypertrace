@@ -11,14 +11,14 @@ services:
   hypertrace:
     image: hypertrace/hypertrace:main
     environment:
-      - MONGO_HOST=mongo
+      - MONGO_HOST=document-store
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
     ports:
       - 2020:2020
     healthcheck:
       start_period: 20s
     depends_on:
-      mongo:
+      document-store:
         condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
@@ -88,8 +88,10 @@ services:
           - kafka
           - zookeeper
   # Stores entities like API, service and backend
-  mongo:
+  # Mongo and postgres are the supported doc store, to use postgres override this using docker-compose.postgres.yml 
+  document-store:
     image: hypertrace/mongodb:main
+
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main
