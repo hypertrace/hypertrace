@@ -1,9 +1,14 @@
 #!/bin/bash
 
 # This script displays the state and logs for the containers in the docker-compose.
+echo "========= INSPECT SCRIPT ==========="
 TEST_TYPE=$1
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "========= SCRIPT_DIR ==========="
+echo "$SCRIPT_DIR"
 DOCKER_COMPOSE_FILE_DIR="$(dirname $SCRIPT_DIR)/docker"
+echo "========= DOCKER_COMPOSE_FILE_DIR ==========="
+echo "$DOCKER_COMPOSE_FILE_DIR"
 
 if [ "$TEST_TYPE" == "postgres" ]
 then
