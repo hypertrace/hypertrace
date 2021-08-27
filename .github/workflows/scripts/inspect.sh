@@ -10,9 +10,8 @@ DOCKER_COMPOSE_FILE_DIR="$(dirname $SCRIPT_DIR)/docker"
 echo "========= DOCKER_COMPOSE_FILE_DIR ==========="
 echo "$DOCKER_COMPOSE_FILE_DIR"
 
-if [ "$TEST_TYPE" == "postgres" ]
-then
-   containers=$(docker-compose -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose.yml  -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose.postgres.yml -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose-zipkin-example.yml ps -q -a)
+if [[ "$TEST_TYPE" == "postgres" ]]; then
+   containers=$(docker-compose -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose.yml -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose.postgres.yml -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose-zipkin-example.yml ps -q -a)
 else
    containers=$(docker-compose -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose.yml -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose-zipkin-example.yml ps -q -a)
 fi     
