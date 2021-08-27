@@ -88,6 +88,7 @@ services:
           - kafka
           - zookeeper
   # Stores entities like API, service and backend
+  # Mongo and postgres are the supported doc store, to use postgres override this using docker-compose.postgres.yml 
   document-store:
     image: hypertrace/mongodb:main
 
