@@ -11,7 +11,7 @@
 TRACES_SERVER_HOST=${1:-127.0.0.1}
 FRONTEND_SERVICE_HOST=${2:-127.0.0.1}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
+echo "Executing test SCRIPT_DIR: $SCRIPT_DIR ARGUMENT: $1"
 echo ""
 echo "Making sure the traces service is up..."
 
