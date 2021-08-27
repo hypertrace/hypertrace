@@ -5,6 +5,8 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_COMPOSE_FILE_DIR="$(dirname $SCRIPT_DIR)/docker"
 
+echo "Executing inspect script $SCRIPT_DIR $DOCKER_COMPOSE_FILE_DIR"
+
 containers=$(docker-compose -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose.yml -f ${DOCKER_COMPOSE_FILE_DIR}/docker-compose-zipkin-example.yml ps -q -a)
 while IFS= read -r container; do
     name=$(docker inspect $container | jq -r '.[0].Name')
