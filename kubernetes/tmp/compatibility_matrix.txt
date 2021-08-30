@@ -6,3 +6,4 @@ config-service:0.1.4
 hypertrace-graphql:0.7.7
 hypertrace-ui:0.70.2
 hypertrace-ingester:0.6.19
+hypertrace-alert-engine:0.0.0
