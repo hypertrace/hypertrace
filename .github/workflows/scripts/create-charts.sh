@@ -93,6 +93,10 @@ update_platform_services_charts() {
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' $hypertrace_service_version
         echo '    condition: merge-query-services.enabled' 
+        echo '  - name: hypertrace-alert-engine'
+        echo '    repository:' $HELM_GCS_REPO
+        echo '    version:' $hypertrace_alert_engine_version
+        echo '    condition: alerting.enabled' 
         echo '  - name: kafka-topic-creator'
         echo '    repository:' $HELM_GCS_REPO
         echo '    version:' 0.1.7
@@ -108,6 +112,7 @@ write_to_tmp_source() {
         echo 'hypertrace-graphql:'$hypertrace_graphql_version
         echo 'hypertrace-ui:'$hypertrace_ui_version
         echo 'hypertrace-ingester:'$hypertrace_ingester_version
+        echo 'hypertrace-alert-engine:'$hypertrace_alert_engine_version
 }
 
 write_changelog() {
@@ -145,6 +150,10 @@ write_changelog() {
     hypertrace_ingester_old_version=$(get_prior_service_version "hypertrace-ingester")
     echo '#### `Hypertrace ingester` ' '[(' $hypertrace_ingester_old_version '..' $hypertrace_ingester_version')](https://github.com/hypertrace/hypertrace-ingester/releases)' 
     changelog -m hypertrace hypertrace-ingester $hypertrace_ingester_old_version $hypertrace_ingester_version
+
+    hypertrace_alert_engine_old_version=$(get_prior_service_version "hypertrace-alert-engine")
+    echo '#### `Hypertrace alert engine` ' '[(' $hypertrace_alert_engine_old_version '..' $hypertrace_alert_engine_version')](https://github.com/hypertrace/hypertrace-alert-engine/releases)' 
+    changelog -m hypertrace hypertrace-alert-engine $hypertrace_alert_engine_old_version $hypertrace_alert_engine_version
 }
 
 if [ $1 == "data-services" ]; then
