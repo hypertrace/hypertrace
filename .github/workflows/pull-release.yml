@@ -106,6 +106,12 @@ jobs:
         with:
           repository: hypertrace/hypertrace-service
 
+      - name: Get latest charts for hypertrace-alert-engine
+        id: hypertrace-alert-engine
+        uses: oprypin/find-latest-tag@v1
+        with:
+          repository: hypertrace/hypertrace-alert-engine  
+
       - uses: actions/checkout@v2
 
       - name: Install changelog python library
@@ -139,6 +145,7 @@ jobs:
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
           hypertrace_service_version: ${{ steps.hypertrace-service.outputs.tag }}
+          hypertrace_alert_engine_version: ${{ steps.hypertrace-alert-engine.outputs.tag }}
 
       - name: update release notes
         run: |
@@ -154,6 +161,7 @@ jobs:
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
           hypertrace_version: ${{ steps.hypertrace.outputs.tag }}
+          hypertrace_alert_engine_version: ${{ steps.hypertrace-alert-engine.outputs.tag }}
 
       - name: update compatibility matrix
         run: |
@@ -168,6 +176,7 @@ jobs:
           gateway_service_version: ${{ steps.gateway-service.outputs.tag }}
           entity_service_version: ${{ steps.entity-service.outputs.tag }}
           config_service_version: ${{ steps.config-service.outputs.tag }}
+          hypertrace_alert_engine_version: ${{ steps.hypertrace-alert-engine.outputs.tag }}
 
       - name: Create Pull Request
         id: cpr
