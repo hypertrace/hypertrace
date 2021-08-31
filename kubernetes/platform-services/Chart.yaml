@@ -66,11 +66,11 @@ dependencies:
     condition: merge-query-services.disabled
   - name: hypertrace-data-config-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.2.15
+    version: 0.2.16
     condition: merge-query-services.enabled
   - name: hypertrace-data-query-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.2.15
+    version: 0.2.16
     condition: merge-query-services.enabled
   - name: hypertrace-alert-engine
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
@@ -78,5 +78,5 @@ dependencies:
     condition: alerting.enabled
   - name: kafka-topic-creator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.7
+    version: 0.1.8
     condition: kafka-topic-creator.enabled
