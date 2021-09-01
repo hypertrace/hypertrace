@@ -4,6 +4,6 @@ query-service:0.6.3
 entity-service:0.8.2
 config-service:0.1.8
 hypertrace-graphql:0.7.9
-hypertrace-ui:0.70.2
+hypertrace-ui:0.70.3
 hypertrace-ingester:0.6.27
-hypertrace-alert-engine:1.0.0
+hypertrace-alert-engine:2.0.0
