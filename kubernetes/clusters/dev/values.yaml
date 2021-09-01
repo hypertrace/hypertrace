@@ -217,42 +217,42 @@ hypertrace-view-generator:
     enabled: true
     kafka:
       topics:
-        - name: backend-entity-view-events
+        backend-entity-view-events:
           replicationFactor: 1
           partitions: 2
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: raw-trace-view-events
+            retention.bytes: 1073741824
+            retention.ms: 10800000
+        raw-trace-view-events:
           replicationFactor: 1
           partitions: 2
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: raw-service-view-events
+            retention.bytes: 1073741824
+            retention.ms: 10800000
+        raw-service-view-events:
           replicationFactor: 1
           partitions: 2
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: service-call-view-events
+            retention.bytes: 1073741824
+            retention.ms: 10800000
+        service-call-view-events:
           replicationFactor: 1
           partitions: 2
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: span-event-view
+            retention.bytes: 1073741824
+            retention.ms: 10800000
+        span-event-view:
           replicationFactor: 1
           partitions: 2
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
-        - name: log-event-view
+            retention.bytes: 1073741824
+            retention.ms: 10800000
+        log-event-view:
           replicationFactor: 1
           partitions: 2
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=10800000
+            retention.bytes: 1073741824
+            retention.ms: 10800000
 
 gateway-service:
   replicaCount: 1
@@ -325,33 +325,33 @@ kafka-topic-creator:
     address: zookeeper:2181
   kafka:
     topics:
-      - name: jaeger-spans
+      jaeger-spans:
         replicationFactor: 1
         partitions: 2
         configs:
-          - retention.bytes=1073741824
-          - retention.ms=10800000
-      - name: raw-spans-from-jaeger-spans
+          retention.bytes: 1073741824
+          retention.ms: 10800000
+      raw-spans-from-jaeger-spans:
         replicationFactor: 1
         partitions: 2
         configs:
-          - retention.bytes=1073741824
-          - retention.ms=10800000
-      - name: structured-traces-from-raw-spans
+          retention.bytes: 1073741824
+          retention.ms: 10800000
+      structured-traces-from-raw-spans:
         replicationFactor: 1
         partitions: 2
         configs:
-          - retention.bytes=1073741824
-          - retention.ms=10800000
-      - name: enriched-structured-traces
+          retention.bytes: 1073741824
+          retention.ms: 10800000
+      enriched-structured-traces:
         replicationFactor: 1
         partitions: 2
         configs:
-          - retention.bytes=1073741824
-          - retention.ms=10800000
-      - name: raw-logs
+          retention.bytes: 1073741824
+          retention.ms: 10800000
+      raw-logs:
         replicationFactor: 1
         partitions: 2
         configs:
-          - retention.bytes=1073741824
-          - retention.ms=10800000
+          retention.bytes: 1073741824
+          retention.ms: 10800000

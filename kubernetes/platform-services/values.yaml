@@ -78,19 +78,19 @@ span-normalizer:
     enabled: true
     kafka:
       topics:
-        - name: raw-spans-from-jaeger-spans
+        raw-spans-from-jaeger-spans:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
-        - name: raw-logs
+            retention.bytes: 1073741824
+            retention.ms: 21600000
+        raw-logs:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=8589934592 # default = -1
-            - retention.ms=43200000 # default = 604800000 (7 days)
-            - max.message.bytes=1048588 # default = 1048588       
+            retention.bytes: 8589934592 # default = -1
+            retention.ms: 43200000 # default = 604800000 (7 days)
+            max.message.bytes: 1048588 # default = 1048588       
 
 raw-spans-grouper:
   resources:
@@ -107,12 +107,12 @@ raw-spans-grouper:
   kafka-topic-creator:
     kafka:
       topics:
-        - name: structured-traces-from-raw-spans
+        structured-traces-from-raw-spans:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+            retention.bytes: 1073741824
+            retention.ms: 21600000
 
 hypertrace-trace-enricher:
   traceEnricherConfig:
@@ -135,12 +135,12 @@ hypertrace-trace-enricher:
     enabled: true
     kafka:
       topics:
-        - name: enriched-structured-traces
+        enriched-structured-traces:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+            retention.bytes: 1073741824
+            retention.ms: 21600000
 
 hypertrace-view-generator:
   viewCreatorJobConfig:
@@ -153,42 +153,42 @@ hypertrace-view-generator:
     enabled: true
     kafka:
       topics:
-        - name: backend-entity-view-events
+        backend-entity-view-events:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
-        - name: raw-trace-view-events
+            retention.bytes: 1073741824
+            retention.ms: 21600000
+        raw-trace-view-events:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
-        - name: raw-service-view-events
+            retention.bytes: 1073741824
+            retention.ms: 21600000
+        raw-service-view-events:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
-        - name: service-call-view-events
+            retention.bytes: 1073741824
+            retention.ms: 21600000
+        service-call-view-events:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
-        - name: span-event-view
+            retention.bytes: 1073741824
+            retention.ms: 21600000
+        span-event-view:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
-        - name: log-event-view
+            retention.bytes: 1073741824
+            retention.ms: 21600000
+        log-event-view:
           replicationFactor: 3
           partitions: 8
           configs:
-            - retention.bytes=1073741824
-            - retention.ms=21600000
+            retention.bytes: 1073741824
+            retention.ms: 21600000
 
 gateway-service:
   resources:
@@ -372,11 +372,11 @@ hypertrace-alert-engine:
                 }
               }
             },
+            "ruleDuration": "PT5M",
             "violationCondition": [ {
               "staticThresholdCondition": {
                 "operator": "STATIC_THRESHOLD_OPERATOR_GT",
                 "value": 5.0,
-                "minimumViolationDuration": "PT5M",
                 "severity": "SEVERITY_CRITICAL"
               }
             } ]
