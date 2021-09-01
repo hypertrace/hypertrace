@@ -25,7 +25,7 @@ appVersion: 0.1.0
 dependencies:
   - name: hypertrace-collector
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.10
+    version: 0.1.11
   - name: span-normalizer
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.6.27
@@ -40,7 +40,7 @@ dependencies:
     version: 0.6.27
   - name: hypertrace-ui
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.70.2
+    version: 0.70.3
   - name: hypertrace-graphql-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
     version: 0.7.9
@@ -78,5 +78,5 @@ dependencies:
     condition: alerting.enabled
   - name: kafka-topic-creator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.8
+    version: 0.1.7
     condition: kafka-topic-creator.enabled
