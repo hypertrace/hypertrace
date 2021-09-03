@@ -1,7 +1,8 @@
 #!/bin/bash
 
-path="./src/main/resources/traces/sample"
+path="./src/main/resources/traces/"
 currentTime=`date +%s` #seconds from epoch
+currentTime=$(($currentTime * 1000000)) #convert in microseconds
 duration=1800 #30 min
 updatedStartTime=$(($currentTime-$duration))
 startTimeString="          \"startTime\": $updatedStartTime,"
