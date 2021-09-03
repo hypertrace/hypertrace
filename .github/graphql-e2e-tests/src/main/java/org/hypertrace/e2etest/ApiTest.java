@@ -84,19 +84,6 @@ public class ApiTest {
     assertResponseBasedOnTraceData(response, "50", "spans");
   }
 
-  @Test
-  public void logsQuery_shouldSucceed() throws IOException {
-    Response response = executeGraphQLQuery("e2e-test/logs.graphql");
-    assertResponseBasedOnTraceData(response, "0", "logs");
-  }
-
-  @Test
-  public void spanQueryWithLogs_shouldSucceed() throws IOException {
-    Response response = executeGraphQLQuery("e2e-test/span-with-logs.graphql");
-    assertResponseBasedOnTraceData(response, "0", "logs");
-  }
-
-
   private Response executeGraphQLQuery(String filePath) throws IOException {
     Request request =
         new RequestBuilder(graphQLUrl, "", filePath)
