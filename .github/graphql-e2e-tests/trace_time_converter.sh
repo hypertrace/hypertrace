@@ -1,7 +1,7 @@
 #!/bin/bash
 
 path="./src/main/resources/traces/"
-starttime="          \"startTime\": 1,"
+#starttime="          \"startTime\": 1," #currnt time - 30 min
 for file in `ls $path`
 do
   absolute_path=$path"/"$file
