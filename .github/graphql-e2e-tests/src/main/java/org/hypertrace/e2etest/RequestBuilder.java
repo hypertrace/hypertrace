@@ -53,8 +53,8 @@ class RequestBuilder {
     String updatedStartTime = "      startTime: \"" + prevTime + "\"";
     String updatedEndTime = "      endTime: \"" + curTime + "\"";
 
-    str = str.replaceAll("(.*)startTime(.*)", updatedStartTime);
-    str = str.replaceAll("(.*)endTime(.*)", updatedEndTime);
+    str = str.replaceFirst("(.*)startTime(.*)", updatedStartTime);
+    str = str.replaceFirst("(.*)endTime(.*)", updatedEndTime);
 
     return str;
   }
