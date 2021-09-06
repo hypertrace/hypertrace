@@ -3,7 +3,7 @@
 path="./src/main/resources/traces/"
 currentTime=`date +%s` #seconds from epoch
 currentTime=$(($currentTime * 1000000)) #convert in microseconds
-duration=1800 #30 min
+duration=$((30 * 60 * 1000000)) #30 min into microseconds
 updatedStartTime=$(($currentTime-$duration))
 startTimeString="          \"startTime\": $updatedStartTime,"
 for file in `ls $path`
