@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.time.Instant;
 import java.util.stream.Collectors;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -29,7 +30,8 @@ class RequestBuilder {
 
     InputStream in = getClass().getClassLoader().getResourceAsStream(filePath);
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-    this.graphQLQueryBody = reader.lines().collect(Collectors.joining(lineSeparator()));
+    String queryBody = reader.lines().collect(Collectors.joining(lineSeparator()));
+    this.graphQLQueryBody = updateTimeStamp(queryBody);
   }
 
   Request build() throws JsonProcessingException {
@@ -42,5 +44,18 @@ class RequestBuilder {
   private static String apiRequestBodyToJson(ApiRequestBody apiRequestBody) throws JsonProcessingException {
     ObjectMapper objectMapper = new ObjectMapper();
     return objectMapper.writeValueAsString(apiRequestBody);
+  }
+
+  private String updateTimeStamp(String str){
+    Instant curTime = Instant.now();
+    Instant prevTime = curTime.minusSeconds(3600);
+
+    String updatedStartTime = "      startTime: \"" + prevTime + "\"";
+    String updatedEndTime = "      endTime: \"" + curTime + "\"";
+
+    str = str.replaceFirst("(.*)startTime(.*)", updatedStartTime);
+    str = str.replaceFirst("(.*)endTime(.*)", updatedEndTime);
+
+    return str;
   }
 }
