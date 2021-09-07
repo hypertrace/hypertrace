@@ -6,6 +6,8 @@ if [[ "$OSTYPE" == "darwin"* && "$COLLECTOR_IP" == "localhost" ]]; then
     COLLECTOR_IP="docker.for.mac.localhost"
 fi
 
+echo "About to ingest test traces, collector ip : $COLLECTOR_IP"
+
 ./trace_time_converter.sh
 
 docker run -v $(pwd)/src/main/resources/traces/trace-1.json:/usr/src/jaeger2zipkin/trace-1.json jbahire/jaeger2zipkin trace-1.json http://$COLLECTOR_IP:9411/api/v2/spans
