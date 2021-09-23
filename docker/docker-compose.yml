@@ -38,6 +38,8 @@ services:
     environment:
       - EXPORTER_KAFKA_BROKER=kafka-zookeeper:9092
       - EXPORTER_KAFKA_TOPIC=jaeger-spans
+    volumes:
+      - ../collector/config.yml:/etc/opt/hypertrace/config.yml:ro
     networks:
       default:
         # Allows sample apps to connect with platform-specific hostnames
@@ -50,7 +52,7 @@ services:
         condition: service_healthy
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
-    image: hypertrace/hypertrace-ingester
+    image: traceableai-docker.jfrog.io/hypertrace/hypertrace-ingester:test
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
@@ -65,8 +67,11 @@ services:
       - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
     volumes:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
+    ports:
+      - 5006:5006
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
@@ -104,6 +109,8 @@ services:
           - pinot-controller
           - pinot-server
           - pinot-broker
+    ports:
+      - 9000:9000
     cpu_shares: 2048
     depends_on:
       kafka-zookeeper:
