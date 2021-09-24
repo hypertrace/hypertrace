@@ -30,18 +30,19 @@ services:
   # Collects spans in different trace formats like Jaeger, Zipkin, etc
   hypertrace-collector:
     image: hypertrace/hypertrace-collector:main
+    command: [ "--config=/etc/otlp-collector-config.yml" ]
     ports:
       - 4317:4317   # grpc-otel
       - 55681:55681 # http-otel
       - 14268:14268 # Jaeger http
       - 9411:9411   # Zipkin HTTP
       - 8888:8888   # Prometheus metrics exposed by the collector
-      - 8889:8889"  # Prometheus exporter metrics
+      - 8889:8889   # Prometheus exporter metrics
     environment:
       - EXPORTER_KAFKA_BROKER=kafka-zookeeper:9092
       - EXPORTER_KAFKA_TOPIC=jaeger-spans
     volumes:
-      - ../collector/config.yml:/etc/opt/hypertrace/config.yml:ro
+      - ./otlp-collector-config.yml:/etc/otlp-collector-config.yml:ro
     networks:
       default:
         # Allows sample apps to connect with platform-specific hostnames
@@ -69,7 +70,7 @@ services:
       - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
-      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5006
       - OTLP_COLLECTOR_HOST=hypertrace-collector
       - OTLP_COLLECTOR_PORT=4317
     volumes:
@@ -98,6 +99,8 @@ services:
         aliases:
           - kafka
           - zookeeper
+    ports:
+      - 9092:9092
   # Stores entities like API, service and backend
   # Mongo and postgres are the supported doc store, to use postgres override this using docker-compose.postgres.yml 
   document-store:
@@ -125,7 +128,8 @@ services:
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
+    command: [ "--config.file=/etc/prometheus.yml", "--storage.tsdb.path=/prometheus", "--web.console.libraries=/usr/share/prometheus/console_libraries", "--web.console.templates=/usr/share/prometheus/consoles" ]
     volumes:
-      - ../prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./prom.yml:/etc/prometheus.yml
     ports:
       - "9090:9090"
