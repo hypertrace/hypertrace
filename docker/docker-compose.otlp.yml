@@ -1,17 +1,12 @@
-## This does everything you need to get a hypertracing system started.
-## You can connect to the UI at port 2020 and send data to it on any supported tracing solution.
-## Note: Our stack is dependent on pinot and it is a cpu heavy during startup.
-## The depends_on has a max wait time of 1 min, so if you don't have enough resources, you may have to re-run the same command.
-## we are looking at improving this.
-version: '2.4'
+## This is the copy of main docker-compose.yml.
+## It runs hypertrace with Postgres as document store, while default one runs with mongo
+version: "2.4"
 services:
 
-
-# This container includes the UI and APIs it needs for storage queries.
   hypertrace:
-    image: hypertrace/hypertrace:main
+    image: traceableai-docker.jfrog.io/hypertrace/hypertrace:latest
     environment:
-      - MONGO_HOST=document-store
+      - MONGO_HOST=mongo
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
       - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     ports:
@@ -20,41 +15,26 @@ services:
     healthcheck:
       start_period: 20s
     depends_on:
-      document-store:
+      mongo:
         condition: service_healthy
       kafka-zookeeper:
         condition: service_healthy
       pinot:
         condition: service_started
 
-# Ingestion pipeline
-
-  # Collects spans in different trace formats like Jaeger, Zipkin, etc
-  hypertrace-collector:
-    image: hypertrace/hypertrace-collector:main
-    command: [ "--config=/etc/otlp-collector-config.yml" ]
-    ports:
-      - 4317:4317   # grpc-otel
-      - 55681:55681 # http-otel
-      - 14268:14268 # Jaeger http
-      - 9411:9411   # Zipkin HTTP
-      - 8888:8888   # Prometheus metrics exposed by the collector
-      - 8889:8889   # Prometheus exporter metrics
+  # sample metric app which reports metrics
+  simple-metric-app:
+    image: traceableai-docker.jfrog.io/hypertrace/simple-metric-app:latest
     environment:
-      - EXPORTER_KAFKA_BROKER=kafka-zookeeper:9092
-      - EXPORTER_KAFKA_TOPIC=jaeger-spans
-    volumes:
-      - ./otlp-collector-config.yml:/etc/otlp-collector-config.yml:ro
-    networks:
-      default:
-        # Allows sample apps to connect with platform-specific hostnames
-        aliases:
-          - jaeger
-          - jaeger-collector
-          - zipkin
+      - OTEL_COLLECTOR_HOST=otel-collector
+      - OTEL_COLLECTOR_PORT=4317
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
     image: traceableai-docker.jfrog.io/hypertrace/hypertrace-ingester:test
@@ -73,24 +53,15 @@ services:
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
       - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
-      - OTLP_COLLECTOR_HOST=hypertrace-collector
-      - OTLP_COLLECTOR_PORT=4317
     volumes:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     ports:
       - 5006:5006
-      - 8098:8098
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
-      hypertrace:
-        # service_started, not service_healthy as pinot and deps can take longer than 60s to start
-        condition: service_started
-      hypertrace-collector:
-        condition: service_started
-     
 
-# Third-party data services:
+  # Third-party data services:
 
   # Kafka is used for streaming functionality.
   # ZooKeeper is required by Kafka and Pinot
@@ -104,10 +75,6 @@ services:
           - zookeeper
     ports:
       - 9092:9092
-  # Stores entities like API, service and backend
-  # Mongo and postgres are the supported doc store, to use postgres override this using docker-compose.postgres.yml 
-  document-store:
-    image: hypertrace/mongodb:main
 
   # Stores spans and traces and provides aggregation functions
   pinot:
@@ -128,11 +95,39 @@ services:
       kafka-zookeeper:
         condition: service_healthy
 
+  # new setup for metrics
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
-    command: [ "--config.file=/etc/prometheus.yml", "--storage.tsdb.path=/prometheus", "--web.console.libraries=/usr/share/prometheus/console_libraries", "--web.console.templates=/usr/share/prometheus/consoles" ]
     volumes:
-      - ./prom.yml:/etc/prometheus.yml
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+
+  # Collector (using latest version)
+  otel-collector:
+    image: otel/opentelemetry-collector:0.33.0
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "1888:1888"   # pprof extension
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "55670:55679" # zpages extension
+      - "55681:55681" # http-otel
+      - "14268:14268" # Jaeger http
+      - "9411:9411" # Zipkin HTTP
+    networks:
+      default:
+        # Allows sample apps to connect with platform-specific hostnames
+        aliases:
+          - jaeger
+          - jaeger-collector
+          - zipkin
+    depends_on:
+      - kafka-zookeeper
+  mongo:
+    image: hypertrace/mongodb:main

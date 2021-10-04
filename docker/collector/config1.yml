@@ -1,0 +1,52 @@
+extensions:
+  health_check:
+  pprof:
+    endpoint: 0.0.0.0:1777
+  zpages:
+    endpoint: 0.0.0.0:55679
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+  jaeger:
+    protocols:
+      grpc:
+      thrift_binary:
+      thrift_compact:
+      thrift_http:
+  zipkin:
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+  logging:
+  kafka:
+    protocol_version: 2.0.0
+    brokers:
+      - kafka:9092
+    topic: otel-metrics
+    encoding: otlp_proto
+  kafka/2:
+    protocol_version: 2.0.0
+    brokers:
+      - kafka:9092
+    topic: jaeger-spans
+    encoding: jaeger_proto
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers: [ otlp, jaeger, zipkin ]
+      processors: [ batch ]
+      exporters: [ kafka/2 ]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, prometheus, kafka]
+
+  extensions: [pprof, zpages, health_check]
