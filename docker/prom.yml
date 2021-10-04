@@ -1,6 +1,11 @@
 scrape_configs:
   - job_name: 'otel-collector'
-    scrape_interval: 5s
+    scrape_interval: 1s
     static_configs:
       - targets: ['hypertrace-collector:8889']
       - targets: ['hypertrace-collector:8888']
+  - job_name: 'otel-collector-app-metrics'
+    scrape_interval: 1s
+    metrics_path: /ingestion/metrics
+    static_configs:
+      - targets: ['hypertrace-ingester:8098']

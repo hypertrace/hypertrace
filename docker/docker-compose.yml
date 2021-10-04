@@ -79,6 +79,7 @@ services:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     ports:
       - 5006:5006
+      - 8098:8098
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
