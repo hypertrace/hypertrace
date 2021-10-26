@@ -3,7 +3,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![E2E-test][github-actions-shield]][github-actions-url]
-[![Twitter][twitter-shield]][issues-url]
+[![Twitter][twitter-shield]][twitter-url]
 
 <br />
 <p align="center">
@@ -84,7 +84,7 @@ Please refer to the [deployments section](https://docs.hypertrace.org/deployment
 
 ## Community
 - [Join the Hypertrace Workspace](https://join.slack.com/t/hypertrace/shared_invite/zt-oln0psj9-lm1CSkXE1vsWdcw6YKWGDg) on Slack to connect with other users, contributors and people behind Hypertrace.
-- We have **public** [monthly meeting](https://traceable-ai.zoom.us/j/99056798944?pwd=dG1HNzlpeVFjN2JJUFJyUEF1eTU2Zz09) on **last Thursday of the month** at 8:00 AM PST/ 8:30 PM IST/ 11:00 AM ET/ 5:00 PM CET where we try to give our community a holistic overview of new features in Hypertrace and community activities. We would like to hear feedback, discuss feature requests and also help new contributors to get started with contributing to Open Source projects. You can join the zoom meeting [here](https://traceable-ai.zoom.us/j/99056798944?pwd=dG1HNzlpeVFjN2JJUFJyUEF1eTU2Zz09) or use zoom meeting details as below:
+- We have **public** [monthly meeting](https://traceable-ai.zoom.us/j/85283423421?pwd=Nk11SUdZZGc1TC80NWgxRlF4Y05GUT09) on **last Thursday of the month** at 8:00 AM PST/ 8:30 PM IST/ 11:00 AM ET/ 5:00 PM CET where we try to give our community a holistic overview of new features in Hypertrace and community activities. We would like to hear feedback, discuss feature requests and also help new contributors to get started with contributing to Open Source projects. You can join the zoom meeting [here](https://traceable-ai.zoom.us/j/85283423421?pwd=Nk11SUdZZGc1TC80NWgxRlF4Y05GUT09) or use zoom meeting details as below:
     - Meeting ID: 990 5679 8944
     - Passcode: 111111
 - If you want to discuss any ideas or have any questions or show us how you are using Hypertrace, you can use [GitHub discsussions](https://github.com/hypertrace/hypertrace/discussions) as well. 
