@@ -15,6 +15,7 @@ services:
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
     ports:
       - 2020:2020
+      - 9001:9001
     healthcheck:
       start_period: 20s
     depends_on:
@@ -50,7 +51,10 @@ services:
         condition: service_healthy
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
-    image: hypertrace/hypertrace-ingester
+    image: hypertrace/hypertrace-ingester:main
+    ports:
+      - 6005:6005
+      - 8099:8099
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
@@ -65,6 +69,7 @@ services:
       - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:6005
     volumes:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     depends_on:
@@ -91,7 +96,8 @@ services:
   # Mongo and postgres are the supported doc store, to use postgres override this using docker-compose.postgres.yml 
   document-store:
     image: hypertrace/mongodb:main
-
+    ports:
+      - 27017:27017
   # Stores spans and traces and provides aggregation functions
   pinot:
     image: hypertrace/pinot-servicemanager:main
@@ -108,5 +114,14 @@ services:
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    command: [ "--config.file=/etc/prometheus.yml", "--storage.tsdb.path=/prometheus", "--web.console.libraries=/usr/share/prometheus/console_libraries", "--web.console.templates=/usr/share/prometheus/consoles" ]
+    volumes:
+      - ./prom.yml:/etc/prometheus.yml
+    ports:
+      - "9090:9090"
 
         
