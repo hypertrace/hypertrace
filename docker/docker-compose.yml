@@ -54,6 +54,7 @@ services:
     image: hypertrace/hypertrace-ingester:main
     ports:
       - 6005:6005
+      - 8099:8099
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
