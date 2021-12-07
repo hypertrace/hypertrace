@@ -19,10 +19,8 @@ services:
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
       - METRICS_PIPELINE_ENABLE=true
-      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     ports:
       - 8099:8099
-      - 5005:5005
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
