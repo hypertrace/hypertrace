@@ -65,8 +65,8 @@ services:
       - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
-    volumes:
-      - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
+#    volumes:
+#      - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
@@ -104,6 +104,8 @@ services:
           - pinot-controller
           - pinot-server
           - pinot-broker
+    ports:
+      - 9000:9000
     cpu_shares: 2048
     depends_on:
       kafka-zookeeper:
