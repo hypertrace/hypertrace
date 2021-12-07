@@ -13,8 +13,10 @@ services:
     environment:
       - MONGO_HOST=document-store
       - ZK_CONNECT_STR=zookeeper:2181/hypertrace-views
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     ports:
       - 2020:2020
+      - 5005:5005
     healthcheck:
       start_period: 20s
     depends_on:
@@ -65,8 +67,11 @@ services:
       - NUM_STREAM_THREADS=1
       - PRE_CREATE_TOPICS=true
       - PRODUCER_VALUE_SERDE=org.hypertrace.core.kafkastreams.framework.serdes.GenericAvroSerde
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006
     volumes:
       - ../docker/configs/log4j2.properties:/app/resources/log4j2.properties:ro
+    ports:
+      - 5006:5006
     depends_on:
       kafka-zookeeper:
         condition: service_healthy
@@ -91,6 +96,8 @@ services:
   # Mongo and postgres are the supported doc store, to use postgres override this using docker-compose.postgres.yml 
   document-store:
     image: hypertrace/mongodb:main
+    ports:
+      - 27017:27017
 
   # Stores spans and traces and provides aggregation functions
   pinot:
@@ -104,6 +111,8 @@ services:
           - pinot-controller
           - pinot-server
           - pinot-broker
+    ports:
+      - 9000:9000
     cpu_shares: 2048
     depends_on:
       kafka-zookeeper:
