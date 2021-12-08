@@ -29,7 +29,6 @@ services:
         condition: service_started
 
   prometheus:
-    container_name: prometheus
     image: prom/prometheus:latest
     command: [ "--config.file=/etc/prom.yml", "--storage.tsdb.path=/prometheus", "--web.console.libraries=/usr/share/prometheus/console_libraries", "--web.console.templates=/usr/share/prometheus/consoles" ]
     volumes:
