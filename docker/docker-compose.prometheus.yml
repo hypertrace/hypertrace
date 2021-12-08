@@ -3,7 +3,7 @@ version: '2.4'
 services:
   # all-in-one ingestion pipeline for hypertrace
   hypertrace-ingester:
-    image: traceableai-docker.jfrog.io/hypertrace/hypertrace-ingester:test
+    image: hypertrace/hypertrace-ingester
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DEFAULT_TENANT_ID=__default
