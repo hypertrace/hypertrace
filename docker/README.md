@@ -38,12 +38,19 @@ References
 https://github.com/hypertrace/hypertrace/issues/114
 https://github.com/hypertrace/hypertrace/issues/124
 
-#### To start alerting related services
+### To start alerting related services
 
 Run ```docker-compose -f docker-compose.yml  -f docker-compose.alerting.yml up```
 or ```docker-compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.alerting.yml up``` (for postgres as document-store)
 
 Update alerting rule definition in alert-rules.json, notification-rules.json
+
+### Enable metrics pipeline components
+
+To enable the metrics component, include `docker-compose.prometheus.yml` in your docker-compose up/down command.
+
+Run ```docker-compose -f docker-compose.yml  -f docker-compose.prometheus.yml up```
+or ```docker-compose -f docker-compose.yml -f docker-compose.postgres.yml -f docker-compose.prometheus.yml up``` (for postgres as document-store)
 
 ### Ports
 
