@@ -1,0 +1,59 @@
+exporters:
+  kafka:
+    brokers:
+      - kafka:9092
+    compression:
+      codec: gzip
+      level: 5
+    encoding: jaeger_proto
+    protocol_version: 2.0.0
+    topic: jaeger-spans
+    producer:
+      max_message_bytes: 1048576
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    resource_to_telemetry_conversion:
+      enabled: true
+extensions:
+  health_check: {}
+  pprof:
+    endpoint: 0.0.0.0:1777
+  zpages:
+    endpoint: 0.0.0.0:55679
+processors:
+  batch: {}
+  hypertrace_tenantid: null
+receivers:
+  jaeger:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:14250
+      thrift_http:
+        endpoint: 0.0.0.0:14268
+  opencensus:
+    endpoint: 0.0.0.0:55678
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+        max_recv_msg_size_mib: 128
+      http:
+        endpoint: 0.0.0.0:55681
+  zipkin:
+    endpoint: 0.0.0.0:9411
+service:
+  extensions:
+    - health_check
+    - pprof
+    - zpages
+  pipelines:
+    traces:
+      exporters:
+        - kafka
+      processors:
+        - batch
+      receivers:
+        - otlp
+        - opencensus
+        - jaeger
+        - zipkin

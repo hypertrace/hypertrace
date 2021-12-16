@@ -32,6 +32,9 @@ services:
   # Collects spans in different trace formats like Jaeger, Zipkin, etc
   hypertrace-collector:
     image: hypertrace/hypertrace-collector:main
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+        - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
       - 4317:4317 # grpc-otel
       - 55681:55681 # http-otel
@@ -92,6 +95,9 @@ services:
         aliases:
           - kafka
           - zookeeper
+    ports:
+      - 9092:9092
+      - 2181:2181
   # Stores entities like API, service and backend
   # Mongo and postgres are the supported doc store, to use postgres override this using docker-compose.postgres.yml 
   document-store:
