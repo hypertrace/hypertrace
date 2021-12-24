@@ -1,33 +1,20 @@
 #### `Hypertrace deployment` 
+- chore: updating message of handling log4j issue [#333](https://github.com/hypertrace/hypertrace/pull/333)
+#### `Attribute service`  [(0.13.12 .. 0.13.12)](https://github.com/hypertrace/attribute-service/releases)
 
-#### `Attribute service`  [(0.13.10 .. 0.13.12)](https://github.com/hypertrace/attribute-service/releases)
-- chore: update log4j version to 2.17.0 [#116](https://github.com/hypertrace/attribute-service/pull/116)
-- chore: update log4j [#115](https://github.com/hypertrace/attribute-service/pull/115)
-#### `Gateway service`  [(0.1.172 .. 0.1.174)](https://github.com/hypertrace/gateway-service/releases)
-- chore: update log4j version to 2.17.0 [#115](https://github.com/hypertrace/gateway-service/pull/115)
-- chore: update log4j, netty, gradle [#114](https://github.com/hypertrace/gateway-service/pull/114)
-#### `Query service`  [(0.6.9 .. 0.6.10)](https://github.com/hypertrace/query-service/releases)
-- chore: update log4j version to 2.17.0 [#128](https://github.com/hypertrace/query-service/pull/128)
-- add tolerations, affinity and topology spread constraints to deployment [#127](https://github.com/hypertrace/query-service/pull/127)
-- Fix : Add support for contains key and like operator [#125](https://github.com/hypertrace/query-service/pull/125)
-- Metrics followup  [#123](https://github.com/hypertrace/query-service/pull/123)
-- chore: update vulnerable deps [#124](https://github.com/hypertrace/query-service/pull/124)
-- Added support for handling complex attribute expression. [#107](https://github.com/hypertrace/query-service/pull/107)
-- feat: Integrate prometheus converter, client and response builder  [#119](https://github.com/hypertrace/query-service/pull/119)
-- feat: adds support for building converter for query service response builder from PromQL response [#113](https://github.com/hypertrace/query-service/pull/113)
-#### `Entity service`  [(0.8.13 .. 0.8.15)](https://github.com/hypertrace/entity-service/releases)
-- chore: upgrade log4j, gradle [#152](https://github.com/hypertrace/entity-service/pull/152)
-#### `Config service`  [(0.1.19 .. 0.1.20)](https://github.com/hypertrace/config-service/releases)
-- chore: update log4j version to 2.17.0 [#90](https://github.com/hypertrace/config-service/pull/90)
-- Fix label update scenario where description, color, enabled fields are updated [#89](https://github.com/hypertrace/config-service/pull/89)
-- chore: update netty [#88](https://github.com/hypertrace/config-service/pull/88)
-#### `Hypertrace GraphQL`  [( 0.8.2 .. 0.8.3)](https://github.com/hypertrace/hypertrace-graphql/releases)
-- chore: update gradle, submodule for log4j [#119](https://github.com/hypertrace/hypertrace-graphql/pull/119)
+#### `Gateway service`  [(0.1.174 .. 0.1.174)](https://github.com/hypertrace/gateway-service/releases)
+
+#### `Query service`  [(0.6.10 .. 0.6.10)](https://github.com/hypertrace/query-service/releases)
+
+#### `Entity service`  [(0.8.15 .. 0.8.16)](https://github.com/hypertrace/entity-service/releases)
+- upgrade log4j version to 2.17.0 [#153](https://github.com/hypertrace/entity-service/pull/153)
+#### `Config service`  [(0.1.20 .. 0.1.20)](https://github.com/hypertrace/config-service/releases)
+
+#### `Hypertrace GraphQL`  [( 0.8.3 .. 0.8.3)](https://github.com/hypertrace/hypertrace-graphql/releases)
+
 #### `Hypertrace UI`  [( 0.73.0 .. 0.73.0)](https://github.com/hypertrace/hypertrace-ui/releases)
 
-#### `Hypertrace ingester`  [( 0.6.37 .. 0.6.39)](https://github.com/hypertrace/hypertrace-ingester/releases)
-- upgrade log4j version to 2.17.0 [#295](https://github.com/hypertrace/hypertrace-ingester/pull/295)
-- chore: update log4j [#294](https://github.com/hypertrace/hypertrace-ingester/pull/294)
-#### `Hypertrace alert engine`  [( 2.0.8 .. 2.0.10)](https://github.com/hypertrace/hypertrace-alert-engine/releases)
-- chore: update log4j version to 2.17.0 [#90](https://github.com/hypertrace/hypertrace-alert-engine/pull/90)
-- Fix snyk failure [#89](https://github.com/hypertrace/hypertrace-alert-engine/pull/89)
+#### `Hypertrace ingester`  [( 0.6.39 .. 0.6.39)](https://github.com/hypertrace/hypertrace-ingester/releases)
+
+#### `Hypertrace alert engine`  [( 2.0.10 .. 2.0.10)](https://github.com/hypertrace/hypertrace-alert-engine/releases)
+
