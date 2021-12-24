@@ -32,7 +32,7 @@
 > 
 > We have upgraded all the dependent hypertrace repositories and have cut the new release with 
 > a safe version of Log4j (2.17). We strongly encourage upgrading to the latest version 
-> [(v0.2.6)](https://github.com/hypertrace/hypertrace/releases/tag/0.2.6) of hypertrace or using appropriate charts from the latest release.
+> [(v0.2.7)](https://github.com/hypertrace/hypertrace/releases/tag/0.2.7) of hypertrace or using appropriate charts from the latest release.
 
 # About The Project
 
