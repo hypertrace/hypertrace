@@ -54,7 +54,7 @@ dependencies:
     condition: merge-query-services.disabled
   - name: entity-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.8.15
+    version: 0.8.16
     condition: merge-query-services.disabled
   - name: attribute-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
