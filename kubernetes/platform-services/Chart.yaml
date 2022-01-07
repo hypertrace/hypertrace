@@ -25,58 +25,58 @@ appVersion: 0.1.0
 dependencies:
   - name: hypertrace-collector
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.11
+    version: 0.2.1
   - name: span-normalizer
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.27
+    version: 0.6.39
   - name: raw-spans-grouper
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.27
+    version: 0.6.39
   - name: hypertrace-trace-enricher
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.27
+    version: 0.6.39
   - name: hypertrace-view-generator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.27
+    version: 0.6.39
   - name: hypertrace-ui
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.70.3
+    version: 0.73.0
   - name: hypertrace-graphql-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.7.9
+    version: 0.8.3
   - name: gateway-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.166
+    version: 0.1.174
     condition: merge-query-services.disabled
   - name: query-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.6.3
+    version: 0.6.10
     condition: merge-query-services.disabled
   - name: entity-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.8.2
+    version: 0.8.16
     condition: merge-query-services.disabled
   - name: attribute-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.13.3
+    version: 0.13.12
     condition: merge-query-services.disabled
   - name: config-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.8
+    version: 0.1.20
     condition: merge-query-services.disabled
   - name: hypertrace-data-config-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.2.16
+    version: 0.2.19
     condition: merge-query-services.enabled
   - name: hypertrace-data-query-service
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.2.16
+    version: 0.2.19
     condition: merge-query-services.enabled
   - name: hypertrace-alert-engine
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 2.0.0
+    version: 2.0.10
     condition: alerting.enabled
   - name: kafka-topic-creator
     repository: "https://storage.googleapis.com/hypertrace-helm-charts"
-    version: 0.1.8
+    version: 0.1.9
     condition: kafka-topic-creator.enabled

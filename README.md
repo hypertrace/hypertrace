@@ -27,6 +27,13 @@
 </p>
 
 
+> CVE-2021-44228 and CVE-2021-45046 disclosed security vulnerabilities in the Apache Log4j 2 version 
+> 2.15 or below.
+> 
+> We have upgraded all the dependent hypertrace repositories and have cut the new release with 
+> a safe version of Log4j (2.17). We strongly encourage upgrading to the latest version 
+> [(v0.2.7)](https://github.com/hypertrace/hypertrace/releases/tag/0.2.7) of hypertrace or using appropriate charts from the latest release.
+
 # About The Project
 
 Hypertrace is a cloud-native distributed tracing based Observability platform that gives visibility into your dev and production distributed systems.
