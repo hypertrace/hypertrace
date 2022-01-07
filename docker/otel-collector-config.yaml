@@ -37,6 +37,9 @@ receivers:
       grpc:
         endpoint: 0.0.0.0:4317
         max_recv_msg_size_mib: 128
+        tls:
+          cert_file: /cert/tls.crt
+          key_file: /cert/tls.key
       http:
         endpoint: 0.0.0.0:55681
   zipkin:
