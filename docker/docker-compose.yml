@@ -35,6 +35,8 @@ services:
     command: [ "--config=/etc/otel-collector-config.yaml" ]
     volumes:
         - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+        - ./tls.crt:/etc/tls.crt
+        - ./tls.key:/etc/tls.key
     ports:
       - 4317:4317 # grpc-otel
       - 55681:55681 # http-otel
