@@ -1,9 +1,9 @@
 attribute-service:0.13.12
-gateway-service:0.1.174
-query-service:0.6.10
-entity-service:0.8.16
+gateway-service:0.2.0
+query-service:0.7.0
+entity-service:0.8.17
 config-service:0.1.20
-hypertrace-graphql:0.8.3
-hypertrace-ui:0.73.0
-hypertrace-ingester:0.6.39
+hypertrace-graphql:0.9.0
+hypertrace-ui:0.74.0
+hypertrace-ingester:0.6.40
 hypertrace-alert-engine:2.0.10
