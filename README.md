@@ -13,7 +13,7 @@
 
   <h3 align="center">Hypertrace</h3>
   <p align="center">
-    An open source distributed tracing & observability platform! 
+    An open distributed tracing & observability platform! 
     <br />
     <a href="https://docs.hypertrace.org"><strong>Explore the docs »</strong></a>
     <br />
@@ -91,7 +91,7 @@ Please refer to the [deployments section](https://docs.hypertrace.org/deployment
 
 ## Community
 - [Join the Hypertrace Workspace](https://join.slack.com/t/hypertrace/shared_invite/zt-oln0psj9-lm1CSkXE1vsWdcw6YKWGDg) on Slack to connect with other users, contributors and people behind Hypertrace.
-- We have **public** [monthly meeting](https://traceable-ai.zoom.us/j/85283423421?pwd=Nk11SUdZZGc1TC80NWgxRlF4Y05GUT09) on **last Thursday of the month** at 8:00 AM PST/ 8:30 PM IST/ 11:00 AM ET/ 5:00 PM CET where we try to give our community a holistic overview of new features in Hypertrace and community activities. We would like to hear feedback, discuss feature requests and also help new contributors to get started with contributing to Open Source projects. You can join the zoom meeting [here](https://traceable-ai.zoom.us/j/85283423421?pwd=Nk11SUdZZGc1TC80NWgxRlF4Y05GUT09) or use zoom meeting details as below:
+- We have **public** [monthly meeting](https://traceable-ai.zoom.us/j/85283423421?pwd=Nk11SUdZZGc1TC80NWgxRlF4Y05GUT09) on **last Thursday of the month** at 8:00 AM PST/ 8:30 PM IST/ 11:00 AM ET/ 5:00 PM CET where we try to give our community a holistic overview of new features in Hypertrace and community activities. We would like to hear feedback, discuss feature requests and also help new contributors to get started with contributing to projects. You can join the zoom meeting [here](https://traceable-ai.zoom.us/j/85283423421?pwd=Nk11SUdZZGc1TC80NWgxRlF4Y05GUT09) or use zoom meeting details as below:
     - Meeting ID: 990 5679 8944
     - Passcode: 111111
 - If you want to discuss any ideas or have any questions or show us how you are using Hypertrace, you can use [GitHub discsussions](https://github.com/hypertrace/hypertrace/discussions) as well. 
@@ -106,7 +106,7 @@ See the [open issues](https://github.com/hypertrace/hypertrace/issues) for a lis
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Check out our [Contribution Guidelines](https://github.com/hypertrace/hypertrace/blob/main/.github/CONTRIBUTING.md) for more details. 
+Contributions are what make the open community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**. Check out our [Contribution Guidelines](https://github.com/hypertrace/hypertrace/blob/main/.github/CONTRIBUTING.md) for more details. 
 
 ## License
 
@@ -126,4 +126,3 @@ Hypertrace follows the open core model where "Hypertrace core" (or simply Core) 
 [issues-url]: https://github.com/hypertrace/hypertrace/issues
 [twitter-shield]: https://img.shields.io/badge/-Twitter-black.svg?style=for-the-badge&logo=twitter&colorB=555
 [twitter-url]: https://twitter.com/hypertraceorg
-[product-screenshot]: https://s3.amazonaws.com/hypertrace-docs/dashboard-3.png
